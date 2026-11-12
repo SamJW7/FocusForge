@@ -1,0 +1,4746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#4f46e5">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>FocusForge - Student Procrastination Management System (100% Offline)</title>
+  <meta name="description" content="Student Procrastination Management System with 100% offline local notifications and focus timer." />
+  <meta property="og:title" content="FocusForge - Student Procrastination Management System" />
+  <meta property="og:description" content="Student Procrastination Management System with 100% offline local notifications and focus timer." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/png" href="FFLOGO.png">
+  <link rel="manifest" href="/manifest.json">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+  
+  <!-- 100% Fully Offline Embedded Vector Icon Engine -->
+  <script>
+    (function() {
+      const OFFLINE_ICONS = {
+        'bar-chart-3': '<path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>',
+        'bell': '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
+        'book-open': '<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>',
+        'check-circle': '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>',
+        'check-circle-2': '<path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/>',
+        'check-square': '<polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
+        'check': '<polyline points="20 6 9 17 4 12"/>',
+        'clock': '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 16 14"/>',
+        'flame': '<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>',
+        'gem': '<path d="M6 3h12l4 6-10 12L2 9z"/><path d="M11 3 8 9l4 12 4-12-3-6"/><path d="M2 9h20"/>',
+        'gift': '<polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>',
+        'help-circle': '<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+        'home': '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+        'pause': '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>',
+        'play': '<polygon points="5 3 19 12 5 21 5 3"/>',
+        'plus': '<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
+        'refresh-cw': '<path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/>',
+        'shield-check': '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/>',
+        'sparkles': '<path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/>',
+        'target': '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+        'trash-2': '<polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/>',
+        'trophy': '<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/>',
+        'x': '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
+        'zap': '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+        'info': '<circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>',
+        'alert-triangle': '<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+        'list-todo': '<rect x="3" y="5" width="6" height="6" rx="1"/><path d="m3 17 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/>',
+        'tag': '<path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2Z"/><circle cx="7" cy="7" r=".5" fill="currentColor"/>',
+        'award': '<circle cx="12" cy="8" r="6"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>',
+        'trending-up': '<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>',
+        'edit-3': '<path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>',
+        'calendar': '<rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
+        'timer': '<line x1="10" y1="2" x2="14" y2="2"/><line x1="12" y1="14" x2="15" y2="11"/><circle cx="12" cy="14" r="8"/>',
+        'volume-2': '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>',
+        'volume-x': '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>',
+        'settings': '<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>',
+        'shield': '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+        'message-square': '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+        'rotate-ccw': '<path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>',
+      };
+
+      function renderIcons() {
+        document.querySelectorAll('[data-lucide]').forEach(el => {
+          const name = el.getAttribute('data-lucide');
+          const path = OFFLINE_ICONS[name] || '<circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/>';
+          const size = el.getAttribute('size') || el.getAttribute('width') || 18;
+          el.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-${name}">${path}</svg>`;
+        });
+      }
+
+      window.lucide = {
+        createIcons: renderIcons
+      };
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', renderIcons);
+      } else {
+        setTimeout(renderIcons, 0);
+      }
+    })();
+  </script>
+
+  <style>
+    :root {
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --bg-dark: #0f172a;
+      --bg-dark-panel: #1e293b;
+      --bg-dark-card: #334155;
+      
+      --border-color: #e2e8f0;
+      --border-dark: #334155;
+      --border-light: #e2e8f0;
+      
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-light: #eef2ff;
+      
+      --amber: #f59e0b;
+      --amber-dark: #b45309;
+      --amber-light: #fef3c7;
+      
+      --emerald: #10b981;
+      --emerald-dark: #047857;
+      --emerald-light: #d1fae5;
+      
+      --rose: #f43f5e;
+      --rose-dark: #be123c;
+      --rose-light: #ffe4e6;
+      
+      --indigo: #6366f1;
+      --indigo-light: #e0e7ff;
+
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-light: #f8fafc;
+      
+      --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    i[data-lucide], [data-lucide] {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      vertical-align: middle;
+      line-height: 1;
+    }
+
+    i[data-lucide] svg, [data-lucide] svg {
+      display: block;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    /* Loading Splash Overlay */
+    #loading-screen {
+      position: fixed;
+      inset: 0;
+      background: #0f172a;
+      color: white;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+
+    #loading-screen.fade-out {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .app-logo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: inherit;
+      transform: scale(1.35);
+      transform-origin: center;
+    }
+
+    .splash-logo {
+      width: 76px;
+      height: 76px;
+      border-radius: 20px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      margin-bottom: 20px;
+      animation: pulseLogo 1.8s infinite ease-in-out;
+      overflow: hidden;
+      padding: 0;
+    }
+
+    @keyframes pulseLogo {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); box-shadow: 0 14px 40px rgba(245, 158, 11, 0.5); }
+    }
+
+    .splash-title {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .splash-title span {
+      color: var(--amber);
+    }
+
+    .splash-subtitle {
+      font-size: 13px;
+      color: #94a3b8;
+      margin-top: 6px;
+      letter-spacing: 0.02em;
+    }
+
+    .splash-loader-bar {
+      width: 180px;
+      height: 4px;
+      background: #1e293b;
+      border-radius: 100px;
+      overflow: hidden;
+      margin-top: 24px;
+    }
+
+    .splash-loader-progress {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--amber));
+      width: 0%;
+      animation: loadProgress 1.4s ease-out forwards;
+    }
+
+    @keyframes loadProgress {
+      0% { width: 0%; }
+      50% { width: 60%; }
+      100% { width: 100%; }
+    }
+
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    /* Navbar Header */
+    header {
+      background-color: rgba(15, 23, 42, 0.96);
+      backdrop-filter: blur(12px);
+      color: var(--text-light);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      border-bottom: 1px solid var(--border-dark);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .nav-container {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 0 16px;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo img, .splash-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+    .brand-logo {
+      width: 49px;
+      height: 47px;
+      border-radius: 12px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+      padding: 0;
+    }
+
+    .brand-text h1 {
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-text h1 span {
+      color: var(--amber);
+    }
+
+    .badge-offline {
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--emerald);
+      padding: 2px 8px;
+      border-radius: 100px;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      letter-spacing: 0.05em;
+    }
+
+    /* Ribbon Bar */
+    .stats-ribbon {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(30, 41, 59, 0.85);
+      padding: 5px 12px;
+      border-radius: 100px;
+      border: 1px solid var(--border-dark);
+    }
+
+    @media (max-width: 960px) {
+      .stats-ribbon {
+        display: none;
+      }
+    }
+
+    .pill-stat {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 100px;
+    }
+
+    .pill-streak {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--amber);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .pill-vault {
+      background: rgba(79, 70, 229, 0.15);
+      color: #a5b4fc;
+      border: 1px solid rgba(79, 70, 229, 0.3);
+    }
+
+    .goal-pill-group {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: #334155;
+      padding: 2px 4px 2px 10px;
+      border-radius: 100px;
+    }
+
+    .btn-goal-label {
+      background: transparent;
+      border: none;
+      color: var(--text-light);
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      max-width: 200px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .btn-goal-label:hover {
+      color: var(--amber);
+    }
+
+    .btn-remove-goal-icon {
+      background: rgba(244, 63, 94, 0.2);
+      color: #fda4af;
+      border: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-remove-goal-icon:hover {
+      background: var(--rose);
+      color: white;
+    }
+
+    /* Actions Right Nav */
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-tabs {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: #1e293b;
+      padding: 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border-dark);
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 7px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 2px 8px rgba(79, 70, 229, 0.4);
+    }
+
+    .tab-btn:hover:not(.active) {
+      color: white;
+    }
+
+    .btn-add-task {
+      background: linear-gradient(135deg, var(--amber), #d97706);
+      color: #0f172a;
+      border: none;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 8px 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+      transition: all 0.2s;
+    }
+
+    .btn-add-task:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(245, 158, 11, 0.4);
+    }
+
+    .btn-icon-nav {
+      background: #334155;
+      color: #e2e8f0;
+      border: 1px solid var(--border-dark);
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 8px 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s;
+    }
+
+    .btn-icon-nav:hover {
+      background: #475569;
+      color: white;
+    }
+
+    .btn-reset-app {
+      background: rgba(244, 63, 94, 0.15);
+      color: #fca5a5;
+      border: 1px solid rgba(244, 63, 94, 0.3);
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 8px 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s;
+    }
+
+    .btn-reset-app:hover {
+      background: var(--rose);
+      color: white;
+    }
+
+    /* Settings Modal Styles */
+    .setting-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px 14px;
+      background: #f8fafc;
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      transition: background 0.2s;
+    }
+
+    .setting-item:hover {
+      background: #f1f5f9;
+    }
+
+    .setting-info {
+      flex: 1;
+    }
+
+    .setting-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .setting-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+      line-height: 1.3;
+    }
+
+    /* Toggle Switch */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #cbd5e1;
+      transition: .2s;
+      border-radius: 24px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .2s;
+      border-radius: 50%;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+    input:checked + .slider {
+      background-color: var(--primary);
+    }
+
+    input:focus + .slider {
+      box-shadow: 0 0 1px var(--primary);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+
+    /* Main Container */
+    main {
+      max-width: 1320px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 20px 16px;
+      flex: 1;
+    }
+
+    /* Daily Reminder Offline Banner */
+    .daily-reminder-banner {
+      background: linear-gradient(135deg, #1e1b4b, #0f172a);
+      color: white;
+      border: 1px solid #4338ca;
+      border-radius: 16px;
+      padding: 14px 20px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      box-shadow: 0 4px 14px rgba(79, 70, 229, 0.2);
+    }
+
+    .reminder-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .reminder-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* Overload Progress Bar Container */
+    .overload-card {
+      background: var(--bg-card);
+      border-radius: 20px;
+      border: 1px solid var(--border-color);
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .overload-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .overload-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .overload-title h2 {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+
+    .level-badge {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 100px;
+      border: 1px solid;
+    }
+
+    .level-healthy {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: #c7d2fe;
+    }
+
+    .level-warning {
+      background: var(--amber-light);
+      color: var(--amber-dark);
+      border-color: #fde68a;
+    }
+
+    .level-danger {
+      background: var(--rose-light);
+      color: var(--rose-dark);
+      border-color: #fecdd3;
+      animation: pulse-border 1.5s infinite;
+    }
+
+    @keyframes pulse-border {
+      0%, 100% { border-color: #fecdd3; }
+      50% { border-color: var(--rose); }
+    }
+
+    .track-bg {
+      height: 18px;
+      background: #f1f5f9;
+      border-radius: 100px;
+      border: 1px solid #e2e8f0;
+      overflow: hidden;
+      padding: 2px;
+      margin-top: 8px;
+    }
+
+    .track-fill {
+      height: 100%;
+      border-radius: 100px;
+      transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      background: linear-gradient(90deg, #3b82f6, #4f46e5);
+      position: relative;
+    }
+
+    .track-fill.warning {
+      background: linear-gradient(90deg, #f59e0b, #d97706);
+    }
+
+    .track-fill.danger {
+      background: linear-gradient(90deg, #f43f5e, #e11d48);
+    }
+
+    .track-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
+    /* Priority Banner */
+    .priority-banner {
+      background: linear-gradient(90deg, rgba(245, 158, 11, 0.08), rgba(245, 158, 11, 0.03));
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .priority-info {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .priority-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--amber);
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .btn-focus-first {
+      background: var(--bg-dark);
+      color: white;
+      border: none;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 10px 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-focus-first:hover {
+      background: #1e293b;
+    }
+
+    /* Filter Bar */
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: white;
+      padding: 12px 18px;
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-chip {
+      background: #f1f5f9;
+      color: var(--text-muted);
+      border: 1px solid #e2e8f0;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+
+    .btn-chip.active {
+      background: var(--bg-dark);
+      color: white;
+      border-color: var(--bg-dark);
+    }
+
+    /* Task Grid & Cards */
+    .task-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 16px;
+    }
+
+    .task-card {
+      background: white;
+      border-radius: 18px;
+      border: 1px solid var(--border-color);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+
+    .task-card:hover {
+      box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+      border-color: #cbd5e1;
+    }
+
+    .task-card.active {
+      border-color: var(--amber);
+      box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3);
+    }
+
+    .task-card.completed {
+      background: #fdfefe;
+      border-color: #a7f3d0;
+    }
+
+    .task-card.terminated {
+      background: #fef2f2;
+      border-color: #fecdd3;
+    }
+
+    .task-card.removing {
+      opacity: 0;
+      transform: translateY(-12px) scale(0.94);
+      filter: blur(4px);
+      pointer-events: none;
+    }
+
+    .task-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .badge-cat {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 100px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .badge-academic {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .badge-household {
+      background: var(--emerald-light);
+      color: var(--emerald-dark);
+    }
+
+    .task-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.4;
+      margin-bottom: 14px;
+    }
+
+    /* Embedded Timer Box inside Task Card */
+    .timer-box {
+      background: var(--bg-dark);
+      color: white;
+      border-radius: 14px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .timer-clock {
+      font-family: var(--font-mono);
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--amber);
+      letter-spacing: 0.05em;
+    }
+
+    .task-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding-top: 12px;
+      border-top: 1px solid #f1f5f9;
+    }
+
+    .btn-ctrl {
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+
+    .btn-start {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-start:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-pause {
+      background: var(--amber);
+      color: #0f172a;
+    }
+
+    .btn-complete {
+      background: var(--emerald);
+      color: white;
+    }
+
+    .btn-complete:hover {
+      background: var(--emerald-dark);
+    }
+
+    .btn-remove-task {
+      background: transparent;
+      color: #94a3b8;
+      border: none;
+      padding: 6px 8px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      transition: all 0.15s;
+    }
+
+    .btn-remove-task:hover {
+      background: #ffe4e6;
+      color: var(--rose);
+    }
+
+    /* Separated 25-Min Fast-Paced Focus Timer Styles */
+    .pomo-card {
+      background: linear-gradient(135deg, #0f172a, #1e1b4b);
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      border-radius: 20px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      color: white;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.25);
+    }
+
+    .pomo-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .pomo-badge-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn-pomo-audio, .btn-pomo-expand {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-pomo-audio:hover, .btn-pomo-expand:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .pomo-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 16px;
+      padding: 20px;
+      border: 1px dashed rgba(255, 255, 255, 0.12);
+    }
+
+    .pomo-clock-display {
+      font-family: var(--font-mono);
+      font-size: 44px;
+      font-weight: 800;
+      color: #38bdf8;
+      letter-spacing: 0.08em;
+      text-shadow: 0 0 20px rgba(56, 189, 248, 0.35);
+    }
+
+    .pomo-controls {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .btn-pomo-main {
+      flex: 1;
+      background: linear-gradient(135deg, #38bdf8, #0284c7);
+      color: #0f172a;
+      border: none;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 12px 18px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
+      transition: all 0.2s;
+      box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
+    }
+
+    .btn-pomo-main:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.1);
+    }
+
+    .btn-pomo-sub {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      font-weight: 700;
+      font-size: 12px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-pomo-sub:hover {
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .pomo-presets {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-pomo-preset {
+      background: rgba(255, 255, 255, 0.08);
+      color: #cbd5e1;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-pomo-preset.active {
+      background: rgba(56, 189, 248, 0.2);
+      color: #38bdf8;
+      border-color: #38bdf8;
+    }
+
+    .pomo-linker {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .pomo-select {
+      flex: 1;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-family: inherit;
+    }
+
+    .btn-fast-pomo {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: white;
+      border: none;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 8px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+      transition: all 0.2s;
+    }
+
+    .btn-fast-pomo:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(99, 102, 241, 0.45);
+    }
+
+    /* Pomo Pop-out Modal Ring */
+    .pomo-modal-card {
+      background: linear-gradient(135deg, #0f172a, #1e1b4b);
+      color: white;
+      border-radius: 24px;
+      max-width: 460px;
+      width: 100%;
+      padding: 32px 24px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      position: relative;
+      text-align: center;
+    }
+
+    .pomo-ring-container {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      margin: 0 auto;
+    }
+
+    .pomo-svg-ring {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .pomo-ring-bg {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.08);
+      stroke-width: 8;
+    }
+
+    .pomo-ring-fill {
+      fill: none;
+      stroke: #38bdf8;
+      stroke-width: 8;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.5s ease-out;
+    }
+
+    .pomo-ring-time {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: var(--font-mono);
+      font-size: 32px;
+      font-weight: 800;
+      color: white;
+    }
+
+    /* Shop Tab Layout */
+    .shop-hero {
+      background: linear-gradient(135deg, #0f172a, #1e1b4b);
+      color: white;
+      border-radius: 20px;
+      padding: 28px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .vault-box {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 16px;
+      padding: 16px 24px;
+      text-align: center;
+      min-width: 180px;
+    }
+
+    .vault-pts {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--amber);
+      font-family: var(--font-mono);
+    }
+
+    .rewards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .reward-card {
+      background: white;
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      transition: all 0.2s ease-out;
+    }
+
+    .btn-remove-reward {
+      background: rgba(244, 63, 94, 0.08);
+      color: var(--rose);
+      border: 1px solid rgba(244, 63, 94, 0.2);
+      padding: 5px 8px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      transition: all 0.15s;
+    }
+
+    .btn-remove-reward:hover {
+      background: var(--rose);
+      color: white;
+    }
+
+    /* Celebration Achievement Modal */
+    .celebration-modal-card {
+      background: linear-gradient(135deg, #0f172a, #1e1b4b);
+      color: white;
+      border-radius: 24px;
+      max-width: 500px;
+      width: 100%;
+      padding: 32px 24px;
+      box-shadow: 0 25px 60px rgba(245, 158, 11, 0.35);
+      border: 2px solid #f59e0b;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      animation: popInBounce 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes popInBounce {
+      0% { transform: scale(0.6); opacity: 0; }
+      70% { transform: scale(1.05); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .trophy-glow-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px auto;
+      box-shadow: 0 0 35px rgba(245, 158, 11, 0.8);
+      animation: trophyFloat 2.2s infinite ease-in-out;
+    }
+
+    @keyframes trophyFloat {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-8px) rotate(3deg); }
+    }
+
+    .ticket-shiny-card {
+      background: rgba(255, 255, 255, 0.08);
+      border: 2px dashed #f59e0b;
+      border-radius: 16px;
+      padding: 16px;
+      margin: 20px 0;
+      position: relative;
+    }
+
+    .ticket-badge-code {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 800;
+      color: #fde68a;
+      letter-spacing: 0.1em;
+      background: rgba(245, 158, 11, 0.2);
+      padding: 6px 16px;
+      border-radius: 10px;
+      display: inline-block;
+      margin-top: 8px;
+      border: 1px solid rgba(245, 158, 11, 0.4);
+    }
+
+    .confetti-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .confetti-piece {
+      position: absolute;
+      width: 8px;
+      height: 14px;
+      opacity: 0.9;
+      animation: confettiFall 2.5s infinite linear;
+    }
+
+    @keyframes confettiFall {
+      0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(450px) rotate(720deg); opacity: 0; }
+    }
+
+    /* Analytics Tab Layout */
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .metric-card {
+      background: white;
+      border-radius: 18px;
+      border: 1px solid var(--border-color);
+      padding: 22px;
+    }
+
+    .metric-num {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text-main);
+      font-family: var(--font-mono);
+      margin-top: 4px;
+    }
+
+    /* Modals */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.2s ease-out;
+    }
+
+    .modal-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      background: white;
+      border-radius: 20px;
+      max-width: 500px;
+      width: 100%;
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+      transform: scale(0.95);
+      transition: all 0.2s ease-out;
+    }
+
+    .modal-backdrop.active .modal-card {
+      transform: scale(1);
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      letter-spacing: 0.03em;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .form-input:focus {
+      border-color: var(--primary);
+    }
+
+    /* Starter Tutorial Stepper */
+    .tutorial-step-dots {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+
+    .tutorial-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      transition: all 0.2s;
+    }
+
+    .tutorial-dot.active {
+      background: var(--primary);
+      width: 24px;
+      border-radius: 100px;
+    }
+
+    /* Toast Alert */
+    .toast-stack {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 380px;
+      width: 100%;
+      pointer-events: none;
+    }
+
+    .toast-item {
+      pointer-events: auto;
+      background: var(--bg-dark);
+      color: white;
+      padding: 14px 16px;
+      border-radius: 14px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      border: 1px solid var(--border-dark);
+      animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: opacity 0.3s;
+    }
+
+    .toast-item.alert {
+      background: #7f1d1d;
+      border-color: #ef4444;
+    }
+
+    .toast-item.warning {
+      background: #78350f;
+      border-color: #f59e0b;
+    }
+
+    .toast-item.success {
+      background: #064e3b;
+      border-color: #10b981;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    footer {
+      border-top: 1px solid var(--border-color);
+      background: white;
+      padding: 18px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1320px;
+      margin: 0 auto;
+      width: 100%;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    :root {
+      --glass-bg: rgba(255, 255, 255, 0.88);
+      --glass-border: rgba(255, 255, 255, 0.65);
+      --glass-dark-bg: rgba(15, 23, 42, 0.92);
+      --glass-dark-border: rgba(255, 255, 255, 0.12);
+      --shadow-ambient: 0 10px 30px -10px rgba(15, 23, 42, 0.08);
+      --shadow-glow-amber: 0 0 25px rgba(245, 158, 11, 0.28);
+      --shadow-glow-indigo: 0 0 25px rgba(79, 70, 229, 0.28);
+      --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    button, .btn-chip, .btn-ctrl, .btn-add-task, .btn-fast-pomo, .btn-icon-nav, .btn-reset-app, .tab-btn, .bottom-nav-btn, .btn-pomo-main, .btn-pomo-sub, .btn-pomo-preset {
+      touch-action: manipulation;
+      transition: transform 0.15s var(--ease-spring), box-shadow 0.2s var(--ease-spring), background 0.2s ease, opacity 0.2s ease, border-color 0.2s ease;
+    }
+
+    button:active, .btn-chip:active, .btn-ctrl:active, .btn-add-task:active, .btn-fast-pomo:active, .btn-icon-nav:active, .tab-btn:active, .bottom-nav-btn:active, .btn-pomo-main:active, .btn-pomo-sub:active {
+      transform: scale(0.96) !important;
+    }
+
+    .task-card, .overload-card, .metric-card, .reward-card {
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+      transition: transform 0.25s var(--ease-spring), box-shadow 0.25s var(--ease-spring), border-color 0.2s ease;
+    }
+
+    .task-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 30px -8px rgba(15, 23, 42, 0.1), 0 0 0 1px rgba(79, 70, 229, 0.15);
+    }
+
+    .reward-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px -6px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(245, 158, 11, 0.2);
+    }
+
+    .task-card.active {
+      border-color: rgba(245, 158, 11, 0.7) !important;
+      box-shadow: 0 0 24px rgba(245, 158, 11, 0.25), 0 8px 24px -4px rgba(0, 0, 0, 0.08) !important;
+      animation: pulseActiveCard 3s infinite ease-in-out;
+    }
+
+    @keyframes pulseActiveCard {
+      0%, 100% { box-shadow: 0 0 18px rgba(245, 158, 11, 0.2), 0 6px 16px rgba(0,0,0,0.06); }
+      50% { box-shadow: 0 0 30px rgba(245, 158, 11, 0.35), 0 10px 24px rgba(0,0,0,0.1); }
+    }
+
+    @keyframes barShimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    .track-fill {
+      background-size: 200% 100%;
+      background-image: linear-gradient(90deg, #3b82f6 0%, #6366f1 25%, #818cf8 50%, #3b82f6 75%, #4f46e5 100%);
+      animation: barShimmer 4s infinite linear;
+    }
+
+    .track-fill.warning {
+      background-image: linear-gradient(90deg, #f59e0b 0%, #fbbf24 25%, #f59e0b 50%, #d97706 75%, #f59e0b 100%);
+    }
+
+    .track-fill.danger {
+      background-image: linear-gradient(90deg, #f43f5e 0%, #fb7185 25%, #f43f5e 50%, #e11d48 75%, #f43f5e 100%);
+    }
+
+    .modal-backdrop {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .modal-card {
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(0, 0, 0, 0.05);
+    }
+
+    .pomo-modal-card {
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.97), rgba(30, 27, 75, 0.95));
+      border: 1px solid rgba(99, 102, 241, 0.45);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5), 0 0 35px rgba(99, 102, 241, 0.25);
+    }
+
+    .celebration-modal-card {
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(30, 27, 75, 0.96));
+      border: 2px solid #f59e0b;
+      box-shadow: 0 25px 60px rgba(245, 158, 11, 0.35), 0 0 40px rgba(245, 158, 11, 0.2);
+    }
+
+    .mobile-stats-strip {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 6px 12px;
+      margin-bottom: 16px;
+      background: rgba(15, 23, 42, 0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 14px;
+      border: 1px solid var(--border-dark);
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .mobile-stats-strip::-webkit-scrollbar {
+      display: none;
+    }
+
+    .mobile-bottom-nav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      z-index: 50;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0 8px;
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .bottom-nav-btn {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-family: var(--font-sans);
+      font-size: 10px;
+      font-weight: 700;
+      gap: 3px;
+      padding: 6px 0;
+      cursor: pointer;
+      min-height: 44px;
+      border-radius: 12px;
+      transition: all 0.2s var(--ease-spring);
+    }
+
+    .bottom-nav-btn.active {
+      color: #f59e0b;
+    }
+
+    .bottom-nav-btn.active i[data-lucide], .bottom-nav-btn.active [data-lucide] {
+      color: #f59e0b;
+      transform: translateY(-1px);
+    }
+
+    .bottom-nav-fab {
+      position: relative;
+      top: -12px;
+      flex: 0 0 54px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .fab-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--amber), #d97706);
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 18px rgba(245, 158, 11, 0.45);
+      border: 3px solid #0f172a;
+      transition: transform 0.2s var(--ease-spring);
+    }
+
+    .bottom-nav-fab:active .fab-circle {
+      transform: scale(0.92);
+    }
+
+    @media (max-width: 840px) {
+      body {
+        padding-bottom: 74px;
+      }
+      .mobile-bottom-nav {
+        display: flex;
+      }
+      .nav-tabs {
+        display: none !important;
+      }
+      .btn-fast-pomo span, .btn-add-task span {
+        display: none !important;
+      }
+      .btn-fast-pomo, .btn-add-task {
+        padding: 8px 10px;
+        min-height: 40px;
+      }
+      .mobile-stats-strip {
+        display: flex;
+      }
+      .task-grid {
+        grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+        gap: 14px;
+      }
+      .rewards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      }
+      .analytics-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      main {
+        padding: 16px 12px 88px 12px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav-container {
+        height: 58px;
+        padding: 0 12px;
+      }
+      .brand-text h1 {
+        font-size: 17px;
+      }
+      .brand-logo {
+        width: 40px;
+        height: 40px;
+      }
+      .btn-add-task, .btn-fast-pomo {
+        display: none !important;
+      }
+      .btn-icon-nav span, .btn-reset-app span {
+        display: none !important;
+      }
+      .btn-icon-nav, .btn-reset-app {
+        padding: 8px;
+        min-width: 38px;
+        justify-content: center;
+      }
+      .overload-card {
+        padding: 16px 14px;
+        border-radius: 16px;
+        margin-bottom: 16px;
+      }
+      .overload-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
+      .overload-title h2 {
+        font-size: 15px;
+      }
+      .priority-banner {
+        padding: 14px 14px;
+        border-radius: 14px;
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .btn-focus-first {
+        width: 100%;
+        justify-content: center;
+        min-height: 44px;
+      }
+      .pomo-card {
+        padding: 16px 14px;
+        border-radius: 16px;
+      }
+      .pomo-body {
+        padding: 14px 12px;
+      }
+      .pomo-clock-display {
+        font-size: 38px;
+      }
+      .pomo-controls {
+        flex-direction: row;
+        width: 100%;
+      }
+      .btn-pomo-main, .btn-pomo-sub {
+        min-height: 44px;
+      }
+      .filter-bar {
+        padding: 10px 12px;
+        gap: 10px;
+        border-radius: 14px;
+      }
+      .filter-group {
+        width: 100%;
+        overflow-x: auto;
+        padding-bottom: 2px;
+        scrollbar-width: none;
+      }
+      .filter-group::-webkit-scrollbar {
+        display: none;
+      }
+      .btn-chip {
+        white-space: nowrap;
+        min-height: 40px;
+        padding: 6px 12px;
+      }
+      .task-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .task-card {
+        padding: 16px 14px;
+        border-radius: 16px;
+      }
+      .timer-box {
+        padding: 10px 12px;
+      }
+      .timer-clock {
+        font-size: 20px;
+      }
+      .task-controls {
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .btn-ctrl {
+        min-height: 42px;
+        padding: 8px 14px;
+        font-size: 13px;
+      }
+      .btn-remove-task {
+        min-height: 42px;
+        padding: 8px 10px;
+      }
+      .shop-hero {
+        padding: 18px 14px;
+        border-radius: 16px;
+      }
+      .shop-hero h2 {
+        font-size: 20px;
+      }
+      .vault-box {
+        width: 100%;
+        min-width: unset;
+      }
+      .rewards-grid {
+        grid-template-columns: 1fr;
+      }
+      .analytics-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .modal-card {
+        padding: 20px 16px;
+        border-radius: 20px;
+        max-width: 95vw;
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+      .pomo-modal-card, .celebration-modal-card {
+        padding: 24px 16px;
+        border-radius: 20px;
+        max-width: 95vw;
+      }
+      .form-input {
+        min-height: 44px;
+        font-size: 15px;
+      }
+      .toast-stack {
+        left: 12px;
+        right: 12px;
+        bottom: 74px;
+        max-width: unset;
+      }
+      footer {
+        padding: 14px;
+        margin-bottom: 70px;
+        flex-direction: column;
+        text-align: center;
+        gap: 6px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .brand-text h1 {
+        font-size: 16px;
+      }
+      .badge-offline {
+        display: none;
+      }
+      .pomo-clock-display {
+        font-size: 32px;
+      }
+      .pomo-presets {
+        gap: 6px;
+      }
+      .btn-pomo-preset {
+        padding: 6px 10px;
+        font-size: 10px;
+      }
+      .pomo-ring-container {
+        width: 150px;
+        height: 150px;
+      }
+      .pomo-ring-time {
+        font-size: 28px;
+      }
+      .trophy-glow-icon {
+        width: 64px;
+        height: 64px;
+      }
+      .ticket-badge-code {
+        font-size: 20px;
+        padding: 4px 12px;
+      }
+      .mobile-bottom-nav {
+        height: 60px;
+      }
+      .bottom-nav-btn {
+        font-size: 9px;
+      }
+      .fab-circle {
+        width: 44px;
+        height: 44px;
+      }
+      .bottom-nav-fab {
+        top: -10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loading Intro Splash Overlay -->
+  <div id="loading-screen">
+    <div class="splash-logo">
+      <img src="FFLOGO.png" height="100px" width="100px" onerror="this.onerror=null; this.src='/assets/aistudio/FFLOGO_70d20ad7.png';">    
+    </div>
+    <div class="splash-title">Focus<span>Forge</span></div>
+    <div class="splash-subtitle">Student Procrastination Management System</div>
+    <div class="splash-loader-bar">
+      <div class="splash-loader-progress"></div>
+    </div>
+    <span style="font-size: 10px; font-weight: 700; color: #64748b; margin-top: 12px; text-transform: uppercase; letter-spacing: 0.05em;">Made by Generous</span>
+  </div>
+
+  <!-- Top Navigation Bar -->
+  <header>
+    <div class="nav-container">
+      <div class="brand-group">
+        <div class="brand-logo">
+          <img src="FFLOGO.png" height="55px" width="57px" onerror="this.onerror=null; this.src='/assets/aistudio/FFLOGO_70d20ad7.png';">
+        </div>
+        <div class="brand-text">
+          <h1>Focus<span>Forge</span> <span class="badge-offline">OFFLINE</span></h1>
+        </div>
+      </div>
+
+      <!-- Center Ribbon Stats -->
+      <div class="stats-ribbon">
+        <div class="pill-stat pill-streak">
+          <i data-lucide="flame" size="14"></i>
+          <span id="stat-streak-val">0 Flow Streak</span>
+        </div>
+
+        <div class="pill-stat pill-vault">
+          <i data-lucide="gem" size="14"></i>
+          <span id="stat-points-val">0 PTS</span>
+        </div>
+
+        <div class="goal-pill-group" id="goal-pill-wrapper">
+          <button class="btn-goal-label" onclick="openGoalModal()" title="Click to set daily target goal">
+            <i data-lucide="target" size="13" style="color: var(--amber)"></i>
+            <span id="stat-goal-text">Set Daily Goal</span>
+          </button>
+          <button id="btn-remove-goal-header" class="btn-remove-goal-icon" style="display: none;" onclick="removeDailyGoal()" title="Remove Goal">
+            <i data-lucide="x" size="12"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Actions Right Nav -->
+      <div class="nav-actions">
+        <div class="nav-tabs">
+          <button class="tab-btn active" id="tab-nav-tasks" onclick="switchView('tasks')">
+            <i data-lucide="check-square" size="14"></i>
+            <span style="display: inline-block;">Tasks</span>
+          </button>
+
+          <button class="tab-btn" id="tab-nav-shop" onclick="switchView('shop')">
+            <i data-lucide="gift" size="14"></i>
+            <span style="display: inline-block;">Vault</span>
+          </button>
+
+          <button class="tab-btn" id="tab-nav-analytics" onclick="switchView('analytics')">
+            <i data-lucide="bar-chart-3" size="14"></i>
+            <span style="display: inline-block;">Analytics</span>
+          </button>
+        </div>
+
+        <button class="btn-fast-pomo" onclick="openPomoModal()" title="Fast-Paced 25m Pomodoro Focus Timer">
+          <i data-lucide="timer" size="15"></i>
+          <span style="display: inline-block;">25m Focus</span>
+        </button>
+
+        <button class="btn-add-task" onclick="openTaskModal()">
+          <i data-lucide="plus" size="16"></i>
+          <span style="display: inline-block;">New Task</span>
+        </button>
+
+        <button class="btn-icon-nav" onclick="openTutorialModal(1)" title="Guide / Tutorial">
+          <i data-lucide="help-circle" size="14"></i>
+          <span style="display: inline-block;">Guide</span>
+        </button>
+
+        <button class="btn-icon-nav" onclick="openSettingsModal()" title="Settings & Passive Features">
+          <i data-lucide="settings" size="14"></i>
+          <span style="display: inline-block;">Settings</span>
+        </button>
+
+        <button class="btn-reset-app" onclick="openResetModal()" title="Reset All App Data">
+          <i data-lucide="refresh-cw" size="13"></i>
+          <span>Reset</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main View Area -->
+  <main>
+
+    <!-- Mobile Touch Stats Strip (Visible on tablets & mobile screens <= 840px) -->
+    <div id="mobile-stats-strip" class="mobile-stats-strip">
+      <div class="pill-stat pill-streak">
+        <i data-lucide="flame" size="14"></i>
+        <span id="mobile-stat-streak-val">0 Flow Streak</span>
+      </div>
+      <div class="pill-stat pill-vault">
+        <i data-lucide="gem" size="14"></i>
+        <span id="mobile-stat-points-val">0 PTS</span>
+      </div>
+      <div class="goal-pill-group">
+        <button class="btn-goal-label" onclick="openGoalModal()" title="Click to set daily target goal">
+          <i data-lucide="target" size="13" style="color: var(--amber)"></i>
+          <span id="mobile-stat-goal-text">Set Daily Goal</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Offline Daily Reminder Alert Banner -->
+    <div id="daily-reminder-banner" class="daily-reminder-banner" style="display: none;">
+      <div class="reminder-content">
+        <div class="reminder-icon">
+          <i data-lucide="bell" size="20"></i>
+        </div>
+        <div>
+          <h4 style="font-size: 14px; font-weight: 800; color: white;">Daily Focus Reminder</h4>
+          <p style="font-size: 12px; color: #c7d2fe;" id="reminder-banner-text">
+            No daily goal locked in for today yet! Set your daily target to keep your flow streak alive.
+          </p>
+        </div>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <button class="btn-chip" style="background: var(--amber); color: #0f172a; border: none;" onclick="openGoalModal()">Set Goal Now</button>
+        <button class="btn-chip" style="background: rgba(255,255,255,0.1); color: white; border: none;" onclick="dismissReminderBanner()">Dismiss</button>
+      </div>
+    </div>
+
+    <!-- VIEW 1: TASKS & TIMER VIEW -->
+    <section id="view-tasks">
+      
+      <!-- Overload Progress Bar -->
+      <div class="overload-card">
+        <div class="overload-header">
+          <div class="overload-title">
+            <i data-lucide="zap" size="20" style="color: var(--primary);"></i>
+            <h2>1 Min Focus = 1% Progress</h2>
+            <span id="overload-badge" class="level-badge level-healthy">Healthy Balance</span>
+          </div>
+
+          <div style="font-size: 12px; font-weight: 700; color: var(--text-muted);" id="overload-stats-summary">
+            0% Completed • 0 active tasks
+          </div>
+        </div>
+
+        <div class="track-bg">
+          <div id="overload-fill" class="track-fill" style="width: 0%;"></div>
+        </div>
+
+        <div class="track-footer">
+          <span id="overload-footer-text">1 minute (01:00) of completed focus = 1% bar fill. 100 mins = 100% full progress.</span>
+          <button id="btn-claim-100" style="display: none; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; font-family: inherit; font-size: 11px; font-weight: 800; padding: 6px 14px; border-radius: 8px; cursor: pointer; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);" onclick="triggerAutomatic100PercentTicket(true)">
+            🏆 100% Focus Ticket Auto-Issued! (Click to View)
+          </button>
+        </div>
+      </div>
+
+      <!-- Earliest Deadline Priority Banner -->
+      <div id="priority-banner-container">
+        <!-- Rendered via JS -->
+      </div>
+
+      <!-- Separated 25-Minute Fast-Paced Focus Sprint Card -->
+      <div class="pomo-card">
+        <div class="pomo-header">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div class="pomo-badge-icon">
+              <i data-lucide="timer" size="18"></i>
+            </div>
+            <div>
+              <h3 style="font-size: 15px; font-weight: 800; color: white; margin: 0;">25-Min Fast-Paced Focus Sprint</h3>
+              <p style="font-size: 11px; color: #a5b4fc; margin: 2px 0 0 0;">Dedicated Pomodoro timer • Earns +25 Vault Points upon completion</p>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <button class="btn-pomo-audio" id="pomo-audio-toggle-btn" onclick="togglePomoAudio()" title="Toggle Offline Chime Sound">
+              <i data-lucide="volume-2" size="14"></i> Sound: ON
+            </button>
+            <button class="btn-pomo-expand" onclick="openPomoModal()" title="Expand Focus Modal">
+              <i data-lucide="sparkles" size="14"></i> Pop-out
+            </button>
+          </div>
+        </div>
+
+        <div class="pomo-body">
+          <div class="pomo-clock-display" id="pomo-widget-clock">25:00</div>
+
+          <div class="pomo-controls">
+            <button class="btn-pomo-main" id="pomo-widget-start-btn" onclick="togglePomoTimer()">
+              <i data-lucide="play" size="16"></i> <span id="pomo-widget-start-text">Start 25m Sprint</span>
+            </button>
+            <button class="btn-pomo-sub" onclick="resetPomoTimer()">
+              <i data-lucide="refresh-cw" size="14"></i> Reset
+            </button>
+          </div>
+
+          <div class="pomo-presets">
+            <button class="btn-pomo-preset active" id="preset-25m" onclick="setPomoPreset(1500, '25m Focus')">⚡ 25m Focus</button>
+            <button class="btn-pomo-preset" id="preset-15m" onclick="setPomoPreset(900, '15m Speed')">🚀 15m Speed</button>
+            <button class="btn-pomo-preset" id="preset-5m" onclick="setPomoPreset(300, '5m Break')">☕ 5m Break</button>
+          </div>
+
+          <div class="pomo-linker">
+            <label style="font-size: 11px; font-weight: 700; color: #94a3b8; display: flex; align-items: center; gap: 4px; white-space: nowrap;">
+              <i data-lucide="target" size="12"></i> Link to Task:
+            </label>
+            <select id="pomo-task-select" class="pomo-select" onchange="setPomoLinkedTask(this.value)">
+              <!-- Rendered via JS -->
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category Filter Bar -->
+      <div class="filter-bar">
+        <div class="filter-group">
+          <span style="font-size: 12px; font-weight: 700; color: var(--text-muted); margin-right: 4px;">Filter:</span>
+          <button class="btn-chip active" id="chip-filter-all" onclick="setCategoryFilter('all')">All Tasks</button>
+          <button class="btn-chip" id="chip-filter-academic" onclick="setCategoryFilter('academic')">
+            <i data-lucide="book-open" size="12"></i> Academic
+          </button>
+          <button class="btn-chip" id="chip-filter-household" onclick="setCategoryFilter('household')">
+            <i data-lucide="home" size="12"></i> Household
+          </button>
+        </div>
+
+        <div style="font-size: 12px; font-weight: 600; color: var(--text-muted);" id="category-ratio-text">
+          Balance: 0 Academic / 0 Household
+        </div>
+      </div>
+
+      <!-- Task Cards Grid -->
+      <div id="task-cards-grid" class="task-grid">
+        <!-- Rendered via JS -->
+      </div>
+    </section>
+
+    <!-- VIEW 2: DOPAMINE VAULT & REWARDS SHOP VIEW -->
+    <section id="view-shop" style="display: none;">
+      <div class="shop-hero">
+        <div>
+          <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #a5b4fc; letter-spacing: 0.05em;">Offline Incentive Chest</span>
+          <h2 style="font-size: 24px; font-weight: 800; margin-top: 4px;">The Dopamine Vault</h2>
+          <p style="font-size: 13px; color: #cbd5e1; margin-top: 4px; max-width: 520px;">
+            Turn real productivity into reward points! Complete tasks and 100% focus cycles to collect points and redeem custom real-life rewards.
+          </p>
+        </div>
+
+        <div class="vault-box">
+          <span style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: #94a3b8; display: block;">Vault Balance</span>
+          <div class="vault-pts" id="vault-pts-display">0</div>
+          <span style="font-size: 11px; color: #cbd5e1;">Reward Points</span>
+        </div>
+      </div>
+
+      <div style="background: white; border-radius: 20px; border: 1px solid var(--border-color); padding: 24px; margin-bottom: 24px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+          <h3 style="font-size: 16px; font-weight: 800;">Offline Rewards Shop</h3>
+          <button class="btn-chip active" onclick="openAddRewardModal()">
+            <i data-lucide="plus" size="14"></i> Add Custom Reward
+          </button>
+        </div>
+
+        <div id="rewards-grid-container" class="rewards-grid">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+
+      <div style="background: white; border-radius: 20px; border: 1px solid var(--border-color); padding: 24px;">
+        <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 4px;">Generated Reward Tickets</h3>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Virtual tickets generated automatically upon reaching 100% progress.</p>
+        
+        <div id="tickets-list-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px;">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 3: PROCRASTINATION ANALYTICS VIEW -->
+    <section id="view-analytics" style="display: none;">
+      <div style="background: white; border-radius: 20px; border: 1px solid var(--border-color); padding: 24px; margin-bottom: 24px;">
+        <h2 style="font-size: 20px; font-weight: 800; letter-spacing: -0.01em;">Procrastination Analytics</h2>
+        <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Tracking student habits and execution metrics stored 100% locally.</p>
+      </div>
+
+      <div class="analytics-grid">
+        <div class="metric-card">
+          <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--text-muted);">Avg Completion Speed</span>
+          <div class="metric-num" id="metric-avg-speed">0 Mins</div>
+          <p style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Time a task sits before being checked off</p>
+        </div>
+
+        <div class="metric-card">
+          <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--text-muted);">Flow Streak</span>
+          <div class="metric-num" id="metric-streak-display" style="color: var(--amber);">0 Days</div>
+          <p style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Consecutive focus milestone cycles</p>
+        </div>
+
+        <div class="metric-card">
+          <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--text-muted);">Task Removal / Delete Rate</span>
+          <div class="metric-num" id="metric-term-rate" style="color: var(--rose);">0%</div>
+          <p style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Percentage of goals removed vs fulfilled</p>
+        </div>
+
+        <div class="metric-card">
+          <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--text-muted);">Total Focus Logged</span>
+          <div class="metric-num" id="metric-total-focused" style="color: var(--emerald-dark);">0m</div>
+          <p style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Active timer seconds logged</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL STARTER: TUTORIAL / ONBOARDING GUIDECODE -->
+  <div id="modal-tutorial" class="modal-backdrop">
+    <div class="modal-card">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <i data-lucide="sparkles" size="18" style="color: var(--amber)"></i>
+          <h3 style="font-size: 17px; font-weight: 800;">Quick Starter Guide</h3>
+        </div>
+        <button style="background: none; border: none; cursor: pointer; color: var(--text-muted);" onclick="closeTutorialModal()">
+          <i data-lucide="x" size="20"></i>
+        </button>
+      </div>
+
+      <div class="tutorial-step-dots">
+        <div id="tut-dot-1" class="tutorial-dot active"></div>
+        <div id="tut-dot-2" class="tutorial-dot"></div>
+        <div id="tut-dot-3" class="tutorial-dot"></div>
+      </div>
+
+      <!-- Tutorial Step 1 -->
+      <div id="tut-step-1">
+        <div style="background: var(--primary-light); border: 1px solid #c7d2fe; border-radius: 14px; padding: 18px; text-align: center; margin-bottom: 16px;">
+          <i data-lucide="target" size="32" style="color: var(--primary); margin-bottom: 6px;"></i>
+          <h4 style="font-size: 15px; font-weight: 800; color: var(--primary);">1. Lock In Your Daily Goal</h4>
+          <p style="font-size: 12px; color: #3730a3; margin-top: 4px;">
+            Eliminate ambiguity right away! Click "Set Daily Goal" in the header to establish your primary intention for the day. You can edit or remove it anytime.
+          </p>
+        </div>
+      </div>
+
+      <!-- Tutorial Step 2 -->
+      <div id="tut-step-2" style="display: none;">
+        <div style="background: var(--amber-light); border: 1px solid #fde68a; border-radius: 14px; padding: 18px; text-align: center; margin-bottom: 16px;">
+          <i data-lucide="check-square" size="32" style="color: var(--amber-dark); margin-bottom: 6px;"></i>
+          <h4 style="font-size: 15px; font-weight: 800; color: var(--amber-dark);">2. Add Academic & Household Tasks</h4>
+          <p style="font-size: 12px; color: #78350f; margin-top: 4px;">
+            Click "+ New Task" to create your focused action list. Organize your academic work and household tasks easily.
+          </p>
+        </div>
+      </div>
+
+      <!-- Tutorial Step 3 -->
+      <div id="tut-step-3" style="display: none;">
+        <div style="background: var(--emerald-light); border: 1px solid #a7f3d0; border-radius: 14px; padding: 18px; text-align: center; margin-bottom: 16px;">
+          <i data-lucide="gem" size="32" style="color: var(--emerald-dark); margin-bottom: 6px;"></i>
+          <h4 style="font-size: 15px; font-weight: 800; color: var(--emerald-dark);">3. Run Timer & Earn Reward Points</h4>
+          <p style="font-size: 12px; color: #065f46; margin-top: 4px;">
+            Hit "Focus" on your card to start the timer. Capped focus sessions earn points for your Dopamine Vault to unlock real-life reward incentives!
+          </p>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 16px;">
+        <button id="btn-tut-prev" class="btn-chip" style="display: none;" onclick="navigateTutorial(-1)">Back</button>
+        <div id="tut-spacer"></div>
+        <button id="btn-tut-next" class="btn-add-task" style="background: var(--primary); color: white;" onclick="navigateTutorial(1)">Next Step →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 1: ADD NEW TASK MODAL -->
+  <div id="modal-task" class="modal-backdrop">
+    <div class="modal-card">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+        <h3 style="font-size: 18px; font-weight: 800;">Add New Focus Task</h3>
+        <button style="background: none; border: none; cursor: pointer; color: var(--text-muted);" onclick="closeTaskModal()">
+          <i data-lucide="x" size="20"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handleTaskSubmit(event)">
+        <div class="form-group">
+          <label>Task / Activity Name *</label>
+          <input type="text" id="input-task-title" required class="form-input" placeholder="e.g. Physics Assignment 2 or Wash Dishes">
+        </div>
+
+        <div class="form-group">
+          <label>Category (Education vs Household)</label>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <button type="button" id="btn-cat-academic" class="btn-chip active" style="justify-content: center; padding: 10px;" onclick="selectFormCategory('academic')">
+              <i data-lucide="book-open" size="14"></i> Academic
+            </button>
+            <button type="button" id="btn-cat-household" class="btn-chip" style="justify-content: center; padding: 10px;" onclick="selectFormCategory('household')">
+              <i data-lucide="home" size="14"></i> Household
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Deadline Date & Time</label>
+          <input type="datetime-local" id="input-task-deadline" class="form-input">
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+          <button type="button" class="btn-chip" onclick="closeTaskModal()">Cancel</button>
+          <button type="submit" class="btn-add-task">Add Task to Forge</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 2: DAILY GOAL CHECK-IN MODAL -->
+  <div id="modal-goal" class="modal-backdrop">
+    <div class="modal-card">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+        <h3 style="font-size: 18px; font-weight: 800;">Daily Goal Check-In</h3>
+        <button style="background: none; border: none; cursor: pointer; color: var(--text-muted);" onclick="closeGoalModal()">
+          <i data-lucide="x" size="20"></i>
+        </button>
+      </div>
+
+      <div style="background: #eef2ff; border: 1px solid #c7d2fe; padding: 14px; border-radius: 12px; margin-bottom: 16px;">
+        <h4 style="font-size: 14px; font-weight: 800; color: var(--primary);">"What is your target GOAL today?"</h4>
+        <p style="font-size: 12px; color: #3730a3; margin-top: 2px;">
+          Setting 1 clear intention primes your focus engine!
+        </p>
+      </div>
+
+      <form onsubmit="handleGoalSubmit(event)">
+        <div class="form-group">
+          <label>Your Daily Goal</label>
+          <input type="text" id="input-goal-text" class="form-input" placeholder="e.g. Finish Math assignment & clean room">
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 20px;">
+          <button type="button" class="btn-chip" style="color: var(--rose);" onclick="removeDailyGoal(); closeGoalModal();">
+            <i data-lucide="trash-2" size="13"></i> Remove Goal
+          </button>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="btn-chip" onclick="closeGoalModal()">Cancel</button>
+            <button type="submit" class="btn-add-task" style="background: var(--primary); color: white;">Lock In Goal</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 3: RESET ALL APP DATA CONFIRMATION MODAL -->
+  <div id="modal-reset" class="modal-backdrop">
+    <div class="modal-card">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+        <h3 style="font-size: 18px; font-weight: 800; color: var(--rose-dark);">Reset All App Data?</h3>
+        <button style="background: none; border: none; cursor: pointer; color: var(--text-muted);" onclick="closeResetModal()">
+          <i data-lucide="x" size="20"></i>
+        </button>
+      </div>
+
+      <div style="background: #fef2f2; border: 1px solid #fecdd3; padding: 14px; border-radius: 12px; margin-bottom: 16px;">
+        <p style="font-size: 13px; color: #9f1239; font-weight: 600;">
+          ⚠️ Warning: This will permanently wipe all local tasks, Flow Streak, Dopamine Vault points, and custom rewards.
+        </p>
+      </div>
+
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">
+        Are you sure you want to restore FocusForge to a clean starting state?
+      </p>
+
+      <div style="display: flex; justify-content: flex-end; gap: 10px;">
+        <button type="button" class="btn-chip" onclick="closeResetModal()">Cancel</button>
+        <button type="button" class="btn-chip" style="background: var(--rose); color: white; border: none;" onclick="confirmResetAppData()">
+          Yes, Reset Everything
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: ADD CUSTOM REWARD MODAL -->
+  <div id="modal-reward" class="modal-backdrop">
+    <div class="modal-card">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+        <h3 style="font-size: 18px; font-weight: 800;">Add Custom Reward</h3>
+        <button style="background: none; border: none; cursor: pointer; color: var(--text-muted);" onclick="closeAddRewardModal()">
+          <i data-lucide="x" size="20"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handleRewardSubmit(event)">
+        <div class="form-group">
+          <label>Reward Name / Incentive *</label>
+          <input type="text" id="input-reward-title" required class="form-input" placeholder="e.g. 1 Hour Video Game Session">
+        </div>
+
+        <div class="form-group">
+          <label>Points Cost (PTS) *</label>
+          <input type="number" id="input-reward-cost" min="10" max="1000" value="50" class="form-input">
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+          <button type="button" class="btn-chip" onclick="closeAddRewardModal()">Cancel</button>
+          <button type="submit" class="btn-add-task">Create Reward</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 5: AUTOMATIC 100% FOCUS CYCLE ACHIEVEMENT CELEBRATION MODAL -->
+  <div id="modal-celebration" class="modal-backdrop">
+    <div class="celebration-modal-card">
+      <div class="confetti-container" id="confetti-holder">
+        <!-- Generated via JS -->
+      </div>
+
+      <button style="position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.15); border: none; cursor: pointer; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 10; transition: all 0.2s;" onclick="closeCelebrationModal()">
+        <i data-lucide="x" size="18"></i>
+      </button>
+
+      <div class="trophy-glow-icon">
+        <i data-lucide="trophy" size="42"></i>
+      </div>
+
+      <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--amber); background: rgba(245, 158, 11, 0.2); padding: 4px 12px; border-radius: 100px; display: inline-block; margin-bottom: 8px;">
+        100% FOCUS CYCLE ACHIEVED!
+      </span>
+
+      <h2 style="font-size: 22px; font-weight: 800; color: white; margin-bottom: 6px;">
+        Achievement Unlocked! 🎉
+      </h2>
+
+      <p style="font-size: 13px; color: #cbd5e1; max-width: 420px; margin: 0 auto 16px auto;">
+        Outstanding focus! You hit 100% completion across all your current tasks. A golden ticket has been automatically generated and saved directly to your Dopamine Vault!
+      </p>
+
+      <div class="ticket-shiny-card">
+        <div style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: #a5b4fc; letter-spacing: 0.05em;">Auto-Issued Golden Ticket</div>
+        <h3 style="font-size: 16px; font-weight: 800; color: white; margin-top: 2px;" id="celebration-ticket-title">Golden Focus Ticket (+50 PTS)</h3>
+        <div class="ticket-badge-code" id="celebration-ticket-code">FORGE-8842</div>
+        <div style="font-size: 11px; color: #fcd34d; margin-top: 10px; font-weight: 700;">
+          +50 Reward Points Claimed • Day <span id="celebration-streak-num">1</span> Streak Active!
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+        <button class="btn-add-task" style="background: linear-gradient(135deg, var(--amber), #d97706); color: #0f172a; padding: 12px 24px; font-size: 13px; width: 100%; justify-content: center;" onclick="closeCelebrationModal()">
+          <i data-lucide="gem" size="16"></i> Collect Ticket & Open Vault
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 6: SEPARATED 25-MIN FAST-PACED FOCUS TIMER POP-OUT MODAL -->
+  <div id="modal-pomo-timer" class="modal-backdrop">
+    <div class="pomo-modal-card">
+      <button style="position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.12); border: none; cursor: pointer; color: white; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" onclick="closePomoModal()">
+        <i data-lucide="x" size="18"></i>
+      </button>
+
+      <div style="text-align: center; margin-bottom: 20px;">
+        <span style="font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #38bdf8; background: rgba(56, 189, 248, 0.15); padding: 4px 12px; border-radius: 100px; display: inline-block; margin-bottom: 10px;">
+          ⚡ FAST FOCUS SPRINT
+        </span>
+        <h2 style="font-size: 22px; font-weight: 800; color: white; margin: 0;">25-Minute Focus Timer</h2>
+        <p style="font-size: 12px; color: #94a3b8; margin-top: 4px;">Zero distraction environment • Instant Web Audio feedback</p>
+      </div>
+
+      <div class="pomo-ring-container">
+        <svg class="pomo-svg-ring" viewBox="0 0 120 120">
+          <circle class="pomo-ring-bg" cx="60" cy="60" r="52"></circle>
+          <circle class="pomo-ring-fill" id="pomo-ring-fill" cx="60" cy="60" r="52" stroke-dasharray="326.72" stroke-dashoffset="0"></circle>
+        </svg>
+        <div class="pomo-ring-time" id="pomo-modal-clock">25:00</div>
+      </div>
+
+      <div style="margin-top: 16px; font-size: 12px; font-weight: 700; color: #cbd5e1;" id="pomo-modal-mode-label">
+        Mode: 25-Min Focus Sprint (+25 PTS)
+      </div>
+
+      <div style="display: flex; gap: 8px; justify-content: center; margin: 16px 0 20px 0;">
+        <button class="btn-pomo-preset active" id="modal-preset-25m" onclick="setPomoPreset(1500, '25m Focus')">⚡ 25m Focus</button>
+        <button class="btn-pomo-preset" id="modal-preset-15m" onclick="setPomoPreset(900, '15m Speed')">🚀 15m Speed</button>
+        <button class="btn-pomo-preset" id="modal-preset-5m" onclick="setPomoPreset(300, '5m Break')">☕ 5m Break</button>
+      </div>
+
+      <div style="display: flex; gap: 10px; justify-content: center;">
+        <button class="btn-pomo-main" style="flex: 1; padding: 14px; font-size: 14px; justify-content: center;" id="pomo-modal-start-btn" onclick="togglePomoTimer()">
+          <i data-lucide="play" size="18"></i> <span id="pomo-modal-start-text">Start Focus Sprint</span>
+        </button>
+        <button class="btn-pomo-sub" style="padding: 14px 18px;" onclick="resetPomoTimer()">
+          <i data-lucide="refresh-cw" size="16"></i> Reset
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 7: APP & PASSIVE FEATURE SETTINGS MODAL -->
+  <div id="modal-settings" class="modal-backdrop">
+    <div class="modal-card" style="max-width: 580px; max-height: 85vh; overflow-y: auto;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; border-bottom: 1px solid var(--border-light); padding-bottom: 12px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="background: var(--primary-light); color: var(--primary); width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+            <i data-lucide="settings" size="20"></i>
+          </div>
+          <div>
+            <h3 style="font-size: 18px; font-weight: 800; margin: 0; color: var(--text-main);">Settings & Passive Features</h3>
+            <p style="font-size: 11px; color: var(--text-muted); margin: 2px 0 0 0;">100% Offline Control Panel • Toggle passive automation & UI preferences</p>
+          </div>
+        </div>
+        <button style="background: none; border: none; cursor: pointer; color: var(--text-muted);" onclick="closeSettingsModal()">
+          <i data-lucide="x" size="20"></i>
+        </button>
+      </div>
+
+      <div class="settings-list" style="display: flex; flex-direction: column; gap: 10px;">
+        <!-- Setting 1: AFK Protection -->
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-title"><i data-lucide="shield" size="15" style="color: var(--primary);"></i> AFK Inactivity Protection</div>
+            <div class="setting-desc">Auto-pauses active focus timers after 3 minutes of mouse & keyboard inactivity.</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="set-afkProtection" onchange="toggleSetting('afkProtection', this.checked)">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <!-- Setting 2: Audio Chimes -->
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-title"><i data-lucide="volume-2" size="15" style="color: var(--emerald-dark);"></i> Offline Audio Chimes</div>
+            <div class="setting-desc">Plays audio sound effects when starting tasks, completing timers, or redeeming rewards.</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="set-audioChimes" onchange="toggleSetting('audioChimes', this.checked)">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <!-- Setting 3: 100% Focus Golden Ticket Auto-Popup -->
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-title"><i data-lucide="award" size="15" style="color: var(--amber-dark);"></i> 100% Focus Golden Ticket Auto-Popup</div>
+            <div class="setting-desc">Automatically opens the celebration popup & awards golden tickets upon hitting 100% progress.</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="set-auto100Ticket" onchange="toggleSetting('auto100Ticket', this.checked)">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <!-- Setting 4: Earliest Deadline Priority Banner -->
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-title"><i data-lucide="alert-triangle" size="15" style="color: var(--amber-dark);"></i> Earliest Deadline Priority Banner</div>
+            <div class="setting-desc">Displays a highlighted top card for the task closest to its deadline.</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="set-priorityBanner" onchange="toggleSetting('priorityBanner', this.checked)">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <!-- Setting 5: Daily Reminder Banner -->
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-title"><i data-lucide="bell" size="15" style="color: var(--primary);"></i> Daily Goal Reminder Banner</div>
+            <div class="setting-desc">Shows top reminder banner prompting you to set a daily goal when none is active.</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="set-dailyReminderBanner" onchange="toggleSetting('dailyReminderBanner', this.checked)">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <!-- Setting 6: Max 120-Min Session Cap -->
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-title"><i data-lucide="clock" size="15" style="color: var(--rose-dark);"></i> Max 120-Min Continuous Timer Cap</div>
+            <div class="setting-desc">Caps active focus timers at 120 continuous minutes to prevent background overnight runs.</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="set-maxSessionCap" onchange="toggleSetting('maxSessionCap', this.checked)">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <!-- Setting 7: 25-Min Sprint Card -->
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-title"><i data-lucide="timer" size="15" style="color: var(--emerald-dark);"></i> 25-Min Fast Focus Sprint Card</div>
+            <div class="setting-desc">Displays the standalone 25-minute Pomodoro Sprint card on the tasks dashboard.</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="set-showPomoCard" onchange="toggleSetting('showPomoCard', this.checked)">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <!-- Setting 8: Dynamic Goal Scaling -->
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-title"><i data-lucide="trending-up" size="15" style="color: var(--primary);"></i> Dynamic Goal Bar Scaling (>100m)</div>
+            <div class="setting-desc">Dynamically scales progress bar denominator when total focus time exceeds 100 minutes.</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="set-dynamicScaling" onchange="toggleSetting('dynamicScaling', this.checked)">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <!-- Setting 10: Actual Device Notifications -->
+        <div class="setting-item" style="border-left: 3px solid var(--primary); background: #f0fdf4;">
+          <div class="setting-info">
+            <div class="setting-title">
+              <i data-lucide="bell" size="15" style="color: var(--primary);"></i> Actual Device OS Notifications (100% Offline)
+            </div>
+            <div class="setting-desc">
+              Sends native system notifications directly to your phone/desktop notification shade (zero internet or push servers required).
+            </div>
+            <div style="margin-top: 8px; display: flex; align-items: center; gap: 8px;">
+              <span id="notif-permission-badge" style="font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 100px; background: #e0e7ff; color: var(--primary);">
+                Checking Permission...
+              </span>
+              <button type="button" class="btn-chip" style="padding: 4px 10px; font-size: 10px; background: var(--primary); color: white; border: none;" onclick="sendTestDeviceNotification()">
+                🔔 Test Device Notification
+              </button>
+            </div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="set-deviceNotifications" onchange="handleDeviceNotifToggle(this.checked)">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <!-- Setting 11: Daily Goal Check-in Time -->
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-title">
+              <i data-lucide="clock" size="15" style="color: var(--amber-dark);"></i> Daily Focus Check-In Time
+            </div>
+            <div class="setting-desc">
+              Time each day your device will ask: "Any goal or task today?" to keep your streak alive (Works even when app is closed).
+            </div>
+          </div>
+          <input type="time" id="set-dailyNotifTime" value="09:00" style="padding: 6px 10px; border-radius: 8px; border: 1px solid var(--border-color); font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: var(--text-main);" onchange="toggleSetting('dailyNotifTime', this.value)">
+        </div>
+
+        <!-- Setting 12: 3-Day Deadline Countdown Reminders -->
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-title">
+              <i data-lucide="alert-triangle" size="15" style="color: var(--rose-dark);"></i> 3-Day Deadline Countdown Alerts
+            </div>
+            <div class="setting-desc">
+              Sends 3 daily countdown alerts to your device (at 3 days, 2 days, and 1 day remaining) prior to task deadlines.
+            </div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="set-deadlineReminders" onchange="toggleSetting('deadlineReminders', this.checked)">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <!-- Setting 9: Toast Notifications -->
+        <div class="setting-item">
+          <div class="setting-info">
+            <div class="setting-title"><i data-lucide="message-square" size="15" style="color: var(--primary);"></i> Notification Toast Popups</div>
+            <div class="setting-desc">Shows floating notification messages for actions, warnings, and achievements.</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="set-enableToasts" onchange="toggleSetting('enableToasts', this.checked)">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 18px; border-top: 1px solid var(--border-light); padding-top: 12px;">
+        <button class="btn-chip" style="color: var(--text-muted);" onclick="resetDefaultSettings()">
+          <i data-lucide="rotate-ccw" size="13"></i> Reset Default Settings
+        </button>
+        <button class="btn-add-task" style="background: var(--primary); color: white;" onclick="closeSettingsModal()">
+          Done
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 8: TASK DELETION CONFIRMATION MODAL -->
+  <div id="modal-delete-task" class="modal-backdrop">
+    <div class="modal-card" style="max-width: 480px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="background: var(--rose-light); color: var(--rose); width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+            <i data-lucide="alert-triangle" size="22"></i>
+          </div>
+          <div>
+            <h3 style="font-size: 18px; font-weight: 800; color: var(--text-main); margin: 0;">Delete This Task?</h3>
+            <p style="font-size: 11px; color: var(--text-muted); margin: 2px 0 0 0;">Permanent Action • Confirmation Required</p>
+          </div>
+        </div>
+        <button style="background: none; border: none; cursor: pointer; color: var(--text-muted);" onclick="closeDeleteTaskModal()">
+          <i data-lucide="x" size="20"></i>
+        </button>
+      </div>
+
+      <div style="background: #fff1f2; border: 1px solid #fecdd3; border-radius: 14px; padding: 14px; margin-bottom: 16px;">
+        <div style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--rose-dark); letter-spacing: 0.05em;" id="delete-modal-task-cat">ACADEMIC TASK</div>
+        <h4 style="font-size: 15px; font-weight: 800; color: #9f1239; margin-top: 4px;" id="delete-modal-task-title">Task Title</h4>
+        <div style="font-size: 11px; color: #be123c; margin-top: 6px; display: flex; align-items: center; gap: 12px;">
+          <span>Active Focus Logged: <strong id="delete-modal-task-time">00:00</strong></span>
+        </div>
+      </div>
+
+      <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 20px;">
+        Are you sure you want to permanently delete this task from FocusForge? All tracked focus time and progress for this task will be removed.
+      </p>
+
+      <div style="display: flex; justify-content: flex-end; gap: 10px;">
+        <button type="button" class="btn-chip" style="min-height: 44px; padding: 10px 18px; font-size: 13px;" onclick="closeDeleteTaskModal()">
+          Cancel & Keep Task
+        </button>
+        <button type="button" class="btn-chip" style="background: var(--rose); color: white; border: none; min-height: 44px; padding: 10px 18px; font-size: 13px; font-weight: 800;" onclick="confirmDeleteCurrentTask()">
+          <i data-lucide="trash-2" size="14"></i> Yes, Delete Task
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-stack" class="toast-stack"></div>
+
+  <!-- Fixed Mobile Bottom Navigation Bar -->
+  <nav id="mobile-bottom-bar" class="mobile-bottom-nav" aria-label="Mobile Navigation">
+    <button class="bottom-nav-btn active" id="mobile-nav-tasks" onclick="switchView('tasks')" title="Tasks">
+      <i data-lucide="check-square" size="20"></i>
+      <span>Tasks</span>
+    </button>
+    <button class="bottom-nav-btn" id="mobile-nav-shop" onclick="switchView('shop')" title="Dopamine Vault">
+      <i data-lucide="gift" size="20"></i>
+      <span>Vault</span>
+    </button>
+    <button class="bottom-nav-btn bottom-nav-fab" id="mobile-nav-add" onclick="openTaskModal()" title="Add New Task">
+      <div class="fab-circle">
+        <i data-lucide="plus" size="22"></i>
+      </div>
+      <span>New</span>
+    </button>
+    <button class="bottom-nav-btn" id="mobile-nav-pomo" onclick="openPomoModal()" title="25m Focus Sprint">
+      <i data-lucide="timer" size="20"></i>
+      <span>25m Focus</span>
+    </button>
+    <button class="bottom-nav-btn" id="mobile-nav-analytics" onclick="switchView('analytics')" title="Analytics">
+      <i data-lucide="bar-chart-3" size="20"></i>
+      <span>Analytics</span>
+    </button>
+  </nav>
+
+  <!-- Footer -->
+  <footer>
+    <div>
+      <strong>FocusForge</strong> • Student Procrastination Management System (Made by Generous)
+    </div>
+    <div style="font-size: 11px;">
+      All data stored locally in your browser
+    </div>
+  </footer>
+
+  <script>
+    // --- 1. LOCAL STORAGE & DATA STATE ---
+    const STORAGE_KEYS = {
+      TASKS: 'focusforge_tasks_v3',
+      REWARDS: 'focusforge_rewards_v3',
+      STATS: 'focusforge_stats_v3',
+      TICKETS: 'focusforge_tickets_v3',
+      TUTORIAL_SEEN: 'focusforge_tutorial_seen',
+      SETTINGS: 'focusforge_settings_v3'
+    };
+
+    const DEFAULT_TASKS = [];
+
+    const DEFAULT_REWARDS = [
+      { id: 'r-1', title: '15 Mins Gaming / Social Media', pointsCost: 50, redemptionCount: 0 },
+      { id: 'r-2', title: 'Favorite Snack or Drink', pointsCost: 100, redemptionCount: 0 },
+      { id: 'r-3', title: 'Watch 1 Anime / Series Episode', pointsCost: 150, redemptionCount: 0 }
+    ];
+
+    const DEFAULT_STATS = {
+      streakCount: 0,
+      dopamineVaultPoints: 0,
+      totalSecondsFocused: 0,
+      dailyGoalText: '',
+      lastDailyNotifDate: ''
+    };
+
+    const DEFAULT_SETTINGS = {
+      afkProtection: true,
+      audioChimes: true,
+      auto100Ticket: true,
+      priorityBanner: true,
+      dailyReminderBanner: true,
+      maxSessionCap: true,
+      showPomoCard: true,
+      dynamicScaling: true,
+      enableToasts: true,
+      deviceNotifications: false,
+      dailyNotifTime: '09:00',
+      deadlineReminders: true
+    };
+
+    let tasks = loadData(STORAGE_KEYS.TASKS, DEFAULT_TASKS);
+    let rewards = loadData(STORAGE_KEYS.REWARDS, DEFAULT_REWARDS);
+    let stats = loadData(STORAGE_KEYS.STATS, DEFAULT_STATS);
+    let tickets = loadData(STORAGE_KEYS.TICKETS, []);
+    let settings = { ...DEFAULT_SETTINGS, ...loadData(STORAGE_KEYS.SETTINGS, DEFAULT_SETTINGS) };
+
+    let activeCategoryFilter = 'all';
+    let formCategory = 'academic';
+    let activeTaskId = null;
+    let lastUserActivityMs = Date.now();
+    let currentTutorialStep = 1;
+    let cycle100Claimed = loadData('focusforge_cycle100_claimed_v3', false);
+
+    // Constant Notification IDs
+    const NOTIF_ID_TEST = 999999;
+    const NOTIF_ID_DAILY_CHECKIN = 10001;
+    const NOTIF_ID_POMO_FINISH = 50002;
+    const NOTIF_ID_TASK_FINISH = 50003;
+    const NOTIF_ID_SESSION_CAP = 50004;
+    const NOTIF_ID_100_CYCLE = 50005;
+
+    // --- 25-MIN FAST FOCUS POMODORO ENGINE STATE (100% OFFLINE) ---
+    let pomoState = loadData('focusforge_pomo_state_v3', {
+      secondsLeft: 1500,
+      totalSeconds: 1500,
+      isRunning: false,
+      modeName: '25m Focus',
+      soundOn: true,
+      linkedTaskId: ''
+    });
+
+    let audioCtxInstance = null;
+    function getAudioCtx() {
+      if (!audioCtxInstance) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtx) audioCtxInstance = new AudioCtx();
+      }
+      if (audioCtxInstance && audioCtxInstance.state === 'suspended') {
+        audioCtxInstance.resume();
+      }
+      return audioCtxInstance;
+    }
+
+    function playOfflineAudioChime(type) {
+      if (!settings.audioChimes || !pomoState.soundOn) return;
+      try {
+        const ctx = getAudioCtx();
+        if (!ctx) return;
+        const now = ctx.currentTime;
+
+        if (type === 'click' || type === 'tap') {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(600, now);
+          osc.frequency.exponentialRampToValueAtTime(200, now + 0.04);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.04);
+        } else if (type === 'start') {
+          [440, 880].forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.value = freq;
+            gain.gain.setValueAtTime(0.12, now + idx * 0.08);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.2);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now + idx * 0.08);
+            osc.stop(now + idx * 0.08 + 0.2);
+          });
+        } else if (type === 'pause') {
+          [440, 330].forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.value = freq;
+            gain.gain.setValueAtTime(0.1, now + idx * 0.08);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.2);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now + idx * 0.08);
+            osc.stop(now + idx * 0.08 + 0.2);
+          });
+        } else if (type === 'complete') {
+          [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.value = freq;
+            gain.gain.setValueAtTime(0.16, now + idx * 0.1);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.1 + 0.3);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now + idx * 0.1);
+            osc.stop(now + idx * 0.1 + 0.3);
+          });
+        } else if (type === 'delete' || type === 'remove') {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(240, now);
+          osc.frequency.exponentialRampToValueAtTime(80, now + 0.12);
+          gain.gain.setValueAtTime(0.1, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.12);
+        } else if (type === 'reward' || type === 'redeem') {
+          [880, 1174.66, 1396.91, 1760].forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.value = freq;
+            gain.gain.setValueAtTime(0.15, now + idx * 0.06);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.25);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now + idx * 0.06);
+            osc.stop(now + idx * 0.06 + 0.25);
+          });
+        } else if (type === 'fanfare' || type === 'victory') {
+          [659.25, 830.61, 987.77, 1318.51].forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.value = freq;
+            gain.gain.setValueAtTime(0.18, now + idx * 0.12);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.12 + 0.5);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now + idx * 0.12);
+            osc.stop(now + idx * 0.12 + 0.5);
+          });
+        } else if (type === 'reset') {
+          [500, 380].forEach((freq, idx) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.value = freq;
+            gain.gain.setValueAtTime(0.08, now + idx * 0.05);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.05 + 0.08);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(now + idx * 0.05);
+            osc.stop(now + idx * 0.05 + 0.08);
+          });
+        } else if (type === 'toast' || type === 'alert') {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(784, now);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.18);
+        }
+      } catch(e) {}
+    }
+
+    function syncPomoState() {
+      saveData('focusforge_pomo_state_v3', pomoState);
+      updatePomoUI();
+    }
+
+    function togglePomoTimer() {
+      pomoState.isRunning = !pomoState.isRunning;
+      if (pomoState.isRunning) {
+        playOfflineAudioChime('start');
+        showToast(`⚡ ${pomoState.modeName} Started!`, 'info');
+      } else {
+        showToast('Fast Focus Timer Paused', 'info');
+      }
+      syncPomoState();
+    }
+
+    function resetPomoTimer(newSecs = pomoState.totalSeconds) {
+      pomoState.isRunning = false;
+      pomoState.totalSeconds = newSecs;
+      pomoState.secondsLeft = newSecs;
+      syncPomoState();
+      showToast('Fast Focus Timer Reset', 'info');
+    }
+
+    function setPomoPreset(seconds, name) {
+      pomoState.isRunning = false;
+      pomoState.totalSeconds = seconds;
+      pomoState.secondsLeft = seconds;
+      pomoState.modeName = name;
+
+      document.querySelectorAll('.btn-pomo-preset').forEach(b => b.classList.remove('active'));
+      if (seconds === 1500) {
+        document.getElementById('preset-25m')?.classList.add('active');
+        document.getElementById('modal-preset-25m')?.classList.add('active');
+      } else if (seconds === 900) {
+        document.getElementById('preset-15m')?.classList.add('active');
+        document.getElementById('modal-preset-15m')?.classList.add('active');
+      } else if (seconds === 300) {
+        document.getElementById('preset-5m')?.classList.add('active');
+        document.getElementById('modal-preset-5m')?.classList.add('active');
+      }
+
+      syncPomoState();
+      showToast(`Preset set to ${name}`, 'info');
+    }
+
+    function setPomoLinkedTask(taskId) {
+      pomoState.linkedTaskId = taskId;
+      syncPomoState();
+      if (taskId) {
+        const t = tasks.find(x => x.id === taskId);
+        showToast(`Timer linked to: ${t ? t.title : 'Task'}`, 'info');
+      }
+    }
+
+    function togglePomoAudio() {
+      pomoState.soundOn = !pomoState.soundOn;
+      syncPomoState();
+      showToast(pomoState.soundOn ? 'Offline Chime Sound Enabled 🔊' : 'Audio Sound Muted 🔇', 'info');
+    }
+
+    function openPomoModal() {
+      const modal = document.getElementById('modal-pomo-timer');
+      const timeInput = document.getElementById('set-dailyNotifTime');
+      if (timeInput && settings.dailyNotifTime) timeInput.value = settings.dailyNotifTime;
+      updateNotificationPermissionUI();
+      if (modal) {
+        modal.classList.add('active');
+        if (window.lucide) lucide.createIcons();
+      }
+      updatePomoUI();
+    }
+
+    function closePomoModal() {
+      const modal = document.getElementById('modal-pomo-timer');
+      if (modal) modal.classList.remove('active');
+    }
+
+    function updatePomoUI() {
+      const timeStr = formatTimer(pomoState.secondsLeft);
+      
+      const widgetClock = document.getElementById('pomo-widget-clock');
+      if (widgetClock) widgetClock.innerText = timeStr;
+
+      const modalClock = document.getElementById('pomo-modal-clock');
+      if (modalClock) modalClock.innerText = timeStr;
+
+      const widgetStartText = document.getElementById('pomo-widget-start-text');
+      if (widgetStartText) widgetStartText.innerText = pomoState.isRunning ? 'Pause Sprint' : `Start ${pomoState.modeName}`;
+
+      const modalStartText = document.getElementById('pomo-modal-start-text');
+      if (modalStartText) modalStartText.innerText = pomoState.isRunning ? 'Pause Focus Sprint' : `Start ${pomoState.modeName}`;
+
+      const audioBtn = document.getElementById('pomo-audio-toggle-btn');
+      if (audioBtn) {
+        audioBtn.innerHTML = pomoState.soundOn 
+          ? '<i data-lucide="volume-2" size="14"></i> Sound: ON'
+          : '<i data-lucide="volume-x" size="14"></i> Sound: MUTED';
+      }
+
+      const modeLabel = document.getElementById('pomo-modal-mode-label');
+      if (modeLabel) {
+        modeLabel.innerText = `Mode: ${pomoState.modeName} (${pomoState.totalSeconds === 1500 ? '+25 PTS' : 'Sprint Mode'})`;
+      }
+
+      const ringFill = document.getElementById('pomo-ring-fill');
+      if (ringFill && pomoState.totalSeconds > 0) {
+        const ratio = pomoState.secondsLeft / pomoState.totalSeconds;
+        const offset = 326.72 * (1 - ratio);
+        ringFill.style.strokeDashoffset = offset;
+      }
+
+      const selectEl = document.getElementById('pomo-task-select');
+      if (selectEl) {
+        const activeTasks = tasks.filter(t => t.status !== 'completed');
+        const opts = ['<option value="">-- Standalone (No Linked Task) --</option>'];
+        activeTasks.forEach(t => {
+          const sel = t.id === pomoState.linkedTaskId ? 'selected' : '';
+          opts.push(`<option value="${t.id}" ${sel}>${t.title} (${formatTimer(t.activeSeconds || 0)})</option>`);
+        });
+        selectEl.innerHTML = opts.join('');
+      }
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function loadData(key, fallback) {
+      try {
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : fallback;
+      } catch (e) {
+        return fallback;
+      }
+    }
+
+    function saveData(key, val) {
+      try {
+        localStorage.setItem(key, JSON.stringify(val));
+      } catch (e) {}
+    }
+
+    function syncState() {
+      saveData(STORAGE_KEYS.TASKS, tasks);
+      saveData(STORAGE_KEYS.REWARDS, rewards);
+      saveData(STORAGE_KEYS.STATS, stats);
+      saveData(STORAGE_KEYS.TICKETS, tickets);
+      saveData(STORAGE_KEYS.SETTINGS, settings);
+      
+      const running = tasks.find(t => t.status === 'active');
+      activeTaskId = running ? running.id : null;
+
+      updateUI();
+      updatePomoUI();
+    }
+
+    // --- CAPACITOR LOCAL NOTIFICATIONS & BROWSER BRIDGE ENGINE ---
+    function getCapacitorLocalNotifications() {
+      if (typeof window !== 'undefined' && window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.LocalNotifications) {
+        return window.Capacitor.Plugins.LocalNotifications;
+      }
+      return null;
+    }
+
+    // Deterministic 32-bit positive integer IDs for each task's 3-day, 2-day, and 1-day alerts
+    function getTaskDeadlineNotifIds(taskId) {
+      let hash = 0;
+      for (let i = 0; i < taskId.length; i++) {
+        hash = ((hash << 5) - hash) + taskId.charCodeAt(i);
+        hash |= 0;
+      }
+      const base = Math.abs(hash) % 200000;
+      return {
+        day3: 200000 + base * 3 + 1,
+        day2: 200000 + base * 3 + 2,
+        day1: 200000 + base * 3 + 3
+      };
+    }
+
+    // Send immediate native notification (or browser fallback)
+    async function triggerImmediateNativeNotification(title, body, id = Math.floor(Date.now() % 1000000)) {
+      const ln = getCapacitorLocalNotifications();
+      if (ln) {
+        try {
+          await ln.schedule({
+            notifications: [
+              {
+                id: Number(id),
+                title: title,
+                body: body,
+                schedule: { at: new Date(Date.now() + 500), allowWhileIdle: true },
+                sound: 'beep.wav'
+              }
+            ]
+          });
+          return;
+        } catch (e) {
+          console.warn('Capacitor schedule immediate notification failed:', e);
+        }
+      }
+      sendDeviceNotification(title, { body: body, tag: `notif-${id}` });
+    }
+
+    // Cancel native deadline alerts for a task
+    async function cancelTaskDeadlineNotifications(taskId) {
+      if (!taskId) return;
+      const ids = getTaskDeadlineNotifIds(taskId);
+      const ln = getCapacitorLocalNotifications();
+      if (ln) {
+        try {
+          await ln.cancel({
+            notifications: [
+              { id: ids.day3 },
+              { id: ids.day2 },
+              { id: ids.day1 }
+            ]
+          });
+        } catch (e) {
+          console.warn('Error cancelling deadline notifications:', e);
+        }
+      }
+    }
+
+    // Schedule 3-day, 2-day, 1-day alerts for a task using schedule: { at: targetDate, allowWhileIdle: true }
+    async function scheduleTaskDeadlineNotifications(task) {
+      if (!task || !task.deadline || task.status === 'completed' || task.status === 'terminated') {
+        return;
+      }
+      if (!settings.deadlineReminders) return;
+
+      const ids = getTaskDeadlineNotifIds(task.id);
+      const ln = getCapacitorLocalNotifications();
+      if (!ln) return;
+
+      try {
+        await ln.cancel({
+          notifications: [
+            { id: ids.day3 },
+            { id: ids.day2 },
+            { id: ids.day1 }
+          ]
+        });
+
+        const deadlineMs = new Date(task.deadline).getTime();
+        if (isNaN(deadlineMs)) return;
+
+        const now = Date.now();
+        const notifsToSchedule = [];
+
+        // 3 Days before deadline
+        const date3Days = new Date(deadlineMs - 3 * 24 * 60 * 60 * 1000);
+        if (date3Days.getTime() > now) {
+          notifsToSchedule.push({
+            id: ids.day3,
+            title: 'Deadline Alert: 3 Days Left',
+            body: `"${task.title}" is due in 3 days! Take a focused step today.`,
+            schedule: { at: date3Days, allowWhileIdle: true },
+            sound: 'beep.wav'
+          });
+        }
+
+        // 2 Days before deadline
+        const date2Days = new Date(deadlineMs - 2 * 24 * 60 * 60 * 1000);
+        if (date2Days.getTime() > now) {
+          notifsToSchedule.push({
+            id: ids.day2,
+            title: 'Deadline Alert: 2 Days Left',
+            body: `"${task.title}" is due in 2 days! Keep your focus cadence going.`,
+            schedule: { at: date2Days, allowWhileIdle: true },
+            sound: 'beep.wav'
+          });
+        }
+
+        // 1 Day before deadline
+        const date1Day = new Date(deadlineMs - 1 * 24 * 60 * 60 * 1000);
+        if (date1Day.getTime() > now) {
+          notifsToSchedule.push({
+            id: ids.day1,
+            title: 'Urgent Deadline Alert: Due Tomorrow',
+            body: `"${task.title}" is due in less than 24 hours! Final sprint time.`,
+            schedule: { at: date1Day, allowWhileIdle: true },
+            sound: 'beep.wav'
+          });
+        }
+
+        if (notifsToSchedule.length > 0) {
+          await ln.schedule({ notifications: notifsToSchedule });
+        }
+      } catch (err) {
+        console.warn('Error scheduling native task deadline notifications:', err);
+      }
+    }
+
+    // Schedule True Closed-App Daily Check-In recurring alarm using schedule: { on: { hour, minute }, allowWhileIdle: true }
+    async function scheduleDailyCheckInAlarm(timeStr) {
+      const time = timeStr || settings.dailyNotifTime || '09:00';
+      const parts = time.split(':');
+      const hour = parseInt(parts[0], 10) || 9;
+      const minute = parseInt(parts[1], 10) || 0;
+
+      const ln = getCapacitorLocalNotifications();
+      if (ln) {
+        try {
+          await ln.cancel({
+            notifications: [{ id: NOTIF_ID_DAILY_CHECKIN }]
+          });
+
+          await ln.schedule({
+            notifications: [
+              {
+                id: NOTIF_ID_DAILY_CHECKIN,
+                title: 'FocusForge Daily Check-In',
+                body: 'Any goal or task today? Set your daily focus and keep your flow streak alive!',
+                schedule: {
+                  on: { hour: hour, minute: minute },
+                  allowWhileIdle: true
+                },
+                sound: 'beep.wav'
+              }
+            ]
+          });
+          return;
+        } catch (err) {
+          console.warn('Failed to schedule native Capacitor daily alarm:', err);
+        }
+      }
+    }
+
+    // Reconcile and schedule native notifications for all active tasks
+    function reconcileAllNativeNotifications() {
+      const ln = getCapacitorLocalNotifications();
+      if (!ln) return;
+      scheduleDailyCheckInAlarm(settings.dailyNotifTime || '09:00');
+      tasks.forEach(t => {
+        if (t.deadline && t.status !== 'completed' && t.status !== 'terminated') {
+          scheduleTaskDeadlineNotifications(t);
+        }
+      });
+    }
+
+    // --- 2. TIMER ENGINE & ANTI-FARMING GUARDS ---
+    setInterval(checkOfflineScheduledNotifications, 30000);
+
+    setInterval(() => {
+      let stateChanged = false;
+
+      // Task Active Timer Tick
+      if (activeTaskId) {
+        tasks = tasks.map(t => {
+          if (t.id !== activeTaskId || t.status !== 'active') return t;
+
+          const newSecs = t.activeSeconds + 1;
+
+          // Max Cap Guard: 120 mins (7200s)
+          if (settings.maxSessionCap && newSecs >= 7200) {
+            showToast('Max Continuous Session Capped (120 Mins)', 'warning');
+            triggerImmediateNativeNotification(
+              'Focus Session Capped (120m)',
+              `"${t.title}" reached the 120-minute maximum continuous focus limit.`,
+              NOTIF_ID_SESSION_CAP
+            );
+            return { ...t, activeSeconds: 7200, status: 'paused', statusBadge: 'Paused: Max Cap' };
+          }
+
+          return { ...t, activeSeconds: newSecs };
+        });
+
+        stats.totalSecondsFocused++;
+        stateChanged = true;
+      }
+
+      // Separated 25-Min Fast Focus Pomodoro Timer Tick
+      if (pomoState.isRunning) {
+        pomoState.secondsLeft--;
+        stats.totalSecondsFocused++;
+
+        if (pomoState.linkedTaskId) {
+          tasks = tasks.map(t => {
+            if (t.id === pomoState.linkedTaskId && t.status !== 'completed') {
+              return { ...t, activeSeconds: t.activeSeconds + 1 };
+            }
+            return t;
+          });
+        }
+
+        // Timer Completion: 25-Min Focus Sprint, 15m Speed, 5m Break
+        if (pomoState.secondsLeft <= 0) {
+          pomoState.isRunning = false;
+          pomoState.secondsLeft = pomoState.totalSeconds;
+          
+          playOfflineAudioChime('complete');
+          
+          let notifTitle = `⚡ ${pomoState.modeName} Complete!`;
+          let notifBody = `Great focus! Your ${pomoState.modeName} session has finished.`;
+
+          if (pomoState.totalSeconds === 1500) {
+            stats.dopamineVaultPoints += 25;
+            notifTitle = '⚡ 25-Min Focus Sprint Complete!';
+            notifBody = '25-minute focus session finished! +25 Reward Points added to Vault! 🎉';
+            showToast('⚡ 25-Minute Focus Sprint Complete! +25 Reward Points Earned! 🎉', 'success');
+          } else if (pomoState.totalSeconds === 900) {
+            notifTitle = '🚀 15m Speed Sprint Complete!';
+            notifBody = '15-minute speed focus finished! Well done!';
+            showToast('🚀 15m Speed Sprint Completed!', 'success');
+          } else if (pomoState.totalSeconds === 300) {
+            notifTitle = '☕ 5m Break Over!';
+            notifBody = '5-minute break is complete. Ready for the next focus sprint?';
+            showToast('☕ 5m Break Completed!', 'success');
+          } else {
+            showToast(`🎉 ${pomoState.modeName} Completed!`, 'success');
+          }
+
+          triggerImmediateNativeNotification(notifTitle, notifBody, NOTIF_ID_POMO_FINISH);
+        }
+
+        syncPomoState();
+        stateChanged = true;
+      }
+
+      if (stateChanged) {
+        syncState();
+      }
+    }, 1000);
+
+    // Visibility Guard (Tab Switched)
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden && activeTaskId) {
+        tasks = tasks.map(t => {
+          if (t.id === activeTaskId && t.status === 'active') {
+            return { ...t, status: 'paused', statusBadge: 'Paused: Tab Switched' };
+          }
+          return t;
+        });
+
+        showToast('Paused: Tab Switched! Anti-farming guard active.', 'warning');
+        syncState();
+      }
+    });
+
+    // Idle AFK Protection Guard (180s = 3 mins)
+    ['mousemove', 'keydown', 'click', 'touchstart', 'scroll'].forEach(evt => {
+      window.addEventListener(evt, () => { lastUserActivityMs = Date.now(); }, { passive: true });
+    });
+
+    setInterval(() => {
+      if (!settings.afkProtection) return;
+      if (!activeTaskId) return;
+      if (Date.now() - lastUserActivityMs >= 180000) {
+        tasks = tasks.map(t => {
+          if (t.id === activeTaskId && t.status === 'active') {
+            const deducted = Math.max(0, t.activeSeconds - 180);
+            return { ...t, activeSeconds: deducted, status: 'paused', statusBadge: 'Paused: AFK Inactive' };
+          }
+          return t;
+        });
+
+        showToast('Timer paused due to inactivity!', 'alert');
+        lastUserActivityMs = Date.now();
+        syncState();
+      }
+    }, 2000);
+
+    // --- 3. UI UPDATER & COMPUTATIONS ---
+    function updateUI() {
+      document.getElementById('stat-streak-val').innerText = `${stats.streakCount} Flow Streak`;
+      document.getElementById('stat-points-val').innerText = `${stats.dopamineVaultPoints} PTS`;
+      
+      const goalTextEl = document.getElementById('stat-goal-text');
+      const goalRemoveBtn = document.getElementById('btn-remove-goal-header');
+      if (stats.dailyGoalText && stats.dailyGoalText.trim() !== '') {
+        goalTextEl.innerText = stats.dailyGoalText;
+        goalRemoveBtn.style.display = 'inline-flex';
+      } else {
+        goalTextEl.innerText = 'Set Daily Goal';
+        goalRemoveBtn.style.display = 'none';
+      }
+
+      document.getElementById('vault-pts-display').innerText = stats.dopamineVaultPoints;
+
+      // Mobile Touch Strip Stats
+      const mStreak = document.getElementById('mobile-stat-streak-val');
+      if (mStreak) mStreak.innerText = `${stats.streakCount} Flow Streak`;
+      const mPoints = document.getElementById('mobile-stat-points-val');
+      if (mPoints) mPoints.innerText = `${stats.dopamineVaultPoints} PTS`;
+      const mGoal = document.getElementById('mobile-stat-goal-text');
+      if (mGoal) mGoal.innerText = (stats.dailyGoalText && stats.dailyGoalText.trim()) ? stats.dailyGoalText : 'Set Daily Goal';
+
+      checkDailyOfflineReminder();
+
+      const nonTerminated = tasks.filter(t => t.status !== 'terminated');
+      const active = nonTerminated.filter(t => t.status !== 'completed');
+
+      let totalFocusSecs = 0;
+      nonTerminated.forEach(t => { totalFocusSecs += (t.activeSeconds || 0); });
+
+      const BASE_TARGET_SECS = 6000;
+      const denominatorSecs = settings.dynamicScaling ? Math.max(BASE_TARGET_SECS, totalFocusSecs) : BASE_TARGET_SECS;
+
+      const rawPct = denominatorSecs > 0 ? (totalFocusSecs / denominatorSecs) * 100 : 0;
+      const pct = Math.min(100, rawPct);
+
+      const fillEl = document.getElementById('overload-fill');
+      fillEl.style.width = `${pct.toFixed(3)}%`;
+
+      const badgeEl = document.getElementById('overload-badge');
+      const activeCount = active.length;
+
+      if (activeCount >= 8) {
+        badgeEl.className = 'level-badge level-danger';
+        badgeEl.innerText = 'DANGER: Overloaded (8+ Tasks)';
+        fillEl.className = 'track-fill danger';
+      } else if (activeCount >= 5) {
+        badgeEl.className = 'level-badge level-warning';
+        badgeEl.innerText = 'Space Shrinking (5-7 Tasks)';
+        fillEl.className = 'track-fill warning';
+      } else {
+        badgeEl.className = 'level-badge level-healthy';
+        badgeEl.innerText = 'Healthy Balance';
+        fillEl.className = 'track-fill';
+      }
+
+      const displayPct = pct >= 100 ? '100' : (pct > 0 && pct < 1 ? pct.toFixed(2) : pct.toFixed(1));
+      const completedMins = (totalFocusSecs / 60).toFixed(1);
+      const goalMins = Math.round(denominatorSecs / 60);
+
+      document.getElementById('overload-stats-summary').innerText = `${displayPct}% Completed (${completedMins}m / ${goalMins}m Goal) • ${activeCount} active tasks`;
+
+      const footerTextEl = document.getElementById('overload-footer-text');
+      if (footerTextEl) {
+        const secRate = (100 / denominatorSecs).toFixed(5);
+        footerTextEl.innerText = `Focus Rate: ${secRate}%/sec (${(100 / denominatorSecs * 60).toFixed(2)}%/min). ${settings.dynamicScaling ? 'Auto-scales for goals >100m.' : 'Fixed 100m target.'}`;
+      }
+
+      document.getElementById('btn-claim-100').style.display = pct >= 100 ? 'inline-block' : 'none';
+
+      const pomoCardEl = document.querySelector('.pomo-card');
+      if (pomoCardEl) {
+        pomoCardEl.style.display = settings.showPomoCard ? 'block' : 'none';
+      }
+
+      // Automatic 100% Progress Ticket Pop-up Trigger
+      if (pct >= 100) {
+        if (!cycle100Claimed) {
+          cycle100Claimed = true;
+          saveData('focusforge_cycle100_claimed_v3', true);
+          if (settings.auto100Ticket) {
+            triggerAutomatic100PercentTicket(false);
+          }
+        }
+      } else {
+        if (cycle100Claimed) {
+          cycle100Claimed = false;
+          saveData('focusforge_cycle100_claimed_v3', false);
+        }
+      }
+
+      renderPriorityBanner(active);
+
+      const academicCount = tasks.filter(t => t.category === 'academic').length;
+      const householdCount = tasks.filter(t => t.category === 'household').length;
+      document.getElementById('category-ratio-text').innerText = `Balance: ${academicCount} Academic / ${householdCount} Household`;
+
+      renderTaskGrid();
+      renderShopItems();
+      renderAnalytics();
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function checkDailyOfflineReminder() {
+      const banner = document.getElementById('daily-reminder-banner');
+      if (!banner) return;
+      if (!settings.dailyReminderBanner) {
+        banner.style.display = 'none';
+        return;
+      }
+      const text = document.getElementById('reminder-banner-text');
+
+      if (!stats.dailyGoalText || stats.dailyGoalText.trim() === '') {
+        text.innerText = "No daily focus goal locked in for today yet! Set your daily target to maintain your flow streak.";
+        banner.style.display = 'flex';
+      } else {
+        banner.style.display = 'none';
+      }
+    }
+
+    function dismissReminderBanner() {
+      document.getElementById('daily-reminder-banner').style.display = 'none';
+    }
+
+    function renderPriorityBanner(activeTasks) {
+      const bannerContainer = document.getElementById('priority-banner-container');
+      if (!bannerContainer) return;
+      if (!settings.priorityBanner) {
+        bannerContainer.innerHTML = '';
+        return;
+      }
+      const sorted = activeTasks
+        .filter(t => t.deadline)
+        .sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime());
+
+      if (sorted.length === 0) {
+        bannerContainer.innerHTML = '';
+        return;
+      }
+
+      const earliest = sorted[0];
+      const dl = new Date(earliest.deadline);
+      const diffHr = Math.round((dl.getTime() - Date.now()) / (1000 * 60 * 60));
+
+      bannerContainer.innerHTML = `
+        <div class="priority-banner">
+          <div class="priority-info">
+            <div class="priority-icon">
+              <i data-lucide="clock" size="22"></i>
+            </div>
+            <div>
+              <span style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--amber-dark); background: rgba(245, 158, 11, 0.2); padding: 2px 6px; border-radius: 4px;">
+                Earliest Deadline Priority
+              </span>
+              <h3 style="font-size: 15px; font-weight: 800; margin-top: 2px;">${earliest.title}</h3>
+              <p style="font-size: 11px; color: var(--text-muted);">
+                ${dl.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })} • 
+                <strong style="color: ${diffHr < 0 ? 'var(--rose)' : 'var(--amber-dark)'}">${diffHr < 0 ? 'Overdue!' : `Due in ${diffHr} hrs`}</strong>
+              </p>
+            </div>
+          </div>
+
+          <button class="btn-focus-first" onclick="startTaskTimer('${earliest.id}')">
+            <i data-lucide="play" size="14"></i> Focus First On This
+          </button>
+        </div>
+      `;
+    }
+
+    function renderTaskGrid() {
+      const container = document.getElementById('task-cards-grid');
+      const filtered = tasks.filter(t => activeCategoryFilter === 'all' || t.category === activeCategoryFilter);
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 56px 20px; background: white; border-radius: 20px; border: 1px dashed var(--border-color); color: var(--text-muted);">
+            <div style="width: 56px; height: 56px; border-radius: 16px; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px auto;">
+              <i data-lucide="sparkles" size="28"></i>
+            </div>
+            <h3 style="font-size: 16px; font-weight: 800; color: var(--text-main);">No Tasks Yet</h3>
+            <p style="font-size: 12px; margin-top: 4px; max-width: 360px; margin-left: auto; margin-right: auto;">
+              Your workspace is completely fresh. Click <strong>'+ New Task'</strong> above to create your first focus item!
+            </p>
+            <button class="btn-add-task" style="margin: 16px auto 0 auto;" onclick="openTaskModal()">
+              <i data-lucide="plus" size="16"></i> Add First Task
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      let currentTotalFocusSecs = 0;
+      tasks.filter(tk => tk.status !== 'terminated').forEach(tk => { currentTotalFocusSecs += (tk.activeSeconds || 0); });
+      const currentDenomSecs = Math.max(6000, currentTotalFocusSecs);
+
+      container.innerHTML = filtered.map(t => {
+        const isCompleted = t.status === 'completed';
+        const isTerminated = t.status === 'terminated';
+        const isActive = t.status === 'active';
+
+        const taskPct = currentDenomSecs > 0 ? ((t.activeSeconds || 0) / currentDenomSecs) * 100 : 0;
+        const taskPctStr = taskPct >= 1 ? taskPct.toFixed(1) : (taskPct > 0 ? taskPct.toFixed(2) : '0');
+
+        return `
+          <div id="task-card-${t.id}" class="task-card ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''} ${isTerminated ? 'terminated' : ''}">
+            <div>
+              <div class="task-card-header">
+                <span class="badge-cat ${t.category === 'academic' ? 'badge-academic' : 'badge-household'}">
+                  ${t.category === 'academic' ? 'Academic' : 'Household'}
+                </span>
+                <span style="font-size: 11px; font-weight: 700; color: var(--text-muted);">${t.statusBadge || t.status}</span>
+              </div>
+
+              <h3 class="task-title" style="${isCompleted ? 'text-decoration: line-through; color: var(--text-muted);' : ''}">${t.title}</h3>
+            </div>
+
+            <div>
+              <div class="timer-box">
+                <div>
+                  <span style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: #94a3b8; display: block;">Active Focus</span>
+                  <div class="timer-clock">${formatTimer(t.activeSeconds)}</div>
+                </div>
+                <div style="text-align: right;">
+                  <span style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: #94a3b8; display: block;">Bar Value</span>
+                  <span style="font-size: 12px; font-weight: 700; color: var(--primary);">+${taskPctStr}%</span>
+                </div>
+              </div>
+
+              <div class="task-controls">
+                ${!isCompleted && !isTerminated ? `
+                  <div style="display: flex; gap: 6px;">
+                    ${isActive ? `
+                      <button class="btn-ctrl btn-pause" onclick="pauseTaskTimer('${t.id}')">
+                        <i data-lucide="pause" size="14"></i> Pause
+                      </button>
+                    ` : `
+                      <button class="btn-ctrl btn-start" onclick="startTaskTimer('${t.id}')">
+                        <i data-lucide="play" size="14"></i> Focus
+                      </button>
+                    `}
+
+                    <button class="btn-ctrl btn-complete" onclick="completeTaskWithAnimation('${t.id}')">
+                      <i data-lucide="check-circle" size="14"></i> Complete
+                    </button>
+                  </div>
+                  <button class="btn-remove-task" onclick="promptDeleteTask('${t.id}')" title="Delete Task with Confirmation">
+                    <i data-lucide="trash-2" size="14"></i> Delete
+                  </button>
+                ` : `
+                  <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                    <span style="font-size: 12px; font-weight: 700; color: var(--text-muted);">
+                      ${isCompleted ? '✓ Completed' : '✕ Terminated'}
+                    </span>
+                    <button class="btn-remove-task" onclick="promptDeleteTask('${t.id}')" title="Delete Completed Task with Confirmation">
+                      <i data-lucide="trash-2" size="14"></i> Remove
+                    </button>
+                  </div>
+                `}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderShopItems() {
+      const container = document.getElementById('rewards-grid-container');
+      if (rewards.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 32px 16px; border: 1px dashed var(--border-color); border-radius: 16px; color: var(--text-muted);">
+            <i data-lucide="gift" size="28" style="margin-bottom: 8px; color: var(--amber);"></i>
+            <p style="font-size: 13px; font-weight: 700;">No custom rewards in your vault!</p>
+            <p style="font-size: 11px;">Click "+ Add Custom Reward" above to create your own offline incentives.</p>
+          </div>
+        `;
+      } else {
+        container.innerHTML = rewards.map(r => `
+          <div class="reward-card" id="reward-card-${r.id}">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--primary); background: var(--primary-light); padding: 2px 8px; border-radius: 100px;">INCENTIVE</span>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <span style="font-size: 12px; font-weight: 800; color: #d97706; font-family: var(--font-mono);">💎 ${r.pointsCost} PTS</span>
+                  <button class="btn-remove-reward" onclick="removeRewardWithAnimation('${r.id}')" title="Remove Custom Reward Option">
+                    <i data-lucide="trash-2" size="13"></i> Remove
+                  </button>
+                </div>
+              </div>
+              <h4 style="font-size: 14px; font-weight: 800; margin-bottom: 12px; color: var(--text-main);">${r.title}</h4>
+            </div>
+
+            <button class="btn-chip active" style="width: 100%; justify-content: center; background: var(--amber); color: #0f172a; font-weight: 800; padding: 10px;" onclick="redeemReward('${r.id}', ${r.pointsCost})">
+              Redeem Reward
+            </button>
+          </div>
+        `).join('');
+      }
+
+      const tplContainer = document.getElementById('tickets-list-container');
+      if (tickets.length === 0) {
+        tplContainer.innerHTML = `<div style="grid-column: 1/-1; font-size: 12px; color: var(--text-muted); background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px dashed var(--border-color); text-align: center;">No tickets claimed yet. Reach 100% progress to earn tickets!</div>`;
+      } else {
+        tplContainer.innerHTML = tickets.map(tk => `
+          <div style="background: linear-gradient(135deg, #fffbeb, #fef3c7); border: 1px solid #fde68a; padding: 14px; border-radius: 14px; position: relative; box-shadow: 0 2px 8px rgba(245,158,11,0.08);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+              <span style="font-size: 10px; font-weight: 800; color: var(--amber-dark); text-transform: uppercase; font-family: var(--font-mono); background: rgba(245, 158, 11, 0.2); padding: 2px 6px; border-radius: 4px;">Ticket Code: ${tk.code}</span>
+              <span style="font-size: 10px; font-weight: 700; color: var(--text-muted);">${tk.date || 'Auto-Earned'}</span>
+            </div>
+            <h4 style="font-size: 13px; font-weight: 800; color: #78350f; margin-top: 4px;">${tk.title}</h4>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 8px;">
+              <span style="font-size: 12px; font-weight: 800; color: var(--emerald-dark);">+${tk.points} PTS</span>
+              <span style="font-size: 10px; font-weight: 800; color: #059669; background: #d1fae5; padding: 2px 8px; border-radius: 100px;">✓ Auto-Issued</span>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    function renderAnalytics() {
+      const completed = tasks.filter(t => t.status === 'completed' && t.completedAt);
+      let totalMins = 0;
+      completed.forEach(t => {
+        const diff = (new Date(t.completedAt).getTime() - new Date(t.createdAt).getTime()) / 60000;
+        totalMins += Math.max(1, diff);
+      });
+
+      const avgSpeed = completed.length > 0 ? Math.round(totalMins / completed.length) : 0;
+      document.getElementById('metric-avg-speed').innerText = `${avgSpeed} Mins`;
+
+      document.getElementById('metric-streak-display').innerText = `${stats.streakCount} Days`;
+
+      const terminatedCount = tasks.filter(t => t.status === 'terminated').length;
+      const termRate = tasks.length > 0 ? Math.round((terminatedCount / tasks.length) * 100) : 0;
+      document.getElementById('metric-term-rate').innerText = `${termRate}%`;
+
+      const minsFocused = Math.round(stats.totalSecondsFocused / 60);
+      document.getElementById('metric-total-focused').innerText = `${minsFocused}m`;
+    }
+
+    // --- 4. ACTION HANDLERS WITH SMOOTH REMOVAL ANIMATION ---
+    function startTaskTimer(id) {
+      tasks = tasks.map(t => {
+        if (t.id === id) return { ...t, status: 'active', statusBadge: 'Active Focus' };
+        if (t.status === 'active') return { ...t, status: 'paused', statusBadge: 'Paused' };
+        return t;
+      });
+      syncState();
+      playOfflineAudioChime('start');
+      showToast('Focus Timer Started', 'info');
+    }
+
+    function pauseTaskTimer(id) {
+      tasks = tasks.map(t => t.id === id ? { ...t, status: 'paused', statusBadge: 'Paused' } : t);
+      syncState();
+      playOfflineAudioChime('pause');
+    }
+
+    function completeTaskWithAnimation(id) {
+      const task = tasks.find(t => t.id === id);
+      tasks = tasks.map(t => t.id === id ? { ...t, status: 'completed', completedAt: new Date().toISOString(), statusBadge: 'Completed' } : t);
+      stats.dopamineVaultPoints += 20;
+
+      // Cancel native deadline alerts for this completed task
+      cancelTaskDeadlineNotifications(id);
+
+      // Trigger immediate native notification
+      const taskTitle = task ? task.title : 'Task';
+      triggerImmediateNativeNotification('Task Completed! 🎉', `"${taskTitle}" has been completed! +20 Points added to your Vault.`, NOTIF_ID_TASK_FINISH);
+
+      syncState();
+      playOfflineAudioChime('complete');
+      showToast('Task Completed! +20 Points Added 🎉', 'success');
+    }
+
+    function removeTaskWithAnimation(id) {
+      playOfflineAudioChime('delete');
+      // Cancel native deadline alerts for this deleted task
+      cancelTaskDeadlineNotifications(id);
+
+      const cardEl = document.getElementById(`task-card-${id}`);
+      if (cardEl) {
+        cardEl.classList.add('removing');
+        setTimeout(() => {
+          tasks = tasks.filter(t => t.id !== id);
+          syncState();
+          showToast('Task Removed', 'info');
+        }, 300);
+      } else {
+        tasks = tasks.filter(t => t.id !== id);
+        syncState();
+        showToast('Task Removed', 'info');
+      }
+    }
+
+    function triggerAutomatic100PercentTicket(isManualClick = false) {
+      let ticketToDisplay = null;
+
+      if (!isManualClick) {
+        stats.streakCount++;
+        stats.dopamineVaultPoints += 50;
+
+        const code = `FORGE-${Math.floor(1000 + Math.random() * 9000)}`;
+        ticketToDisplay = {
+          id: `tk-${Date.now()}`,
+          title: 'Golden Focus Ticket (+50 Points)',
+          points: 50,
+          code,
+          date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+        };
+
+        tickets.unshift(ticketToDisplay);
+
+        // Immediate native notification on 100% Focus Cycle
+        triggerImmediateNativeNotification(
+          '🏆 100% Focus Cycle Achieved!',
+          'Outstanding focus! Golden ticket auto-issued and +50 points added to your Vault!',
+          NOTIF_ID_100_CYCLE
+        );
+
+        syncState();
+        showToast('🏆 100% Focus Cycle Reached! Golden Ticket Auto-Issued!', 'success');
+      } else {
+        ticketToDisplay = tickets[0] || {
+          id: `tk-${Date.now()}`,
+          title: 'Golden Focus Ticket (+50 Points)',
+          points: 50,
+          code: `FORGE-${Math.floor(1000 + Math.random() * 9000)}`,
+          date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+        };
+      }
+
+      openCelebrationModal(ticketToDisplay);
+    }
+
+    function openCelebrationModal(ticket) {
+      if (!ticket) return;
+      playOfflineAudioChime('fanfare');
+
+      document.getElementById('celebration-ticket-title').innerText = ticket.title || 'Golden Focus Ticket (+50 PTS)';
+      document.getElementById('celebration-ticket-code').innerText = ticket.code || 'FORGE-1000';
+      document.getElementById('celebration-streak-num').innerText = stats.streakCount;
+
+      const confettiContainer = document.getElementById('confetti-holder');
+      if (confettiContainer) {
+        confettiContainer.innerHTML = '';
+        const colors = ['#f59e0b', '#3b82f6', '#10b981', '#ec4899', '#8b5cf6', '#f43f5e'];
+
+        for (let i = 0; i < 40; i++) {
+          const p = document.createElement('div');
+          p.className = 'confetti-piece';
+          p.style.left = `${Math.random() * 100}%`;
+          p.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+          p.style.animationDuration = `${1.8 + Math.random() * 1.8}s`;
+          p.style.animationDelay = `${Math.random() * 0.6}s`;
+          p.style.width = `${6 + Math.random() * 6}px`;
+          p.style.height = `${10 + Math.random() * 10}px`;
+          confettiContainer.appendChild(p);
+        }
+      }
+
+      const modalEl = document.getElementById('modal-celebration');
+      if (modalEl) {
+        modalEl.classList.add('active');
+        if (window.lucide) lucide.createIcons();
+      }
+    }
+
+    function closeCelebrationModal() {
+      playOfflineAudioChime('click');
+      const modalEl = document.getElementById('modal-celebration');
+      if (modalEl) modalEl.classList.remove('active');
+    }
+
+    function removeRewardWithAnimation(id) {
+      playOfflineAudioChime('delete');
+      const cardEl = document.getElementById(`reward-card-${id}`);
+      if (cardEl) {
+        cardEl.style.transition = 'all 0.25s ease-out';
+        cardEl.style.opacity = '0';
+        cardEl.style.transform = 'scale(0.85)';
+        setTimeout(() => {
+          rewards = rewards.filter(r => r.id !== id);
+          syncState();
+          showToast('Reward option removed from Vault', 'info');
+        }, 250);
+      } else {
+        rewards = rewards.filter(r => r.id !== id);
+        syncState();
+        showToast('Reward option removed from Vault', 'info');
+      }
+    }
+
+    function redeemReward(rewardId, cost) {
+      if (stats.dopamineVaultPoints < cost) {
+        playOfflineAudioChime('pause');
+        alert(`Kulang pa ang points! You need ${cost} points to redeem this reward.`);
+        return;
+      }
+
+      stats.dopamineVaultPoints -= cost;
+      rewards = rewards.map(r => r.id === rewardId ? { ...r, redemptionCount: r.redemptionCount + 1 } : r);
+      syncState();
+      playOfflineAudioChime('reward');
+      showToast('Reward Unlocked! Enjoy your reward! 🎉', 'success');
+    }
+
+    function removeDailyGoal() {
+      stats.dailyGoalText = '';
+      syncState();
+      showToast('Daily Goal Removed', 'info');
+    }
+
+    function handleGoalSubmit(e) {
+      e.preventDefault();
+      const text = document.getElementById('input-goal-text').value.trim();
+      stats.dailyGoalText = text;
+      syncState();
+      closeGoalModal();
+      showToast('Daily Goal Locked In! 🎯', 'success');
+    }
+
+    // --- TASK DELETION CONFIRMATION MODAL LOGIC ---
+    let pendingDeleteTaskId = null;
+
+    function promptDeleteTask(id) {
+      const task = tasks.find(t => t.id === id);
+      if (!task) return;
+      pendingDeleteTaskId = id;
+
+      const titleEl = document.getElementById('delete-modal-task-title');
+      const catEl = document.getElementById('delete-modal-task-cat');
+      const timeEl = document.getElementById('delete-modal-task-time');
+
+      if (titleEl) titleEl.innerText = task.title;
+      if (catEl) catEl.innerText = `${(task.category || 'general').toUpperCase()} TASK`;
+      if (timeEl) timeEl.innerText = formatTimer(task.activeSeconds || 0);
+
+      const modal = document.getElementById('modal-delete-task');
+      if (modal) {
+        modal.classList.add('active');
+        if (window.lucide) lucide.createIcons();
+      }
+    }
+
+    function closeDeleteTaskModal() {
+      const modal = document.getElementById('modal-delete-task');
+      if (modal) modal.classList.remove('active');
+      pendingDeleteTaskId = null;
+    }
+
+    function confirmDeleteCurrentTask() {
+      if (!pendingDeleteTaskId) return;
+      const idToDelete = pendingDeleteTaskId;
+      closeDeleteTaskModal();
+      removeTaskWithAnimation(idToDelete);
+    }
+
+    // --- NOTIFICATION PERMISSION & TEST ENGINE ---
+    function checkDeviceNotificationPermission() {
+      if (!('Notification' in window)) return 'unsupported';
+      return Notification.permission;
+    }
+
+    function updateNotificationPermissionBadge(status) {
+      const badge = document.getElementById('notif-permission-badge');
+      if (!badge) return;
+      if (status === 'granted') {
+        badge.innerText = 'Granted';
+        badge.style.background = '#d1fae5';
+        badge.style.color = '#065f46';
+      } else if (status === 'denied') {
+        badge.innerText = 'Denied';
+        badge.style.background = '#fee2e2';
+        badge.style.color = '#991b1b';
+      } else if (status === 'unsupported') {
+        badge.innerText = 'Unsupported';
+        badge.style.background = '#f1f5f9';
+        badge.style.color = '#64748b';
+      } else {
+        badge.innerText = 'Permission: Not Granted';
+        badge.style.background = '#fef3c7';
+        badge.style.color = '#92400e';
+      }
+    }
+
+    async function updateNotificationPermissionUI() {
+      const ln = getCapacitorLocalNotifications();
+      if (ln && ln.checkPermissions) {
+        try {
+          const res = await ln.checkPermissions();
+          const isGranted = (res && (res.display === 'granted' || res.receive === 'granted'));
+          updateNotificationPermissionBadge(isGranted ? 'granted' : (res.display === 'denied' ? 'denied' : 'prompt'));
+          return;
+        } catch (e) {}
+      }
+
+      const perm = checkDeviceNotificationPermission();
+      updateNotificationPermissionBadge(perm);
+    }
+
+    async function handleDeviceNotifToggle(enabled) {
+      const ln = getCapacitorLocalNotifications();
+      if (enabled) {
+        if (ln) {
+          try {
+            const permResult = await ln.requestPermissions();
+            const isGranted = (permResult && (permResult.display === 'granted' || permResult.receive === 'granted'));
+            updateNotificationPermissionBadge(isGranted ? 'granted' : 'denied');
+            if (isGranted) {
+              settings.deviceNotifications = true;
+              syncState();
+              showToast('Device notifications enabled on this native device! 🔔', 'success');
+              reconcileAllNativeNotifications();
+            } else {
+              settings.deviceNotifications = false;
+              document.getElementById('set-deviceNotifications').checked = false;
+              syncState();
+              showToast('Notification permission was denied.', 'warning');
+            }
+            return;
+          } catch (e) {
+            console.warn('Capacitor requestPermissions error:', e);
+          }
+        }
+
+        // Web Notification Fallback
+        if (!('Notification' in window)) {
+          showToast('Device notifications not supported on this browser', 'alert');
+          document.getElementById('set-deviceNotifications').checked = false;
+          settings.deviceNotifications = false;
+          syncState();
+          updateNotificationPermissionBadge('unsupported');
+          return;
+        }
+
+        if (Notification.permission === 'granted') {
+          settings.deviceNotifications = true;
+          syncState();
+          showToast('Device notifications are enabled! 🔔', 'success');
+          updateNotificationPermissionBadge('granted');
+          sendDeviceNotification('FocusForge Notifications Active', {
+            body: 'You will receive offline daily goal check-ins and 3-day deadline countdown alerts.',
+            tag: 'focusforge-welcome'
+          });
+        } else if (Notification.permission === 'denied') {
+          showToast('Notification permission is blocked in your browser site settings.', 'alert');
+          document.getElementById('set-deviceNotifications').checked = false;
+          settings.deviceNotifications = false;
+          syncState();
+          updateNotificationPermissionBadge('denied');
+        } else {
+          try {
+            const perm = await Notification.requestPermission();
+            if (perm === 'granted') {
+              settings.deviceNotifications = true;
+              syncState();
+              showToast('Device notifications granted & active! 🔔', 'success');
+              updateNotificationPermissionBadge('granted');
+              sendDeviceNotification('FocusForge Notifications Active', {
+                body: 'You will receive offline daily goal check-ins and 3-day deadline countdown alerts.',
+                tag: 'focusforge-welcome'
+              });
+            } else {
+              settings.deviceNotifications = false;
+              document.getElementById('set-deviceNotifications').checked = false;
+              syncState();
+              showToast('Notification permission was not granted.', 'warning');
+              updateNotificationPermissionBadge('denied');
+            }
+          } catch (e) {
+            settings.deviceNotifications = false;
+            document.getElementById('set-deviceNotifications').checked = false;
+            syncState();
+          }
+        }
+      } else {
+        settings.deviceNotifications = false;
+        syncState();
+        showToast('Device notifications disabled', 'info');
+        updateNotificationPermissionUI();
+      }
+    }
+
+    // 1. Permission & Test Button Implementation
+    async function sendTestDeviceNotification() {
+      const ln = getCapacitorLocalNotifications();
+      if (ln) {
+        try {
+          const permResult = await ln.requestPermissions();
+          const isGranted = (permResult && (permResult.display === 'granted' || permResult.receive === 'granted'));
+          updateNotificationPermissionBadge(isGranted ? 'granted' : 'denied');
+
+          if (!isGranted) {
+            showToast('Permission denied. Please enable notifications in device settings.', 'warning');
+            return;
+          }
+
+          settings.deviceNotifications = true;
+          const toggle = document.getElementById('set-deviceNotifications');
+          if (toggle) toggle.checked = true;
+          syncState();
+
+          // Schedule immediate test notification (1 second delay)
+          await ln.schedule({
+            notifications: [
+              {
+                id: NOTIF_ID_TEST,
+                title: 'FocusForge 100% Offline Notification',
+                body: 'Actual device notification delivered successfully! Vibration and sound test passed.',
+                schedule: { at: new Date(Date.now() + 1000), allowWhileIdle: true },
+                sound: 'beep.wav'
+              }
+            ]
+          });
+
+          playOfflineAudioChime('fanfare');
+          showToast('Native test notification scheduled (1s delay)! 🔔', 'success');
+          return;
+        } catch (err) {
+          console.warn('Capacitor LocalNotifications schedule error:', err);
+        }
+      }
+
+      // Desktop browser fallback
+      if (!('Notification' in window)) {
+        updateNotificationPermissionBadge('unsupported');
+        showToast('Device notifications are not supported in this browser', 'alert');
+        return;
+      }
+
+      if (Notification.permission !== 'granted') {
+        const perm = await Notification.requestPermission();
+        if (perm !== 'granted') {
+          updateNotificationPermissionBadge('denied');
+          showToast('Please grant notification permission first!', 'warning');
+          return;
+        }
+        settings.deviceNotifications = true;
+        const toggle = document.getElementById('set-deviceNotifications');
+        if (toggle) toggle.checked = true;
+        syncState();
+      }
+
+      updateNotificationPermissionBadge('granted');
+      setTimeout(() => {
+        sendDeviceNotification('FocusForge 100% Offline Notification', {
+          body: 'Actual device notification delivered successfully! Vibration and sound test passed.',
+          tag: 'test-device-notif'
+        });
+      }, 1000);
+      playOfflineAudioChime('fanfare');
+      showToast('Actual device notification scheduled (1s delay)! Check your notification tray 🔔', 'success');
+    }
+
+    function sendDeviceNotification(title, options = {}) {
+      if (!settings.deviceNotifications) return;
+      if (!('Notification' in window) || Notification.permission !== 'granted') return;
+
+      const opts = {
+        icon: 'FFLOGO.png',
+        badge: 'FFLOGO.png',
+        vibrate: [200, 100, 200],
+        silent: false,
+        ...options
+      };
+
+      try {
+        const notif = new Notification(title, opts);
+        notif.onclick = function() {
+          window.focus();
+          this.close();
+        };
+      } catch (err) {
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.ready.then(reg => {
+            reg.showNotification(title, opts);
+          }).catch(() => {});
+        }
+      }
+    }
+
+    // Scheduled Offline Prober: Browser Fallback for Daily Goal & Deadline Countdown
+    function checkOfflineScheduledNotifications() {
+      if (!settings.deviceNotifications) return;
+      if (!('Notification' in window) || Notification.permission !== 'granted') return;
+
+      const now = new Date();
+      const todayDateStr = now.toISOString().slice(0, 10);
+      const currentHours = String(now.getHours()).padStart(2, '0');
+      const currentMinutes = String(now.getMinutes()).padStart(2, '0');
+      const currentTimeStr = `${currentHours}:${currentMinutes}`;
+      const targetTimeStr = settings.dailyNotifTime || '09:00';
+
+      // 1. Daily Check-in Notification Fallback
+      if (currentTimeStr >= targetTimeStr && stats.lastDailyNotifDate !== todayDateStr) {
+        stats.lastDailyNotifDate = todayDateStr;
+        saveData(STORAGE_KEYS.STATS, stats);
+
+        const goalStatus = (stats.dailyGoalText && stats.dailyGoalText.trim())
+          ? `Current Goal: "${stats.dailyGoalText}"`
+          : 'No goal set yet for today.';
+
+        sendDeviceNotification('FocusForge Daily Focus', {
+          body: `Any goal or task today? ${goalStatus} Keep your flow streak alive!`,
+          tag: `daily-checkin-${todayDateStr}`
+        });
+      }
+
+      // 2. 3-Day Deadline Countdown Reminders Fallback
+      if (settings.deadlineReminders) {
+        let taskUpdated = false;
+        tasks.forEach(t => {
+          if (t.status === 'completed' || t.status === 'terminated' || !t.deadline) return;
+
+          const deadlineMs = new Date(t.deadline).getTime();
+          const diffMs = deadlineMs - now.getTime();
+          const diffHours = diffMs / (1000 * 60 * 60);
+
+          if (!t.deadlineNotifsSent) {
+            t.deadlineNotifsSent = {};
+          }
+
+          if (diffHours > 48 && diffHours <= 72 && !t.deadlineNotifsSent['3']) {
+            t.deadlineNotifsSent['3'] = todayDateStr;
+            taskUpdated = true;
+            sendDeviceNotification('Deadline Alert: 3 Days Left', {
+              body: `"${t.title}" is due in 3 days! Take a focused step today.`,
+              tag: `dl-3-${t.id}`
+            });
+          } else if (diffHours > 24 && diffHours <= 48 && !t.deadlineNotifsSent['2']) {
+            t.deadlineNotifsSent['2'] = todayDateStr;
+            taskUpdated = true;
+            sendDeviceNotification('Deadline Alert: 2 Days Left', {
+              body: `"${t.title}" is due in 2 days! Keep your focus cadence going.`,
+              tag: `dl-2-${t.id}`
+            });
+          } else if (diffHours > 0 && diffHours <= 24 && !t.deadlineNotifsSent['1']) {
+            t.deadlineNotifsSent['1'] = todayDateStr;
+            taskUpdated = true;
+            sendDeviceNotification('Urgent Deadline Alert: Due Tomorrow', {
+              body: `"${t.title}" is due in less than 24 hours! Final sprint time.`,
+              tag: `dl-1-${t.id}`
+            });
+          }
+        });
+
+        if (taskUpdated) {
+          saveData(STORAGE_KEYS.TASKS, tasks);
+        }
+      }
+    }
+
+    function openResetModal() { document.getElementById('modal-reset').classList.add('active'); }
+    function closeResetModal() { document.getElementById('modal-reset').classList.remove('active'); }
+
+    async function confirmResetAppData() {
+      // Cancel all scheduled native deadline alerts and alarms
+      tasks.forEach(t => cancelTaskDeadlineNotifications(t.id));
+      const ln = getCapacitorLocalNotifications();
+      if (ln) {
+        try {
+          await ln.cancel({ notifications: [{ id: NOTIF_ID_DAILY_CHECKIN }, { id: NOTIF_ID_TEST }] });
+        } catch(e) {}
+      }
+
+      tasks = [];
+      rewards = DEFAULT_REWARDS;
+      stats = { streakCount: 0, dopamineVaultPoints: 0, totalSecondsFocused: 0, dailyGoalText: '' };
+      tickets = [];
+      settings = { ...DEFAULT_SETTINGS };
+
+      localStorage.removeItem(STORAGE_KEYS.TASKS);
+      localStorage.removeItem(STORAGE_KEYS.REWARDS);
+      localStorage.removeItem(STORAGE_KEYS.STATS);
+      localStorage.removeItem(STORAGE_KEYS.TICKETS);
+      localStorage.removeItem(STORAGE_KEYS.SETTINGS);
+
+      syncState();
+      closeResetModal();
+      showToast('App Restored to Clean Fresh State', 'info');
+    }
+
+    function openTutorialModal(step = 1) {
+      currentTutorialStep = step;
+      renderTutorialStep();
+      document.getElementById('modal-tutorial').classList.add('active');
+    }
+
+    function closeTutorialModal() {
+      document.getElementById('modal-tutorial').classList.remove('active');
+      localStorage.setItem(STORAGE_KEYS.TUTORIAL_SEEN, 'true');
+    }
+
+    function navigateTutorial(direction) {
+      currentTutorialStep += direction;
+      if (currentTutorialStep > 3) {
+        closeTutorialModal();
+        return;
+      }
+      if (currentTutorialStep < 1) currentTutorialStep = 1;
+      renderTutorialStep();
+    }
+
+    function renderTutorialStep() {
+      document.getElementById('tut-step-1').style.display = currentTutorialStep === 1 ? 'block' : 'none';
+      document.getElementById('tut-step-2').style.display = currentTutorialStep === 2 ? 'block' : 'none';
+      document.getElementById('tut-step-3').style.display = currentTutorialStep === 3 ? 'block' : 'none';
+
+      document.getElementById('tut-dot-1').className = `tutorial-dot ${currentTutorialStep === 1 ? 'active' : ''}`;
+      document.getElementById('tut-dot-2').className = `tutorial-dot ${currentTutorialStep === 2 ? 'active' : ''}`;
+      document.getElementById('tut-dot-3').className = `tutorial-dot ${currentTutorialStep === 3 ? 'active' : ''}`;
+
+      document.getElementById('btn-tut-prev').style.display = currentTutorialStep > 1 ? 'inline-block' : 'none';
+      document.getElementById('btn-tut-next').innerText = currentTutorialStep === 3 ? 'Start Forging! 🚀' : 'Next Step →';
+    }
+
+    function openTaskModal() { document.getElementById('modal-task').classList.add('active'); }
+    function closeTaskModal() { document.getElementById('modal-task').classList.remove('active'); }
+    function openGoalModal() { 
+      document.getElementById('input-goal-text').value = stats.dailyGoalText || '';
+      document.getElementById('modal-goal').classList.add('active'); 
+    }
+    function closeGoalModal() { document.getElementById('modal-goal').classList.remove('active'); }
+
+    function openAddRewardModal() { document.getElementById('modal-reward').classList.add('active'); }
+    function closeAddRewardModal() { document.getElementById('modal-reward').classList.remove('active'); }
+
+    function selectFormCategory(cat) {
+      formCategory = cat;
+      document.getElementById('btn-cat-academic').className = `btn-chip ${cat === 'academic' ? 'active' : ''}`;
+      document.getElementById('btn-cat-household').className = `btn-chip ${cat === 'household' ? 'active' : ''}`;
+    }
+
+    function handleTaskSubmit(e) {
+      e.preventDefault();
+      const title = document.getElementById('input-task-title').value.trim();
+      const dl = document.getElementById('input-task-deadline').value;
+
+      const newTask = {
+        id: `t-${Date.now()}`,
+        title,
+        category: formCategory,
+        deadline: dl || null,
+        activeSeconds: 0,
+        status: 'not_started',
+        createdAt: new Date().toISOString(),
+        statusBadge: 'Not Started'
+      };
+
+      tasks.unshift(newTask);
+
+      // Schedule True Closed-App 3-Day Deadline Alerts for the new task
+      if (newTask.deadline) {
+        scheduleTaskDeadlineNotifications(newTask);
+      }
+
+      syncState();
+      closeTaskModal();
+      document.getElementById('input-task-title').value = '';
+      playOfflineAudioChime('start');
+      showToast('Task Created Successfully! 🚀', 'success');
+    }
+
+    function handleRewardSubmit(e) {
+      e.preventDefault();
+      const title = document.getElementById('input-reward-title').value.trim();
+      const cost = Number(document.getElementById('input-reward-cost').value) || 50;
+
+      const newReward = {
+        id: `r-${Date.now()}`,
+        title,
+        pointsCost: cost,
+        redemptionCount: 0
+      };
+
+      rewards.push(newReward);
+      syncState();
+      closeAddRewardModal();
+      document.getElementById('input-reward-title').value = '';
+      playOfflineAudioChime('reward');
+      showToast('Custom Reward Added to Vault! 🎁', 'success');
+    }
+
+    function switchView(viewName) {
+      playOfflineAudioChime('click');
+      document.getElementById('view-tasks').style.display = viewName === 'tasks' ? 'block' : 'none';
+      document.getElementById('view-shop').style.display = viewName === 'shop' ? 'block' : 'none';
+      document.getElementById('view-analytics').style.display = viewName === 'analytics' ? 'block' : 'none';
+
+      document.getElementById('tab-nav-tasks').className = `tab-btn ${viewName === 'tasks' ? 'active' : ''}`;
+      document.getElementById('tab-nav-shop').className = `tab-btn ${viewName === 'shop' ? 'active' : ''}`;
+      document.getElementById('tab-nav-analytics').className = `tab-btn ${viewName === 'analytics' ? 'active' : ''}`;
+
+      // Sync mobile bottom nav buttons
+      ['tasks', 'shop', 'analytics'].forEach(n => {
+        const btn = document.getElementById(`mobile-nav-${n}`);
+        if (btn) {
+          if (n === viewName) btn.classList.add('active');
+          else btn.classList.remove('active');
+        }
+      });
+    }
+
+    function setCategoryFilter(cat) {
+      playOfflineAudioChime('click');
+      activeCategoryFilter = cat;
+      ['all', 'academic', 'household'].forEach(c => {
+        const btn = document.getElementById(`chip-filter-${c}`);
+        if (btn) btn.className = `btn-chip ${c === cat ? 'active' : ''}`;
+      });
+      renderTaskGrid();
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function formatTimer(totalSeconds) {
+      const s = Number(totalSeconds) || 0;
+      const mins = Math.floor(Math.max(0, s) / 60);
+      const secs = Math.floor(Math.max(0, s) % 60);
+      return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    function showToast(msg, type = 'info') {
+      if (settings && settings.enableToasts === false) return;
+      const stack = document.getElementById('toast-stack');
+      const item = document.createElement('div');
+      item.className = `toast-item ${type}`;
+      item.innerHTML = `
+        <div style="flex: 1;">
+          <strong style="display: block; font-size: 12px; font-weight: 800;">FocusForge Alert</strong>
+          <span style="font-size: 11px; opacity: 0.9;">${msg}</span>
+        </div>
+      `;
+      stack.appendChild(item);
+
+      setTimeout(() => {
+        item.style.opacity = '0';
+        setTimeout(() => item.remove(), 300);
+      }, 3500);
+    }
+
+    function openSettingsModal() {
+      Object.keys(DEFAULT_SETTINGS).forEach(key => {
+        const input = document.getElementById(`set-${key}`);
+        if (input && input.type === 'checkbox') input.checked = !!settings[key];
+      });
+      const modal = document.getElementById('modal-settings');
+      const timeInput = document.getElementById('set-dailyNotifTime');
+      if (timeInput && settings.dailyNotifTime) timeInput.value = settings.dailyNotifTime;
+      updateNotificationPermissionUI();
+      if (modal) {
+        modal.classList.add('active');
+        if (window.lucide) lucide.createIcons();
+      }
+    }
+
+    function closeSettingsModal() {
+      const modal = document.getElementById('modal-settings');
+      if (modal) modal.classList.remove('active');
+    }
+
+    function toggleSetting(key, val) {
+      settings[key] = val;
+      syncState();
+
+      // If user changed Daily Focus Check-in time, reschedule closed-app native alarm
+      if (key === 'dailyNotifTime') {
+        scheduleDailyCheckInAlarm(val);
+      } else if (key === 'deadlineReminders') {
+        if (val) {
+          reconcileAllNativeNotifications();
+        } else {
+          tasks.forEach(t => cancelTaskDeadlineNotifications(t.id));
+        }
+      }
+
+      showToast(`Setting ${val ? 'Updated' : 'Disabled'}`, 'info');
+    }
+
+    function resetDefaultSettings() {
+      settings = { ...DEFAULT_SETTINGS };
+      syncState();
+      openSettingsModal();
+      scheduleDailyCheckInAlarm(settings.dailyNotifTime);
+      showToast('Settings restored to defaults', 'info');
+    }
+
+    // Assign all handlers to window for complete global scope accessibility
+    window.switchView = switchView;
+    window.openPomoModal = openPomoModal;
+    window.closePomoModal = closePomoModal;
+    window.togglePomoTimer = togglePomoTimer;
+    window.resetPomoTimer = resetPomoTimer;
+    window.setPomoPreset = setPomoPreset;
+    window.setPomoLinkedTask = setPomoLinkedTask;
+    window.togglePomoAudio = togglePomoAudio;
+    window.openTaskModal = openTaskModal;
+    window.closeTaskModal = closeTaskModal;
+    window.handleTaskSubmit = handleTaskSubmit;
+    window.selectFormCategory = selectFormCategory;
+    window.openGoalModal = openGoalModal;
+    window.closeGoalModal = closeGoalModal;
+    window.handleGoalSubmit = handleGoalSubmit;
+    window.removeDailyGoal = removeDailyGoal;
+    window.openAddRewardModal = openAddRewardModal;
+    window.closeAddRewardModal = closeAddRewardModal;
+    window.handleRewardSubmit = handleRewardSubmit;
+    window.redeemReward = redeemReward;
+    window.removeRewardWithAnimation = removeRewardWithAnimation;
+    window.openResetModal = openResetModal;
+    window.closeResetModal = closeResetModal;
+    window.confirmResetAppData = confirmResetAppData;
+    window.openTutorialModal = openTutorialModal;
+    window.closeTutorialModal = closeTutorialModal;
+    window.navigateTutorial = navigateTutorial;
+    window.openSettingsModal = openSettingsModal;
+    window.closeSettingsModal = closeSettingsModal;
+    window.toggleSetting = toggleSetting;
+    window.resetDefaultSettings = resetDefaultSettings;
+    window.handleDeviceNotifToggle = handleDeviceNotifToggle;
+    window.sendTestDeviceNotification = sendTestDeviceNotification;
+    window.promptDeleteTask = promptDeleteTask;
+    window.closeDeleteTaskModal = closeDeleteTaskModal;
+    window.confirmDeleteCurrentTask = confirmDeleteCurrentTask;
+    window.startTaskTimer = startTaskTimer;
+    window.pauseTaskTimer = pauseTaskTimer;
+    window.completeTaskWithAnimation = completeTaskWithAnimation;
+    window.removeTaskWithAnimation = removeTaskWithAnimation;
+    window.setCategoryFilter = setCategoryFilter;
+    window.dismissReminderBanner = dismissReminderBanner;
+    window.triggerAutomatic100PercentTicket = triggerAutomatic100PercentTicket;
+    window.closeCelebrationModal = closeCelebrationModal;
+    window.openCelebrationModal = openCelebrationModal;
+    window.scheduleDailyCheckInAlarm = scheduleDailyCheckInAlarm;
+    window.scheduleTaskDeadlineNotifications = scheduleTaskDeadlineNotifications;
+    window.cancelTaskDeadlineNotifications = cancelTaskDeadlineNotifications;
+
+    // Startup Initialization Routine
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        checkOfflineScheduledNotifications();
+        reconcileAllNativeNotifications();
+      }, 1500);
+
+      if (window.lucide) lucide.createIcons();
+      syncState();
+      updateNotificationPermissionUI();
+
+      if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
+        navigator.serviceWorker.register('/sw.js').then(reg => {
+          console.log('FocusForge Offline SW Registered:', reg.scope);
+        }).catch(err => console.log('Offline SW Registration failed:', err));
+      }
+
+      setTimeout(() => {
+        const loaderScreen = document.getElementById('loading-screen');
+        if (loaderScreen) loaderScreen.classList.add('fade-out');
+
+        const seenTutorial = localStorage.getItem(STORAGE_KEYS.TUTORIAL_SEEN);
+        if (!seenTutorial) {
+          setTimeout(() => {
+            openTutorialModal(1);
+          }, 400);
+        }
+      }, 1400);
+    });
+  </script>
+</body>
+</html>
