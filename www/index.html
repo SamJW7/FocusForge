@@ -140,6 +140,26 @@
       -ms-user-select: none;
       user-select: none;
       -webkit-touch-callout: none;
+      scrollbar-width: none !important;
+      -ms-overflow-style: none !important;
+    }
+
+    *::-webkit-scrollbar {
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
+    }
+
+    html, body {
+      scrollbar-width: none !important;
+      -ms-overflow-style: none !important;
+    }
+
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar {
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
     }
 
     /* Only input text boxes, textareas, and explicitly selectable data zones can be selected & copied */
@@ -497,6 +517,41 @@
 
     .btn-add-task:hover {
       transform: translateY(-1px);
+    }
+
+    /* Modal & Form Primary Action Buttons (Always visible across all viewports) */
+    .btn-modal-primary {
+      background: linear-gradient(135deg, var(--amber), #d97706);
+      color: #0f172a;
+      border: none;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 800;
+      padding: 10px 18px;
+      min-height: 44px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      white-space: nowrap;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+      transition: transform 0.15s;
+    }
+
+    .btn-modal-primary:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-modal-primary:active {
+      transform: scale(0.98);
+    }
+
+    .btn-modal-primary.btn-modal-indigo {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
     }
 
     .btn-icon-nav {
@@ -1212,6 +1267,11 @@
       border-radius: 24px;
       max-width: 460px;
       width: 100%;
+      max-height: 90vh;
+      max-height: 90dvh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
       padding: 32px 24px;
       box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
       border: 1px solid rgba(99, 102, 241, 0.4);
@@ -1333,12 +1393,16 @@
       border-radius: 24px;
       max-width: 500px;
       width: 100%;
+      max-height: 90vh;
+      max-height: 90dvh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
       padding: 32px 24px;
       box-shadow: 0 25px 60px rgba(245, 158, 11, 0.35);
       border: 2px solid #f59e0b;
       text-align: center;
       position: relative;
-      overflow: hidden;
     }
 
     .trophy-glow-icon {
@@ -1439,6 +1503,7 @@
       align-items: center;
       justify-content: center;
       padding: 16px;
+      overscroll-behavior: contain;
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.2s ease-out;
@@ -1455,6 +1520,12 @@
       border-radius: 20px;
       max-width: 500px;
       width: 100%;
+      max-height: 88vh;
+      max-height: 88dvh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      touch-action: pan-y;
       padding: 24px;
       box-shadow: 0 20px 40px rgba(0,0,0,0.25);
       transform: scale(0.96);
@@ -1508,6 +1579,7 @@
       height: 10px;
       border-radius: 50%;
       background: #e2e8f0;
+      cursor: pointer;
       transition: background-color 0.15s, width 0.15s;
     }
 
@@ -1731,10 +1803,10 @@
       .nav-tabs {
         display: none !important;
       }
-      .btn-fast-pomo span, .btn-add-task span {
+      .nav-actions .btn-fast-pomo span, .nav-actions .btn-add-task span {
         display: none !important;
       }
-      .btn-fast-pomo, .btn-add-task {
+      .nav-actions .btn-fast-pomo, .nav-actions .btn-add-task {
         padding: 8px 10px;
         min-height: 40px;
       }
@@ -1768,13 +1840,13 @@
         width: 40px;
         height: 40px;
       }
-      .btn-add-task, .btn-fast-pomo {
+      .nav-actions .btn-add-task, .nav-actions .btn-fast-pomo {
         display: none !important;
       }
-      .btn-icon-nav span, .btn-reset-app span {
+      .nav-actions .btn-icon-nav span, .nav-actions .btn-reset-app span {
         display: none !important;
       }
-      .btn-icon-nav, .btn-reset-app {
+      .nav-actions .btn-icon-nav, .nav-actions .btn-reset-app {
         padding: 8px;
         min-width: 38px;
         justify-content: center;
@@ -1888,13 +1960,17 @@
         padding: 20px 16px;
         border-radius: 20px;
         max-width: 95vw;
-        max-height: 90vh;
+        max-height: 88vh;
+        max-height: 88dvh;
         overflow-y: auto;
       }
       .pomo-modal-card, .celebration-modal-card {
         padding: 24px 16px;
         border-radius: 20px;
         max-width: 95vw;
+        max-height: 88vh;
+        max-height: 88dvh;
+        overflow-y: auto;
       }
       .form-input {
         min-height: 44px;
@@ -2235,7 +2311,7 @@
       </div>
 
       <div style="background: white; border-radius: 20px; border: 1px solid var(--border-color); padding: 24px; margin-bottom: 24px;">
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 16px;">
           <h3 style="font-size: 16px; font-weight: 800;">Offline Rewards Shop</h3>
           <button class="btn-chip active" onclick="openAddRewardModal()">
             <i data-lucide="plus" size="14"></i> Add Custom Reward
@@ -2291,57 +2367,63 @@
 
   <!-- MODAL STARTER: TUTORIAL / ONBOARDING GUIDECODE -->
   <div id="modal-tutorial" class="modal-backdrop">
-    <div class="modal-card">
+    <div class="modal-card" id="tutorial-modal-card">
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
         <div style="display: flex; align-items: center; gap: 8px;">
           <i data-lucide="sparkles" size="18" style="color: var(--amber)"></i>
           <h3 style="font-size: 17px; font-weight: 800;">Quick Starter Guide</h3>
         </div>
-        <button style="background: none; border: none; cursor: pointer; color: var(--text-muted);" onclick="closeTutorialModal()">
+        <button style="background: none; border: none; cursor: pointer; color: var(--text-muted); min-width: 36px; min-height: 36px; display: inline-flex; align-items: center; justify-content: center;" onclick="closeTutorialModal()" aria-label="Close Guide">
           <i data-lucide="x" size="20"></i>
         </button>
       </div>
 
       <div class="tutorial-step-dots">
-        <div id="tut-dot-1" class="tutorial-dot active"></div>
-        <div id="tut-dot-2" class="tutorial-dot"></div>
-        <div id="tut-dot-3" class="tutorial-dot"></div>
+        <div id="tut-dot-1" class="tutorial-dot active" onclick="goToTutorialStep(1)" title="Step 1"></div>
+        <div id="tut-dot-2" class="tutorial-dot" onclick="goToTutorialStep(2)" title="Step 2"></div>
+        <div id="tut-dot-3" class="tutorial-dot" onclick="goToTutorialStep(3)" title="Step 3"></div>
       </div>
 
-      <div id="tut-step-1">
-        <div style="background: var(--primary-light); border: 1px solid #c7d2fe; border-radius: 14px; padding: 18px; text-align: center; margin-bottom: 16px;">
-          <i data-lucide="target" size="32" style="color: var(--primary); margin-bottom: 6px;"></i>
-          <h4 style="font-size: 15px; font-weight: 800; color: var(--primary);">1. Lock In Your Daily Goal</h4>
-          <p style="font-size: 12px; color: #3730a3; margin-top: 4px;">
-            Eliminate ambiguity right away! Click "Set Daily Goal" in the header to establish your primary intention for the day. You can edit or remove it anytime.
-          </p>
+      <div id="tut-steps-viewport" style="touch-action: pan-y;">
+        <div id="tut-step-1">
+          <div style="background: var(--primary-light); border: 1px solid #c7d2fe; border-radius: 14px; padding: 18px; text-align: center; margin-bottom: 16px;">
+            <i data-lucide="target" size="32" style="color: var(--primary); margin-bottom: 6px;"></i>
+            <h4 style="font-size: 15px; font-weight: 800; color: var(--primary);">1. Lock In Your Daily Goal</h4>
+            <p style="font-size: 12px; color: #3730a3; margin-top: 4px; line-height: 1.55;">
+              Eliminate ambiguity right away! Tap "Set Daily Goal" in the header strip to establish your primary intention for the day. You can edit or remove it anytime.
+            </p>
+          </div>
+        </div>
+
+        <div id="tut-step-2" style="display: none;">
+          <div style="background: var(--amber-light); border: 1px solid #fde68a; border-radius: 14px; padding: 18px; text-align: center; margin-bottom: 16px;">
+            <i data-lucide="check-square" size="32" style="color: var(--amber-dark); margin-bottom: 6px;"></i>
+            <h4 style="font-size: 15px; font-weight: 800; color: var(--amber-dark);">2. Add Academic & Household Tasks</h4>
+            <p style="font-size: 12px; color: #78350f; margin-top: 4px; line-height: 1.55;">
+              Tap "+ New" to create your focused action list. Organize your academic work and household tasks easily, with optional deadline alerts.
+            </p>
+          </div>
+        </div>
+
+        <div id="tut-step-3" style="display: none;">
+          <div style="background: var(--emerald-light); border: 1px solid #a7f3d0; border-radius: 14px; padding: 18px; text-align: center; margin-bottom: 16px;">
+            <i data-lucide="gem" size="32" style="color: var(--emerald-dark); margin-bottom: 6px;"></i>
+            <h4 style="font-size: 15px; font-weight: 800; color: var(--emerald-dark);">3. Run Timer & Earn Reward Points</h4>
+            <p style="font-size: 12px; color: #065f46; margin-top: 4px; line-height: 1.55;">
+              Hit "Focus" on your card to start the timer. Completed sessions and 25m sprints earn points for your Dopamine Vault to unlock real-life reward incentives!
+            </p>
+          </div>
         </div>
       </div>
 
-      <div id="tut-step-2" style="display: none;">
-        <div style="background: var(--amber-light); border: 1px solid #fde68a; border-radius: 14px; padding: 18px; text-align: center; margin-bottom: 16px;">
-          <i data-lucide="check-square" size="32" style="color: var(--amber-dark); margin-bottom: 6px;"></i>
-          <h4 style="font-size: 15px; font-weight: 800; color: var(--amber-dark);">2. Add Academic & Household Tasks</h4>
-          <p style="font-size: 12px; color: #78350f; margin-top: 4px;">
-            Click "+ New Task" to create your focused action list. Organize your academic work and household tasks easily.
-          </p>
-        </div>
+      <div style="text-align: center; font-size: 11px; color: var(--text-muted); margin-bottom: 12px;">
+        Swipe left or right, or tap buttons below
       </div>
 
-      <div id="tut-step-3" style="display: none;">
-        <div style="background: var(--emerald-light); border: 1px solid #a7f3d0; border-radius: 14px; padding: 18px; text-align: center; margin-bottom: 16px;">
-          <i data-lucide="gem" size="32" style="color: var(--emerald-dark); margin-bottom: 6px;"></i>
-          <h4 style="font-size: 15px; font-weight: 800; color: var(--emerald-dark);">3. Run Timer & Earn Reward Points</h4>
-          <p style="font-size: 12px; color: #065f46; margin-top: 4px;">
-            Hit "Focus" on your card to start the timer. Capped focus sessions earn points for your Dopamine Vault to unlock real-life reward incentives!
-          </p>
-        </div>
-      </div>
-
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 16px;">
-        <button id="btn-tut-prev" class="btn-chip" style="display: none;" onclick="navigateTutorial(-1)">Back</button>
-        <div id="tut-spacer"></div>
-        <button id="btn-tut-next" class="btn-add-task" style="background: var(--primary); color: white;" onclick="navigateTutorial(1)">Next Step →</button>
+      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-top: 12px;">
+        <button type="button" id="btn-tut-prev" class="btn-chip" style="display: none; min-height: 44px; padding: 10px 16px;" onclick="navigateTutorial(-1)">← Back</button>
+        <div id="tut-spacer" style="flex: 1;"></div>
+        <button type="button" id="btn-tut-next" class="btn-modal-primary btn-modal-indigo" onclick="navigateTutorial(1)">Next Step →</button>
       </div>
     </div>
   </div>
@@ -2379,9 +2461,9 @@
           <input type="datetime-local" id="input-task-deadline" class="form-input">
         </div>
 
-        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
-          <button type="button" class="btn-chip" onclick="closeTaskModal()">Cancel</button>
-          <button type="submit" class="btn-add-task">Add Task to Forge</button>
+        <div style="display: flex; justify-content: flex-end; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 20px;">
+          <button type="button" class="btn-chip" style="min-height: 44px; padding: 10px 16px;" onclick="closeTaskModal()">Cancel</button>
+          <button type="submit" class="btn-modal-primary">Add Task to Forge</button>
         </div>
       </form>
     </div>
@@ -2410,13 +2492,13 @@
           <input type="text" id="input-goal-text" class="form-input" placeholder="e.g. Finish Math assignment & clean room">
         </div>
 
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 20px;">
-          <button type="button" class="btn-chip" style="color: var(--rose);" onclick="removeDailyGoal(); closeGoalModal();">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-top: 20px;">
+          <button type="button" class="btn-chip" style="color: var(--rose); min-height: 44px; padding: 10px 14px;" onclick="removeDailyGoal(); closeGoalModal();">
             <i data-lucide="trash-2" size="13"></i> Remove Goal
           </button>
-          <div style="display: flex; gap: 8px;">
-            <button type="button" class="btn-chip" onclick="closeGoalModal()">Cancel</button>
-            <button type="submit" class="btn-add-task" style="background: var(--primary); color: white;">Lock In Goal</button>
+          <div style="display: flex; gap: 8px; margin-left: auto;">
+            <button type="button" class="btn-chip" style="min-height: 44px; padding: 10px 16px;" onclick="closeGoalModal()">Cancel</button>
+            <button type="submit" class="btn-modal-primary btn-modal-indigo">Lock In Goal</button>
           </div>
         </div>
       </form>
@@ -2473,9 +2555,9 @@
           <input type="number" id="input-reward-cost" min="10" max="1000" value="50" class="form-input">
         </div>
 
-        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
-          <button type="button" class="btn-chip" onclick="closeAddRewardModal()">Cancel</button>
-          <button type="submit" class="btn-add-task">Create Reward</button>
+        <div style="display: flex; justify-content: flex-end; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 20px;">
+          <button type="button" class="btn-chip" style="min-height: 44px; padding: 10px 16px;" onclick="closeAddRewardModal()">Cancel</button>
+          <button type="submit" class="btn-modal-primary">Create Reward</button>
         </div>
       </form>
     </div>
@@ -2516,7 +2598,7 @@
       </div>
 
       <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
-        <button class="btn-add-task" style="background: linear-gradient(135deg, var(--amber), #d97706); color: #0f172a; padding: 12px 24px; font-size: 13px; width: 100%; justify-content: center;" onclick="closeCelebrationModal()">
+        <button type="button" class="btn-modal-primary" style="padding: 12px 24px; width: 100%;" onclick="closeCelebrationModal()">
           <i data-lucide="gem" size="16"></i> Collect Ticket & Open Vault
         </button>
       </div>
@@ -2736,11 +2818,11 @@
         </div>
       </div>
 
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 18px; border-top: 1px solid var(--border-light); padding-top: 12px;">
-        <button class="btn-chip" style="color: var(--text-muted);" onclick="resetDefaultSettings()">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 18px; border-top: 1px solid var(--border-light); padding-top: 12px;">
+        <button type="button" class="btn-chip" style="color: var(--text-muted); min-height: 44px; padding: 10px 14px;" onclick="resetDefaultSettings()">
           <i data-lucide="rotate-ccw" size="13"></i> Reset Default Settings
         </button>
-        <button class="btn-add-task" style="background: var(--primary); color: white;" onclick="closeSettingsModal()">
+        <button type="button" class="btn-modal-primary btn-modal-indigo" style="margin-left: auto;" onclick="closeSettingsModal()">
           Done
         </button>
       </div>
@@ -3113,14 +3195,32 @@
       if (modal) modal.classList.remove('active');
     }
 
+    function escapeHtml(str) {
+      return String(str == null ? '' : str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function updatePomoTaskOptions() {
+      const selectEl = document.getElementById('pomo-task-select');
+      if (!selectEl) return;
+      const activeTasks = tasks.filter(t => t.status !== 'completed' && t.status !== 'terminated');
+      const opts = ['<option value="">-- Standalone (No Linked Task) --</option>'];
+      activeTasks.forEach(t => {
+        const sel = t.id === pomoState.linkedTaskId ? 'selected' : '';
+        opts.push(`<option value="${escapeHtml(t.id)}" ${sel}>${escapeHtml(t.title)} (${formatTimer(t.activeSeconds || 0)})</option>`);
+      });
+      selectEl.innerHTML = opts.join('');
+    }
+
     function updatePomoUI() {
       const timeStr = formatTimer(pomoState.secondsLeft);
       
-      const widgetClock = document.getElementById('pomo-widget-clock');
-      if (widgetClock && widgetClock.textContent !== timeStr) widgetClock.textContent = timeStr;
-
-      const modalClock = document.getElementById('pomo-modal-clock');
-      if (modalClock && modalClock.textContent !== timeStr) modalClock.textContent = timeStr;
+      patchElementText('pomo-widget-clock', timeStr);
+      patchElementText('pomo-modal-clock', timeStr);
 
       const widgetStartText = document.getElementById('pomo-widget-start-text');
       if (widgetStartText) widgetStartText.textContent = pomoState.isRunning ? 'Pause Sprint' : `Start ${pomoState.modeName}`;
@@ -3146,16 +3246,7 @@
         ringFill.style.strokeDashoffset = (326.72 * (1 - ratio)).toFixed(2);
       }
 
-      const selectEl = document.getElementById('pomo-task-select');
-      if (selectEl) {
-        const activeTasks = tasks.filter(t => t.status !== 'completed');
-        const opts = ['<option value="">-- Standalone (No Linked Task) --</option>'];
-        activeTasks.forEach(t => {
-          const sel = t.id === pomoState.linkedTaskId ? 'selected' : '';
-          opts.push(`<option value="${t.id}" ${sel}>${t.title} (${formatTimer(t.activeSeconds || 0)})</option>`);
-        });
-        selectEl.innerHTML = opts.join('');
-      }
+      updatePomoTaskOptions();
     }
 
     function loadData(key, fallback) {
@@ -3354,8 +3445,10 @@
     async function scheduleDailyCheckInAlarm(timeStr) {
       const time = timeStr || settings.dailyNotifTime || '09:00';
       const parts = time.split(':');
-      const hour = parseInt(parts[0], 10) || 9;
-      const minute = parseInt(parts[1], 10) || 0;
+      const parsedHour = parseInt(parts[0], 10);
+      const parsedMin = parseInt(parts[1], 10);
+      const hour = Number.isNaN(parsedHour) ? 9 : parsedHour;
+      const minute = Number.isNaN(parsedMin) ? 0 : parsedMin;
 
       const ln = getCapacitorLocalNotifications();
       if (ln) {
@@ -3443,10 +3536,10 @@
         stats.totalSecondsFocused++;
         stateChanged = true;
 
-        if (pomoState.linkedTaskId) {
+        if (pomoState.linkedTaskId && pomoState.linkedTaskId !== activeTaskId) {
           for (let i = 0; i < tasks.length; i++) {
             const t = tasks[i];
-            if (t.id === pomoState.linkedTaskId && t.status !== 'completed') {
+            if (t.id === pomoState.linkedTaskId && t.status !== 'completed' && t.status !== 'terminated') {
               t.activeSeconds = (t.activeSeconds || 0) + 1;
               patchElementText(`task-clock-${t.id}`, formatTimer(t.activeSeconds));
               break;
@@ -3692,6 +3785,8 @@
         renderAnalytics();
       }
 
+      updatePomoTaskOptions();
+
       // Targeted icon resolution
       window.lucide.createIcons();
     }
@@ -3748,7 +3843,7 @@
               <span style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--amber-dark); background: rgba(245, 158, 11, 0.2); padding: 2px 6px; border-radius: 4px;">
                 Earliest Deadline Priority
               </span>
-              <h3 style="font-size: 15px; font-weight: 800; margin-top: 2px;">${earliest.title}</h3>
+              <h3 style="font-size: 15px; font-weight: 800; margin-top: 2px;">${escapeHtml(earliest.title)}</h3>
               <p style="font-size: 11px; color: var(--text-muted);">
                 ${dl.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })} • 
                 <strong style="color: ${diffHr < 0 ? 'var(--rose)' : 'var(--amber-dark)'}">${diffHr < 0 ? 'Overdue!' : `Due in ${diffHr} hrs`}</strong>
@@ -3756,7 +3851,7 @@
             </div>
           </div>
 
-          <button class="btn-focus-first" onclick="startTaskTimer('${earliest.id}')">
+          <button class="btn-focus-first" onclick="startTaskTimer('${escapeHtml(earliest.id)}')">
             <i data-lucide="play" size="14"></i> Focus First On This
           </button>
         </div>
@@ -3777,9 +3872,9 @@
             </div>
             <h3 style="font-size: 16px; font-weight: 800; color: var(--text-main);">No Tasks Yet</h3>
             <p style="font-size: 12px; margin-top: 4px; max-width: 360px; margin-left: auto; margin-right: auto;">
-              Your workspace is completely fresh. Click <strong>'+ New Task'</strong> above to create your first focus item!
+              Your workspace is completely fresh. Tap <strong>'+ New'</strong> below or click the button to create your first focus item!
             </p>
-            <button class="btn-add-task" style="margin: 16px auto 0 auto;" onclick="openTaskModal()">
+            <button type="button" class="btn-modal-primary" style="margin: 16px auto 0 auto;" onclick="openTaskModal()">
               <i data-lucide="plus" size="16"></i> Add First Task
             </button>
           </div>
@@ -3801,25 +3896,26 @@
 
         const taskPct = currentDenomSecs > 0 ? ((t.activeSeconds || 0) / currentDenomSecs) * 100 : 0;
         const taskPctStr = taskPct >= 1 ? taskPct.toFixed(1) : (taskPct > 0 ? taskPct.toFixed(2) : '0');
+        const safeId = escapeHtml(t.id);
 
         return `
-          <div id="task-card-${t.id}" class="task-card ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''} ${isTerminated ? 'terminated' : ''}">
+          <div id="task-card-${safeId}" class="task-card ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''} ${isTerminated ? 'terminated' : ''}">
             <div>
               <div class="task-card-header">
                 <span class="badge-cat ${t.category === 'academic' ? 'badge-academic' : 'badge-household'}">
                   ${t.category === 'academic' ? 'Academic' : 'Household'}
                 </span>
-                <span style="font-size: 11px; font-weight: 700; color: var(--text-muted);">${t.statusBadge || t.status}</span>
+                <span style="font-size: 11px; font-weight: 700; color: var(--text-muted);">${escapeHtml(t.statusBadge || t.status)}</span>
               </div>
 
-              <h3 class="task-title" style="${isCompleted ? 'text-decoration: line-through; color: var(--text-muted);' : ''}">${t.title}</h3>
+              <h3 class="task-title" style="${isCompleted ? 'text-decoration: line-through; color: var(--text-muted);' : ''}">${escapeHtml(t.title)}</h3>
             </div>
 
             <div>
               <div class="timer-box">
                 <div>
                   <span style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: #94a3b8; display: block;">Active Focus</span>
-                  <div class="timer-clock" id="task-clock-${t.id}">${formatTimer(t.activeSeconds)}</div>
+                  <div class="timer-clock" id="task-clock-${safeId}">${formatTimer(t.activeSeconds)}</div>
                 </div>
                 <div style="text-align: right;">
                   <span style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: #94a3b8; display: block;">Bar Value</span>
@@ -3831,20 +3927,20 @@
                 ${!isCompleted && !isTerminated ? `
                   <div style="display: flex; gap: 6px;">
                     ${isActive ? `
-                      <button class="btn-ctrl btn-pause" data-action="pause" data-task-id="${t.id}" onclick="pauseTaskTimer('${t.id}')">
+                      <button type="button" class="btn-ctrl btn-pause" data-action="pause" data-task-id="${safeId}">
                         <i data-lucide="pause" size="14"></i> Pause
                       </button>
                     ` : `
-                      <button class="btn-ctrl btn-start" data-action="start" data-task-id="${t.id}" onclick="startTaskTimer('${t.id}')">
+                      <button type="button" class="btn-ctrl btn-start" data-action="start" data-task-id="${safeId}">
                         <i data-lucide="play" size="14"></i> Focus
                       </button>
                     `}
 
-                    <button class="btn-ctrl btn-complete" data-action="complete" data-task-id="${t.id}" onclick="completeTaskWithAnimation('${t.id}')">
+                    <button type="button" class="btn-ctrl btn-complete" data-action="complete" data-task-id="${safeId}">
                       <i data-lucide="check-circle" size="14"></i> Complete
                     </button>
                   </div>
-                  <button class="btn-remove-task" data-action="delete" data-task-id="${t.id}" onclick="promptDeleteTask('${t.id}')" title="Delete Task with Confirmation">
+                  <button type="button" class="btn-remove-task" data-action="delete" data-task-id="${safeId}" title="Delete Task with Confirmation">
                     <i data-lucide="trash-2" size="14"></i> Delete
                   </button>
                 ` : `
@@ -3852,7 +3948,7 @@
                     <span style="font-size: 12px; font-weight: 700; color: var(--text-muted);">
                       ${isCompleted ? '✓ Completed' : '✕ Terminated'}
                     </span>
-                    <button class="btn-remove-task" data-action="delete" data-task-id="${t.id}" onclick="promptDeleteTask('${t.id}')" title="Delete Completed Task with Confirmation">
+                    <button type="button" class="btn-remove-task" data-action="delete" data-task-id="${safeId}" title="Delete Completed Task with Confirmation">
                       <i data-lucide="trash-2" size="14"></i> Remove
                     </button>
                   </div>
@@ -3878,21 +3974,21 @@
         `;
       } else {
         container.innerHTML = rewards.map(r => `
-          <div class="reward-card" id="reward-card-${r.id}">
+          <div class="reward-card" id="reward-card-${escapeHtml(r.id)}">
             <div>
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                 <span style="font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--primary); background: var(--primary-light); padding: 2px 8px; border-radius: 100px;">INCENTIVE</span>
                 <div style="display: flex; align-items: center; gap: 8px;">
-                  <span style="font-size: 12px; font-weight: 800; color: #d97706; font-family: var(--font-mono);">💎 ${r.pointsCost} PTS</span>
-                  <button class="btn-remove-reward" onclick="removeRewardWithAnimation('${r.id}')" title="Remove Custom Reward Option">
+                  <span style="font-size: 12px; font-weight: 800; color: #d97706; font-family: var(--font-mono);">💎 ${Number(r.pointsCost) || 0} PTS</span>
+                  <button type="button" class="btn-remove-reward" onclick="removeRewardWithAnimation('${escapeHtml(r.id)}')" title="Remove Custom Reward Option">
                     <i data-lucide="trash-2" size="13"></i> Remove
                   </button>
                 </div>
               </div>
-              <h4 style="font-size: 14px; font-weight: 800; margin-bottom: 12px; color: var(--text-main);">${r.title}</h4>
+              <h4 style="font-size: 14px; font-weight: 800; margin-bottom: 12px; color: var(--text-main);">${escapeHtml(r.title)}</h4>
             </div>
 
-            <button class="btn-chip active" style="width: 100%; justify-content: center; background: var(--amber); color: #0f172a; font-weight: 800; padding: 10px;" onclick="redeemReward('${r.id}', ${r.pointsCost})">
+            <button type="button" class="btn-chip active" style="width: 100%; justify-content: center; background: var(--amber); color: #0f172a; font-weight: 800; padding: 10px;" onclick="redeemReward('${escapeHtml(r.id)}', ${Number(r.pointsCost) || 0})">
               Redeem Reward
             </button>
           </div>
@@ -3908,12 +4004,12 @@
           tplContainer.innerHTML = tickets.map(tk => `
             <div style="background: linear-gradient(135deg, #fffbeb, #fef3c7); border: 1px solid #fde68a; padding: 14px; border-radius: 14px; position: relative; box-shadow: 0 2px 8px rgba(245,158,11,0.08);">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                <span style="font-size: 10px; font-weight: 800; color: var(--amber-dark); text-transform: uppercase; font-family: var(--font-mono); background: rgba(245, 158, 11, 0.2); padding: 2px 6px; border-radius: 4px;">Ticket Code: ${tk.code}</span>
-                <span style="font-size: 10px; font-weight: 700; color: var(--text-muted);">${tk.date || 'Auto-Earned'}</span>
+                <span style="font-size: 10px; font-weight: 800; color: var(--amber-dark); text-transform: uppercase; font-family: var(--font-mono); background: rgba(245, 158, 11, 0.2); padding: 2px 6px; border-radius: 4px;">Ticket Code: ${escapeHtml(tk.code)}</span>
+                <span style="font-size: 10px; font-weight: 700; color: var(--text-muted);">${escapeHtml(tk.date || 'Auto-Earned')}</span>
               </div>
-              <h4 style="font-size: 13px; font-weight: 800; color: #78350f; margin-top: 4px;">${tk.title}</h4>
+              <h4 style="font-size: 13px; font-weight: 800; color: #78350f; margin-top: 4px;">${escapeHtml(tk.title)}</h4>
               <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 8px;">
-                <span style="font-size: 12px; font-weight: 800; color: var(--emerald-dark);">+${tk.points} PTS</span>
+                <span style="font-size: 12px; font-weight: 800; color: var(--emerald-dark);">+${Number(tk.points) || 0} PTS</span>
                 <span style="font-size: 10px; font-weight: 800; color: #059669; background: #d1fae5; padding: 2px 8px; border-radius: 100px;">✓ Auto-Issued</span>
               </div>
             </div>
@@ -3969,8 +4065,10 @@
 
     function completeTaskWithAnimation(id) {
       const task = tasks.find(t => t.id === id);
+      if (!task || task.status === 'completed') return;
       tasks = tasks.map(t => t.id === id ? { ...t, status: 'completed', completedAt: new Date().toISOString(), statusBadge: 'Completed' } : t);
       if (activeTaskId === id) activeTaskId = null;
+      if (pomoState.linkedTaskId === id) pomoState.linkedTaskId = '';
       stats.dopamineVaultPoints += 20;
 
       cancelTaskDeadlineNotifications(id);
@@ -3986,6 +4084,7 @@
     function removeTaskWithAnimation(id) {
       playOfflineAudioChime('delete');
       cancelTaskDeadlineNotifications(id);
+      if (pomoState.linkedTaskId === id) pomoState.linkedTaskId = '';
 
       const cardEl = document.getElementById(`task-card-${id}`);
       if (cardEl) {
@@ -4108,7 +4207,7 @@
     function redeemReward(rewardId, cost) {
       if (stats.dopamineVaultPoints < cost) {
         playOfflineAudioChime('pause');
-        alert(`Kulang pa ang points! You need ${cost} points to redeem this reward.`);
+        showToast(`Not enough points! Need ${cost} PTS (have ${stats.dopamineVaultPoints} PTS).`, 'warning');
         return;
       }
 
@@ -4131,7 +4230,11 @@
       stats.dailyGoalText = text;
       syncState();
       closeGoalModal();
-      showToast('Daily Goal Locked In! 🎯', 'success');
+      if (text) {
+        showToast('Daily Goal Locked In! 🎯', 'success');
+      } else {
+        showToast('Daily Goal Cleared', 'info');
+      }
     }
 
     // --- TASK DELETION CONFIRMATION MODAL LOGIC ---
@@ -4494,13 +4597,26 @@
     function openTutorialModal(step = 1) {
       currentTutorialStep = step;
       renderTutorialStep();
-      document.getElementById('modal-tutorial').classList.add('active');
-      window.lucide.createIcons(document.getElementById('modal-tutorial'));
+      const modal = document.getElementById('modal-tutorial');
+      if (modal) {
+        modal.classList.add('active');
+        const card = document.getElementById('tutorial-modal-card');
+        if (card) card.scrollTop = 0;
+        window.lucide.createIcons(modal);
+      }
     }
 
     function closeTutorialModal() {
-      document.getElementById('modal-tutorial').classList.remove('active');
+      const modal = document.getElementById('modal-tutorial');
+      if (modal) modal.classList.remove('active');
       localStorage.setItem(STORAGE_KEYS.TUTORIAL_SEEN, 'true');
+    }
+
+    function goToTutorialStep(step) {
+      if (step < 1) step = 1;
+      if (step > 3) step = 3;
+      currentTutorialStep = step;
+      renderTutorialStep();
     }
 
     function navigateTutorial(direction) {
@@ -4514,39 +4630,83 @@
     }
 
     function renderTutorialStep() {
-      document.getElementById('tut-step-1').style.display = currentTutorialStep === 1 ? 'block' : 'none';
-      document.getElementById('tut-step-2').style.display = currentTutorialStep === 2 ? 'block' : 'none';
-      document.getElementById('tut-step-3').style.display = currentTutorialStep === 3 ? 'block' : 'none';
+      const s1 = document.getElementById('tut-step-1');
+      const s2 = document.getElementById('tut-step-2');
+      const s3 = document.getElementById('tut-step-3');
+      if (s1) s1.style.display = currentTutorialStep === 1 ? 'block' : 'none';
+      if (s2) s2.style.display = currentTutorialStep === 2 ? 'block' : 'none';
+      if (s3) s3.style.display = currentTutorialStep === 3 ? 'block' : 'none';
 
-      document.getElementById('tut-dot-1').className = `tutorial-dot ${currentTutorialStep === 1 ? 'active' : ''}`;
-      document.getElementById('tut-dot-2').className = `tutorial-dot ${currentTutorialStep === 2 ? 'active' : ''}`;
-      document.getElementById('tut-dot-3').className = `tutorial-dot ${currentTutorialStep === 3 ? 'active' : ''}`;
+      const d1 = document.getElementById('tut-dot-1');
+      const d2 = document.getElementById('tut-dot-2');
+      const d3 = document.getElementById('tut-dot-3');
+      if (d1) d1.className = `tutorial-dot ${currentTutorialStep === 1 ? 'active' : ''}`;
+      if (d2) d2.className = `tutorial-dot ${currentTutorialStep === 2 ? 'active' : ''}`;
+      if (d3) d3.className = `tutorial-dot ${currentTutorialStep === 3 ? 'active' : ''}`;
 
-      document.getElementById('btn-tut-prev').style.display = currentTutorialStep > 1 ? 'inline-block' : 'none';
-      document.getElementById('btn-tut-next').textContent = currentTutorialStep === 3 ? 'Start Forging! 🚀' : 'Next Step →';
+      const prevBtn = document.getElementById('btn-tut-prev');
+      if (prevBtn) prevBtn.style.display = currentTutorialStep > 1 ? 'inline-flex' : 'none';
+
+      const nextBtn = document.getElementById('btn-tut-next');
+      if (nextBtn) nextBtn.textContent = currentTutorialStep === 3 ? 'Start Forging! 🚀' : 'Next Step →';
     }
 
-    function openTaskModal() { document.getElementById('modal-task').classList.add('active'); }
-    function closeTaskModal() { document.getElementById('modal-task').classList.remove('active'); }
+    function openTaskModal() {
+      const modal = document.getElementById('modal-task');
+      if (modal) {
+        modal.classList.add('active');
+        window.lucide.createIcons(modal);
+      }
+    }
+    function closeTaskModal() {
+      const modal = document.getElementById('modal-task');
+      if (modal) modal.classList.remove('active');
+    }
     function openGoalModal() { 
-      document.getElementById('input-goal-text').value = stats.dailyGoalText || '';
-      document.getElementById('modal-goal').classList.add('active'); 
+      const input = document.getElementById('input-goal-text');
+      if (input) input.value = stats.dailyGoalText || '';
+      const modal = document.getElementById('modal-goal');
+      if (modal) {
+        modal.classList.add('active');
+        window.lucide.createIcons(modal);
+      }
     }
-    function closeGoalModal() { document.getElementById('modal-goal').classList.remove('active'); }
+    function closeGoalModal() {
+      const modal = document.getElementById('modal-goal');
+      if (modal) modal.classList.remove('active');
+    }
 
-    function openAddRewardModal() { document.getElementById('modal-reward').classList.add('active'); }
-    function closeAddRewardModal() { document.getElementById('modal-reward').classList.remove('active'); }
+    function openAddRewardModal() {
+      const modal = document.getElementById('modal-reward');
+      if (modal) {
+        modal.classList.add('active');
+        window.lucide.createIcons(modal);
+      }
+    }
+    function closeAddRewardModal() {
+      const modal = document.getElementById('modal-reward');
+      if (modal) modal.classList.remove('active');
+    }
 
     function selectFormCategory(cat) {
       formCategory = cat;
-      document.getElementById('btn-cat-academic').className = `btn-chip ${cat === 'academic' ? 'active' : ''}`;
-      document.getElementById('btn-cat-household').className = `btn-chip ${cat === 'household' ? 'active' : ''}`;
+      const acBtn = document.getElementById('btn-cat-academic');
+      const hhBtn = document.getElementById('btn-cat-household');
+      if (acBtn) acBtn.className = `btn-chip ${cat === 'academic' ? 'active' : ''}`;
+      if (hhBtn) hhBtn.className = `btn-chip ${cat === 'household' ? 'active' : ''}`;
     }
 
     function handleTaskSubmit(e) {
       e.preventDefault();
-      const title = document.getElementById('input-task-title').value.trim();
-      const dl = document.getElementById('input-task-deadline').value;
+      const titleInput = document.getElementById('input-task-title');
+      const deadlineInput = document.getElementById('input-task-deadline');
+      const title = titleInput ? titleInput.value.trim() : '';
+      if (!title) {
+        showToast('Please enter a task name first.', 'warning');
+        if (titleInput) titleInput.focus();
+        return;
+      }
+      const dl = deadlineInput ? deadlineInput.value : '';
 
       const newTask = {
         id: `t-${Date.now()}`,
@@ -4567,15 +4727,25 @@
 
       syncState();
       closeTaskModal();
-      document.getElementById('input-task-title').value = '';
+      if (titleInput) titleInput.value = '';
+      if (deadlineInput) deadlineInput.value = '';
+      selectFormCategory('academic');
       playOfflineAudioChime('start');
       showToast('Task Created Successfully! 🚀', 'success');
     }
 
     function handleRewardSubmit(e) {
       e.preventDefault();
-      const title = document.getElementById('input-reward-title').value.trim();
-      const cost = Number(document.getElementById('input-reward-cost').value) || 50;
+      const titleInput = document.getElementById('input-reward-title');
+      const costInput = document.getElementById('input-reward-cost');
+      const title = titleInput ? titleInput.value.trim() : '';
+      if (!title) {
+        showToast('Please enter a reward name.', 'warning');
+        if (titleInput) titleInput.focus();
+        return;
+      }
+      const rawCost = Number(costInput ? costInput.value : 50);
+      const cost = Math.max(10, Math.min(10000, Number.isFinite(rawCost) && rawCost > 0 ? Math.round(rawCost) : 50));
 
       const newReward = {
         id: `r-${Date.now()}`,
@@ -4587,7 +4757,8 @@
       rewards.push(newReward);
       syncState();
       closeAddRewardModal();
-      document.getElementById('input-reward-title').value = '';
+      if (titleInput) titleInput.value = '';
+      if (costInput) costInput.value = '50';
       playOfflineAudioChime('reward');
       showToast('Custom Reward Added to Vault! 🎁', 'success');
     }
@@ -4740,6 +4911,7 @@
     }
 
     function toggleSetting(key, val) {
+      if (key === 'dailyNotifTime' && !val) return;
       settings[key] = val;
       syncState();
 
@@ -4792,6 +4964,7 @@
     window.openTutorialModal = openTutorialModal;
     window.closeTutorialModal = closeTutorialModal;
     window.navigateTutorial = navigateTutorial;
+    window.goToTutorialStep = goToTutorialStep;
     window.openSettingsModal = openSettingsModal;
     window.closeSettingsModal = closeSettingsModal;
     window.toggleSetting = toggleSetting;
@@ -4826,6 +4999,47 @@
           return; // Allow native context menu inside editable input fields & textareas
         }
         e.preventDefault();
+      });
+
+      // Touch swipe navigation on Starter Guide (swipe left = next, swipe right = back)
+      const tutCard = document.getElementById('tutorial-modal-card');
+      if (tutCard) {
+        let touchStartX = 0;
+        let touchStartY = 0;
+        tutCard.addEventListener('touchstart', (e) => {
+          if (e.changedTouches && e.changedTouches.length > 0) {
+            touchStartX = e.changedTouches[0].clientX;
+            touchStartY = e.changedTouches[0].clientY;
+          }
+        }, { passive: true });
+        tutCard.addEventListener('touchend', (e) => {
+          if (!e.changedTouches || e.changedTouches.length === 0) return;
+          const dx = e.changedTouches[0].clientX - touchStartX;
+          const dy = e.changedTouches[0].clientY - touchStartY;
+          if (Math.abs(dx) >= 42 && Math.abs(dx) > Math.abs(dy) * 1.4) {
+            if (dx < 0) {
+              navigateTutorial(1);
+            } else if (currentTutorialStep > 1) {
+              navigateTutorial(-1);
+            }
+          }
+        }, { passive: true });
+      }
+
+      // Close modals when tapping directly on the dark backdrop overlay
+      document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+        backdrop.addEventListener('click', (e) => {
+          if (e.target !== backdrop) return;
+          if (backdrop.id === 'modal-tutorial') closeTutorialModal();
+          else if (backdrop.id === 'modal-task') closeTaskModal();
+          else if (backdrop.id === 'modal-goal') closeGoalModal();
+          else if (backdrop.id === 'modal-reset') closeResetModal();
+          else if (backdrop.id === 'modal-reward') closeAddRewardModal();
+          else if (backdrop.id === 'modal-celebration') closeCelebrationModal();
+          else if (backdrop.id === 'modal-pomo-timer') closePomoModal();
+          else if (backdrop.id === 'modal-settings') closeSettingsModal();
+          else if (backdrop.id === 'modal-delete-task') closeDeleteTaskModal();
+        });
       });
 
       // Event delegation on task grid
