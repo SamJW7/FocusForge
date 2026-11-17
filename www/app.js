@@ -141,7 +141,9 @@
     dopamineVaultPoints: 0,
     totalSecondsFocused: 0,
     dailyGoalText: '',
-    lastDailyNotifDate: ''
+    lastDailyNotifDate: '',
+    lastDailyNotifKey: '',
+    dailyNotifUserEditedDate: ''
   };
 
   var DEFAULT_SETTINGS = {
@@ -192,6 +194,7 @@
   var editingTaskId = null;
   var activeTaskId = null;
   var lastUserActivityMs = Date.now();
+  var lastTimerTickMs = Date.now();
   var currentTutorialStep = 1;
   var cycle100Claimed = !!loadData(STORAGE_KEYS.CYCLE100, false);
 
@@ -201,6 +204,7 @@
   // Constant Notification IDs & Android Channels (default app icon; no custom smallIcon)
   var NOTIF_ID_TEST = 999999;
   var NOTIF_ID_DAILY_CHECKIN = 10001;
+  var NOTIF_ID_DAILY_CHECKIN_IMMEDIATE = 10002;
   var NOTIF_ID_POMO_FINISH = 50002;
   var NOTIF_ID_TASK_FINISH = 50003;
   var NOTIF_ID_SESSION_CAP = 50004;
@@ -208,6 +212,8 @@
   var NOTIF_CHANNEL_DEADLINES = 'deadlines';
   var NOTIF_CHANNEL_DAILY_FOCUS = 'daily-focus';
   var MAX_CAPACITOR_SLOTS_PER_TASK = 24;
+  var AFK_TIMEOUT_MS = 180000;
+  var AFK_TIMEOUT_SECS = 180;
 
   var MIN_MS = 60000;
   var HOUR_MS = 3600000;
@@ -417,8 +423,13 @@
   }
 
   function togglePomoTimer() {
+    var wasAnyRunning = !!(activeTaskId || pomoState.isRunning);
     pomoState.isRunning = !pomoState.isRunning;
     if (pomoState.isRunning) {
+      if (!wasAnyRunning) {
+        lastTimerTickMs = Date.now();
+      }
+      lastUserActivityMs = Date.now();
       playOfflineAudioChime('start');
       showToast(pomoState.modeName + ' running', 'info', '⚡ Focus Sprint Started');
     } else {
@@ -709,14 +720,17 @@
     }
   }
 
-  function getDailyCheckInTimeParts() {
-    var time = (settings && settings.dailyNotifTime) ? settings.dailyNotifTime : '09:00';
-    var parts = time.split(':');
+  function getDailyCheckInTimeParts(timeOverride) {
+    var time = timeOverride || (settings && settings.dailyNotifTime) || '09:00';
+    var parts = String(time).split(':');
     var parsedHour = parseInt(parts[0], 10);
     var parsedMin = parseInt(parts[1], 10);
+    var hour = Number.isNaN(parsedHour) ? 9 : Math.max(0, Math.min(23, parsedHour));
+    var minute = Number.isNaN(parsedMin) ? 0 : Math.max(0, Math.min(59, parsedMin));
     return {
-      hour: Number.isNaN(parsedHour) ? 9 : Math.max(0, Math.min(23, parsedHour)),
-      minute: Number.isNaN(parsedMin) ? 0 : Math.max(0, Math.min(59, parsedMin))
+      hour: hour,
+      minute: minute,
+      formatted: String(hour).padStart(2, '0') + ':' + String(minute).padStart(2, '0')
     };
   }
 
@@ -1065,12 +1079,9 @@
   }
 
   async function scheduleDailyCheckInAlarm(timeStr) {
-    var time = timeStr || settings.dailyNotifTime || '09:00';
-    var parts = time.split(':');
-    var parsedHour = parseInt(parts[0], 10);
-    var parsedMin = parseInt(parts[1], 10);
-    var hour = Number.isNaN(parsedHour) ? 9 : Math.max(0, Math.min(23, parsedHour));
-    var minute = Number.isNaN(parsedMin) ? 0 : Math.max(0, Math.min(59, parsedMin));
+    var parts = getDailyCheckInTimeParts(timeStr);
+    var hour = parts.hour;
+    var minute = parts.minute;
 
     var ln = getCapacitorLocalNotifications();
     if (ln) {
@@ -1098,6 +1109,37 @@
     }
   }
 
+  function deliverDailyCheckInReminder(todayDateStr, targetTimeStr, isFromEdit) {
+    var goalStatus = (stats.dailyGoalText && stats.dailyGoalText.trim())
+      ? 'Current Goal: "' + stats.dailyGoalText + '"'
+      : 'No goal set yet for today.';
+    var bodyText = 'Any goal or task today? ' + goalStatus + ' Keep your flow streak alive!';
+
+    stats.lastDailyNotifDate = todayDateStr;
+    stats.lastDailyNotifKey = todayDateStr + '|' + targetTimeStr;
+    saveData(STORAGE_KEYS.STATS, stats);
+
+    var ln = getCapacitorLocalNotifications();
+    if (ln) {
+      if (isFromEdit) {
+        triggerImmediateNativeNotification(
+          'FocusForge Daily Check-In',
+          bodyText,
+          NOTIF_ID_DAILY_CHECKIN_IMMEDIATE,
+          NOTIF_CHANNEL_DAILY_FOCUS
+        );
+      }
+    } else if (settings.deviceNotifications && ('Notification' in window) && Notification.permission === 'granted') {
+      sendDeviceNotification('FocusForge Daily Focus', {
+        body: bodyText,
+        tag: 'daily-checkin-' + todayDateStr + '-' + targetTimeStr.replace(':', '') + (isFromEdit ? '-' + Date.now() : ''),
+        vibrate: [120]
+      });
+    }
+
+    showToast('Any goal or task today? ' + goalStatus, 'info', 'Daily Focus Check-In (' + targetTimeStr + ')');
+  }
+
   function reconcileAllNativeNotifications() {
     var ln = getCapacitorLocalNotifications();
     if (!ln) return;
@@ -1123,17 +1165,61 @@
 
   window._focusforgeNotifInterval = setInterval(checkOfflineScheduledNotifications, 30000);
 
-  window._focusforgeTimerInterval = setInterval(function() {
+  function runTimerTick(fromInterval) {
+    var nowMs = Date.now();
+    var prevTickMs = lastTimerTickMs;
+    var elapsedMs = nowMs - prevTickMs;
+
+    if (elapsedMs < 0) {
+      lastTimerTickMs = nowMs;
+      return;
+    }
+
+    if (!activeTaskId && !pomoState.isRunning) {
+      lastTimerTickMs = nowMs;
+      return;
+    }
+
+    var elapsedSecs = Math.floor(elapsedMs / 1000);
+    if (elapsedSecs === 0 && fromInterval && elapsedMs >= 900) {
+      elapsedSecs = 1;
+      lastTimerTickMs = nowMs;
+    } else if (elapsedSecs >= 1) {
+      lastTimerTickMs = (elapsedSecs === 1 && fromInterval && elapsedMs < 1500)
+        ? nowMs
+        : (prevTickMs + elapsedSecs * 1000);
+    } else {
+      return;
+    }
+
     var stateChanged = false;
     var needsFullRender = false;
-    var nowMs = Date.now();
+    var shouldSyncState = false;
 
-    // 1. AFK Inactivity Protection check (folded inside the single 1s interval)
-    if (settings.afkProtection && activeTaskId && (nowMs - lastUserActivityMs >= 180000)) {
+    // 1. AFK Inactivity Protection (only pauses after 3 minutes of zero interaction when enabled)
+    var afkTriggered = !!(settings.afkProtection && activeTaskId && (nowMs - lastUserActivityMs >= AFK_TIMEOUT_MS));
+    if (afkTriggered) {
+      var idleTickedSecs = 0;
+      if (prevTickMs > lastUserActivityMs) {
+        idleTickedSecs = Math.min(AFK_TIMEOUT_SECS, Math.floor((prevTickMs - lastUserActivityMs) / 1000));
+      }
+
       for (var k = 0; k < tasks.length; k++) {
         var afkTask = tasks[k];
         if (afkTask.id === activeTaskId && afkTask.status === 'active') {
-          afkTask.activeSeconds = Math.max(0, (afkTask.activeSeconds || 0) - 180);
+          var creditBeforeAfk = (prevTickMs < lastUserActivityMs)
+            ? Math.max(0, Math.floor((lastUserActivityMs - prevTickMs) / 1000))
+            : 0;
+          if (creditBeforeAfk > 0) {
+            if (settings.maxSessionCap) {
+              creditBeforeAfk = Math.min(creditBeforeAfk, Math.max(0, 7200 - (afkTask.activeSeconds || 0)));
+            }
+            afkTask.activeSeconds = (afkTask.activeSeconds || 0) + creditBeforeAfk;
+            stats.totalSecondsFocused += creditBeforeAfk;
+          }
+          var actualRemoved = Math.min(afkTask.activeSeconds || 0, idleTickedSecs);
+          afkTask.activeSeconds = Math.max(0, (afkTask.activeSeconds || 0) - actualRemoved);
+          stats.totalSecondsFocused = Math.max(0, stats.totalSecondsFocused - actualRemoved);
           afkTask.status = 'paused';
           afkTask.statusBadge = 'Paused: AFK Inactive';
           break;
@@ -1141,21 +1227,28 @@
       }
       activeTaskId = null;
       lastUserActivityMs = nowMs;
+      stateChanged = true;
+      needsFullRender = true;
+      shouldSyncState = true;
       showToast('Auto-paused after 3 mins inactivity', 'alert', 'AFK Guard Activated');
-      syncState();
-      return;
     }
 
-    // 2. Active Task Timer Tick
-    if (activeTaskId) {
+    // 2. Active Task Timer Tick (catches up real off-screen elapsed seconds)
+    if (activeTaskId && !afkTriggered) {
       for (var i = 0; i < tasks.length; i++) {
         var t = tasks[i];
         if (t.id === activeTaskId && t.status === 'active') {
-          t.activeSeconds = (t.activeSeconds || 0) + 1;
-          stats.totalSecondsFocused++;
-          stateChanged = true;
-
-          patchElementText('task-clock-' + t.id, formatTimer(t.activeSeconds));
+          var taskDeltaSecs = elapsedSecs;
+          if (settings.maxSessionCap) {
+            taskDeltaSecs = Math.min(taskDeltaSecs, Math.max(0, 7200 - (t.activeSeconds || 0)));
+          }
+          if (taskDeltaSecs > 0) {
+            t.activeSeconds = (t.activeSeconds || 0) + taskDeltaSecs;
+            stats.totalSecondsFocused += taskDeltaSecs;
+            stateChanged = true;
+            if (elapsedSecs > 1) secondsSinceLastStorageSave += taskDeltaSecs;
+            patchElementText('task-clock-' + t.id, formatTimer(t.activeSeconds));
+          }
 
           if (settings.maxSessionCap && t.activeSeconds >= 7200) {
             t.activeSeconds = 7200;
@@ -1170,25 +1263,30 @@
             );
             activeTaskId = null;
             needsFullRender = true;
+            shouldSyncState = true;
           }
           break;
         }
       }
     }
 
-    // 3. Separated 25-Min Fast Focus Pomodoro Timer Tick
+    // 3. Separated 25-Min Fast Focus Pomodoro Timer Tick (catches up off-screen seconds cleanly)
     if (pomoState.isRunning) {
-      pomoState.secondsLeft--;
-      stats.totalSecondsFocused++;
-      stateChanged = true;
+      var pomoConsumed = Math.min(elapsedSecs, Math.max(0, pomoState.secondsLeft));
+      if (pomoConsumed > 0) {
+        pomoState.secondsLeft -= pomoConsumed;
+        stats.totalSecondsFocused += pomoConsumed;
+        stateChanged = true;
+        if (elapsedSecs > 1) secondsSinceLastStorageSave += pomoConsumed;
 
-      if (pomoState.linkedTaskId && pomoState.linkedTaskId !== activeTaskId) {
-        for (var j = 0; j < tasks.length; j++) {
-          var lt = tasks[j];
-          if (lt.id === pomoState.linkedTaskId && lt.status !== 'completed' && lt.status !== 'terminated') {
-            lt.activeSeconds = (lt.activeSeconds || 0) + 1;
-            patchElementText('task-clock-' + lt.id, formatTimer(lt.activeSeconds));
-            break;
+        if (pomoState.linkedTaskId && pomoState.linkedTaskId !== activeTaskId) {
+          for (var j = 0; j < tasks.length; j++) {
+            var lt = tasks[j];
+            if (lt.id === pomoState.linkedTaskId && lt.status !== 'completed' && lt.status !== 'terminated') {
+              lt.activeSeconds = (lt.activeSeconds || 0) + pomoConsumed;
+              patchElementText('task-clock-' + lt.id, formatTimer(lt.activeSeconds));
+              break;
+            }
           }
         }
       }
@@ -1228,7 +1326,7 @@
 
         triggerImmediateNativeNotification(notifTitle, notifBody, NOTIF_ID_POMO_FINISH, NOTIF_CHANNEL_DAILY_FOCUS);
         needsFullRender = true;
-        syncStateImmediate();
+        shouldSyncState = true;
       }
     }
 
@@ -1236,9 +1334,9 @@
     if (stateChanged) {
       updateProgressBarOnly();
 
-      secondsSinceLastStorageSave++;
-      if (secondsSinceLastStorageSave >= 12 || needsFullRender) {
-        if (needsFullRender) {
+      secondsSinceLastStorageSave += 1;
+      if (shouldSyncState || needsFullRender || secondsSinceLastStorageSave >= 12) {
+        if (shouldSyncState || needsFullRender) {
           syncStateImmediate();
         } else {
           saveProgressData();
@@ -1250,6 +1348,10 @@
         scheduleRender();
       }
     }
+  }
+
+  window._focusforgeTimerInterval = setInterval(function() {
+    runTimerTick(true);
   }, 1000);
 
   // Targeted updater for overload progress bar & active counters (NO task grid rebuild)
@@ -1313,6 +1415,8 @@
 
   // Visibility, Pagehide & Capacitor Resume Handling
   function handleAppResume() {
+    // Reconcile off-screen timer delta BEFORE resetting activity timestamp so AFK ON still honors 3-min rule
+    runTimerTick(false);
     var nowMs = Date.now();
     lastUserActivityMs = nowMs;
     scheduleRender();
@@ -1325,17 +1429,8 @@
 
   document.addEventListener('visibilitychange', function() {
     if (document.hidden) {
-      if (activeTaskId) {
-        for (var i = 0; i < tasks.length; i++) {
-          if (tasks[i].id === activeTaskId && tasks[i].status === 'active') {
-            tasks[i].status = 'paused';
-            tasks[i].statusBadge = 'Paused: Tab Switched';
-            break;
-          }
-        }
-        activeTaskId = null;
-        showToast('Anti-farming guard paused active timer', 'warning', 'Paused: Tab Switched');
-      }
+      // Never pause timers immediately when leaving app or locking device; save state cleanly instead
+      runTimerTick(false);
       syncStateImmediate();
     } else {
       handleAppResume();
@@ -1345,7 +1440,7 @@
   window.addEventListener('pagehide', syncStateImmediate);
   window.addEventListener('beforeunload', syncStateImmediate);
 
-  ['mousemove', 'keydown', 'click', 'touchstart'].forEach(function(evt) {
+  ['mousemove', 'keydown', 'click', 'touchstart', 'scroll'].forEach(function(evt) {
     window.addEventListener(evt, function() { lastUserActivityMs = Date.now(); }, { passive: true });
   });
 
@@ -1671,12 +1766,17 @@
 
   // --- 4. ACTION HANDLERS ---
   function startTaskTimer(id) {
+    var wasAnyRunning = !!(activeTaskId || pomoState.isRunning);
     tasks = tasks.map(function(t) {
       if (t.id === id) return Object.assign({}, t, { status: 'active', statusBadge: 'Active Focus' });
       if (t.status === 'active') return Object.assign({}, t, { status: 'paused', statusBadge: 'Paused' });
       return t;
     });
     activeTaskId = id;
+    if (!wasAnyRunning) {
+      lastTimerTickMs = Date.now();
+    }
+    lastUserActivityMs = Date.now();
     syncState();
     playOfflineAudioChime('start');
     showToast('Task clock is running', 'info', 'Focus Timer Started');
@@ -2141,24 +2241,14 @@
     var currentHours = String(now.getHours()).padStart(2, '0');
     var currentMinutes = String(now.getMinutes()).padStart(2, '0');
     var currentTimeStr = currentHours + ':' + currentMinutes;
-    var targetTimeStr = settings.dailyNotifTime || '09:00';
+    var targetTimeStr = getDailyCheckInTimeParts().formatted;
+    var todayDailyKey = todayDateStr + '|' + targetTimeStr;
     var hasBrowserNotifs = !!(settings.deviceNotifications && ('Notification' in window) && Notification.permission === 'granted');
     var isCapacitor = !!getCapacitorLocalNotifications();
 
-    // 1. Daily Check-in Notification Fallback (Browser / Electron)
-    if (!isCapacitor && hasBrowserNotifs && currentTimeStr >= targetTimeStr && stats.lastDailyNotifDate !== todayDateStr) {
-      stats.lastDailyNotifDate = todayDateStr;
-      saveData(STORAGE_KEYS.STATS, stats);
-
-      var goalStatus = (stats.dailyGoalText && stats.dailyGoalText.trim())
-        ? 'Current Goal: "' + stats.dailyGoalText + '"'
-        : 'No goal set yet for today.';
-
-      sendDeviceNotification('FocusForge Daily Focus', {
-        body: 'Any goal or task today? ' + goalStatus + ' Keep your flow streak alive!',
-        tag: 'daily-checkin-' + todayDateStr,
-        vibrate: [120]
-      });
+    // 1. Daily Check-in Notification Fallback (Browser / Electron; keyed by date+time so edits re-arm it)
+    if (!isCapacitor && (hasBrowserNotifs || stats.dailyNotifUserEditedDate === todayDateStr) && currentTimeStr >= targetTimeStr && stats.lastDailyNotifKey !== todayDailyKey) {
+      deliverDailyCheckInReminder(todayDateStr, targetTimeStr, false);
     }
 
     // 2. Extended Deadline Countdown Checker (only tasks due within 72h; skips completed/terminated/deleted)
@@ -2235,7 +2325,7 @@
     var ln = getCapacitorLocalNotifications();
     if (ln) {
       try {
-        await ln.cancel({ notifications: [{ id: NOTIF_ID_DAILY_CHECKIN }, { id: NOTIF_ID_TEST }] });
+        await ln.cancel({ notifications: [{ id: NOTIF_ID_DAILY_CHECKIN }, { id: NOTIF_ID_DAILY_CHECKIN_IMMEDIATE }, { id: NOTIF_ID_TEST }] });
       } catch (e) {}
     }
 
@@ -2649,14 +2739,42 @@
     if (modal) modal.classList.remove('active');
   }
 
-  function toggleSetting(key, val) {
-    if (key === 'dailyNotifTime' && !val) return;
-    settings[key] = val;
+  function handleDailyNotifTimeUpdated(rawTimeVal) {
+    var parts = getDailyCheckInTimeParts(rawTimeVal);
+    var normalizedTime = parts.formatted;
+    var now = new Date();
+    var todayDateStr = toLocalDateStr(now);
+    var currentTimeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+
+    settings.dailyNotifTime = normalizedTime;
+    stats.lastDailyNotifKey = '';
+    stats.lastDailyNotifDate = '';
+    stats.dailyNotifUserEditedDate = todayDateStr;
     syncState();
 
+    reconcileAllNativeNotifications();
+
+    if (currentTimeStr >= normalizedTime) {
+      deliverDailyCheckInReminder(todayDateStr, normalizedTime, true);
+    } else {
+      showToast('Daily check-in scheduled for ' + normalizedTime, 'info', 'Preferences Saved');
+    }
+  }
+
+  function toggleSetting(key, val) {
     if (key === 'dailyNotifTime') {
-      reconcileAllNativeNotifications();
-    } else if (key === 'deadlineReminders') {
+      if (!val) return;
+      handleDailyNotifTimeUpdated(val);
+      return;
+    }
+
+    settings[key] = val;
+    if (key === 'afkProtection') {
+      lastUserActivityMs = Date.now();
+    }
+    syncState();
+
+    if (key === 'deadlineReminders') {
       if (val) {
         reconcileAllNativeNotifications();
       } else {
@@ -2669,6 +2787,9 @@
 
   function resetDefaultSettings() {
     settings = Object.assign({}, DEFAULT_SETTINGS);
+    stats.lastDailyNotifKey = '';
+    stats.lastDailyNotifDate = '';
+    lastUserActivityMs = Date.now();
     syncState();
     openSettingsModal();
     reconcileAllNativeNotifications();
