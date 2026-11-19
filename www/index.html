@@ -51,7 +51,7 @@
 
         <div class="pill-stat pill-vault">
           <i data-lucide="gem" size="14"></i>
-          <span id="stat-points-val">0 PTS</span>
+          <span id="stat-points-val">0.00 PTS</span>
         </div>
 
         <div class="goal-pill-group" id="goal-pill-wrapper">
@@ -123,7 +123,7 @@
       </div>
       <div class="pill-stat pill-vault">
         <i data-lucide="gem" size="14"></i>
-        <span id="mobile-stat-points-val">0 PTS</span>
+        <span id="mobile-stat-points-val">0.00 PTS</span>
       </div>
       <div class="goal-pill-group">
         <button type="button" class="btn-goal-label" onclick="openGoalModal()" title="Click to set daily target goal">
@@ -174,7 +174,7 @@
         </div>
 
         <div class="track-footer">
-          <span id="overload-footer-text">1 minute (01:00) of completed focus = 1% bar fill. 100 mins = 100% full progress.</span>
+          <span id="overload-footer-text">1 minute (01:00) of focus = 1% bar fill. 100 mins = 100% cycle (+250 PTS &amp; Golden Ticket).</span>
           <button type="button" id="btn-claim-100" style="display: none; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; font-family: inherit; font-size: 11px; font-weight: 800; padding: 6px 14px; border-radius: 8px; cursor: pointer; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);" onclick="triggerAutomatic100PercentTicket(true)">
             🏆 100% Focus Ticket Auto-Issued! (Click to View)
           </button>
@@ -193,7 +193,7 @@
             </div>
             <div>
               <h3 style="font-size: 15px; font-weight: 800; color: white; margin: 0;">25-Min Fast-Paced Focus Sprint</h3>
-              <p style="font-size: 11px; color: #a5b4fc; margin: 2px 0 0 0;">Dedicated Pomodoro timer • Earns +25 Vault Points upon completion</p>
+              <p style="font-size: 11px; color: #a5b4fc; margin: 2px 0 0 0;">Dedicated Pomodoro timer • Accrues 0.2 Vault PTS per minute focused</p>
             </div>
           </div>
 
@@ -265,13 +265,13 @@
           <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #a5b4fc; letter-spacing: 0.05em;">Offline Incentive Chest</span>
           <h2 style="font-size: 24px; font-weight: 800; margin-top: 4px;">The Dopamine Vault</h2>
           <p style="font-size: 13px; color: #cbd5e1; margin-top: 4px; max-width: 520px;">
-            Turn real productivity into reward points! Complete tasks and 100% focus cycles to collect points and redeem custom real-life rewards.
+            Turn real productivity into reward points! Focus to earn 0.2 PTS/min and complete 100-minute focus cycles for +250 PTS golden tickets to redeem custom real-life rewards.
           </p>
         </div>
 
         <div class="vault-box">
           <span style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: #94a3b8; display: block;">Vault Balance</span>
-          <div class="vault-pts" id="vault-pts-display">0</div>
+          <div class="vault-pts" id="vault-pts-display">0.00</div>
           <span style="font-size: 11px; color: #cbd5e1;">Reward Points</span>
         </div>
       </div>
@@ -376,7 +376,7 @@
             <i data-lucide="gem" size="32" style="color: var(--emerald-dark); margin-bottom: 6px;"></i>
             <h4 style="font-size: 15px; font-weight: 800; color: var(--emerald-dark);">3. Run Timer &amp; Earn Reward Points</h4>
             <p style="font-size: 12px; color: #065f46; margin-top: 4px; line-height: 1.55;">
-              Hit "Focus" on your card to start the timer. Completed sessions and 25m sprints earn points for your Dopamine Vault to unlock real-life reward incentives!
+              Hit "Focus" on your card or run a 25m sprint to accrue 0.2 PTS/min and earn +250 PTS golden tickets every 100 minutes for your Dopamine Vault!
             </p>
           </div>
         </div>
@@ -517,8 +517,8 @@
         </div>
 
         <div class="form-group">
-          <label for="input-reward-cost">Points Cost (PTS) *</label>
-          <input type="number" id="input-reward-cost" min="10" max="1000" value="50" class="form-input">
+          <label for="input-reward-cost">Points Cost (Min 70.00 PTS) *</label>
+          <input type="number" id="input-reward-cost" min="70" max="10000" step="0.01" value="70" class="form-input">
         </div>
 
         <div style="display: flex; justify-content: flex-end; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 20px;">
@@ -551,15 +551,15 @@
       </h2>
 
       <p style="font-size: 13px; color: #cbd5e1; max-width: 420px; margin: 0 auto 16px auto;">
-        Outstanding focus! You hit 100% completion across all your current tasks. A golden ticket has been automatically generated and saved directly to your Dopamine Vault!
+        Outstanding focus! You completed a full 100-minute focus cycle. A golden ticket has been automatically generated and saved directly to your Dopamine Vault!
       </p>
 
       <div class="ticket-shiny-card">
         <div style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: #a5b4fc; letter-spacing: 0.05em;">Auto-Issued Golden Ticket</div>
-        <h3 style="font-size: 16px; font-weight: 800; color: white; margin-top: 2px;" id="celebration-ticket-title">Golden Focus Ticket (+50 PTS)</h3>
+        <h3 style="font-size: 16px; font-weight: 800; color: white; margin-top: 2px;" id="celebration-ticket-title">Golden Focus Ticket (+250 PTS)</h3>
         <div class="ticket-badge-code selectable-text" id="celebration-ticket-code">FORGE-8842</div>
         <div style="font-size: 11px; color: #fcd34d; margin-top: 10px; font-weight: 700;">
-          +50 Reward Points Claimed • Day <span id="celebration-streak-num">1</span> Streak Active!
+          +250 Reward Points Claimed • Day <span id="celebration-streak-num">1</span> Streak Active!
         </div>
       </div>
 
@@ -595,7 +595,7 @@
       </div>
 
       <div style="margin-top: 16px; font-size: 12px; font-weight: 700; color: #cbd5e1;" id="pomo-modal-mode-label">
-        Mode: 25-Min Focus Sprint (+25 PTS)
+        Mode: 25m Focus (0.2 PTS/min)
       </div>
 
       <div style="display: flex; gap: 8px; justify-content: center; margin: 16px 0 20px 0;">
@@ -711,17 +711,6 @@
           </label>
         </div>
 
-        <div class="setting-item">
-          <div class="setting-info">
-            <div class="setting-title"><i data-lucide="trending-up" size="15" style="color: var(--primary);"></i> Dynamic Goal Bar Scaling (&gt;100m)</div>
-            <div class="setting-desc">Dynamically scales progress bar denominator when total focus time exceeds 100 minutes.</div>
-          </div>
-          <label class="switch">
-            <input type="checkbox" id="set-dynamicScaling" onchange="toggleSetting('dynamicScaling', this.checked)">
-            <span class="slider"></span>
-          </label>
-        </div>
-
         <div class="setting-item" style="border-left: 3px solid var(--primary); background: #f0fdf4;">
           <div class="setting-info">
             <div class="setting-title">
@@ -822,7 +811,7 @@
       </div>
 
       <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 20px;">
-        Are you sure you want to permanently delete this task from FocusForge? All tracked focus time and progress for this task will be removed.
+        Are you sure you want to permanently delete this task from FocusForge? The task and its local timer card will be removed, while your overall focus bar progress and Vault points are kept.
       </p>
 
       <div style="display: flex; justify-content: flex-end; gap: 10px;">

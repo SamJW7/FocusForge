@@ -115,6 +115,11 @@
   };
 
   // --- 1. LOCAL STORAGE & DATA STATE ---
+  var CYCLE_TARGET_SECS = 6000;
+  var CYCLE_BONUS_PTS = 250;
+  var POINTS_PER_FOCUS_SEC = 0.2 / 60;
+  var MIN_REWARD_COST = 70;
+
   var STORAGE_KEYS = {
     TASKS: 'focusforge_tasks_v3',
     REWARDS: 'focusforge_rewards_v3',
@@ -131,11 +136,12 @@
   var DEFAULT_TASKS = [];
 
   var DEFAULT_REWARDS = [
-    { id: 'r-1', title: '15 Mins Gaming / Social Media', pointsCost: 50, redemptionCount: 0 },
+    { id: 'r-1', title: '15 Mins Gaming / Social Media', pointsCost: 70, redemptionCount: 0 },
     { id: 'r-2', title: 'Favorite Snack or Drink', pointsCost: 100, redemptionCount: 0 },
     { id: 'r-3', title: 'Watch 1 Anime / Series Episode', pointsCost: 150, redemptionCount: 0 }
   ];
 
+  // Intentionally omit cycleBaseSecs from DEFAULT_STATS so saved stats without it trigger legacy migration once
   var DEFAULT_STATS = {
     streakCount: 0,
     dopamineVaultPoints: 0,
@@ -154,11 +160,19 @@
     dailyReminderBanner: true,
     maxSessionCap: true,
     showPomoCard: true,
-    dynamicScaling: true,
     enableToasts: true,
     deviceNotifications: false,
     dailyNotifTime: '09:00',
     deadlineReminders: true
+  };
+
+  var DEFAULT_POMO_STATE = {
+    secondsLeft: 1500,
+    totalSeconds: 1500,
+    isRunning: false,
+    modeName: '25m Focus',
+    soundOn: true,
+    linkedTaskId: ''
   };
 
   function loadData(key, fallback) {
@@ -176,17 +190,70 @@
     } catch (e) {}
   }
 
+  function migrateStats() {
+    var changed = false;
+    if (typeof stats.totalSecondsFocused !== 'number' || !Number.isFinite(stats.totalSecondsFocused) || stats.totalSecondsFocused < 0) {
+      stats.totalSecondsFocused = 0;
+      changed = true;
+    }
+    if (typeof stats.dopamineVaultPoints !== 'number' || !Number.isFinite(stats.dopamineVaultPoints) || stats.dopamineVaultPoints < 0) {
+      stats.dopamineVaultPoints = 0;
+      changed = true;
+    }
+    if (typeof stats.cycleBaseSecs !== 'number' || !Number.isFinite(stats.cycleBaseSecs) || stats.cycleBaseSecs < 0) {
+      stats.cycleBaseSecs = Math.floor(stats.totalSecondsFocused / CYCLE_TARGET_SECS) * CYCLE_TARGET_SECS;
+      changed = true;
+    } else if (stats.cycleBaseSecs > stats.totalSecondsFocused) {
+      stats.cycleBaseSecs = Math.floor(stats.totalSecondsFocused / CYCLE_TARGET_SECS) * CYCLE_TARGET_SECS;
+      changed = true;
+    }
+    if (changed) {
+      saveData(STORAGE_KEYS.STATS, stats);
+    }
+    return changed;
+  }
+
+  function migrateRewards() {
+    var changed = false;
+    for (var i = 0; i < rewards.length; i++) {
+      var r = rewards[i];
+      if (!r) continue;
+      var parsedCost = Number(r.pointsCost);
+      if (!Number.isFinite(parsedCost) || parsedCost < MIN_REWARD_COST) {
+        rewards[i] = Object.assign({}, r, { pointsCost: MIN_REWARD_COST });
+        changed = true;
+      } else {
+        var roundedCost = Math.round((parsedCost + 1e-9) * 100) / 100;
+        if (roundedCost !== parsedCost) {
+          rewards[i] = Object.assign({}, r, { pointsCost: roundedCost });
+          changed = true;
+        }
+      }
+    }
+    if (changed) {
+      saveData(STORAGE_KEYS.REWARDS, rewards);
+    }
+    return changed;
+  }
+
   var tasks = loadData(STORAGE_KEYS.TASKS, DEFAULT_TASKS);
   if (!Array.isArray(tasks)) tasks = [];
 
-  var rewards = loadData(STORAGE_KEYS.REWARDS, DEFAULT_REWARDS);
-  if (!Array.isArray(rewards)) rewards = DEFAULT_REWARDS.slice();
+  var rewards = loadData(STORAGE_KEYS.REWARDS, DEFAULT_REWARDS.map(function(r) { return Object.assign({}, r); }));
+  if (!Array.isArray(rewards)) rewards = DEFAULT_REWARDS.map(function(r) { return Object.assign({}, r); });
+  migrateRewards();
 
   var stats = Object.assign({}, DEFAULT_STATS, loadData(STORAGE_KEYS.STATS, DEFAULT_STATS));
+  migrateStats();
+
   var tickets = loadData(STORAGE_KEYS.TICKETS, []);
   if (!Array.isArray(tickets)) tickets = [];
 
   var settings = Object.assign({}, DEFAULT_SETTINGS, loadData(STORAGE_KEYS.SETTINGS, DEFAULT_SETTINGS));
+  if ('dynamicScaling' in settings) {
+    delete settings.dynamicScaling;
+    saveData(STORAGE_KEYS.SETTINGS, settings);
+  }
 
   var activeCategoryFilter = 'all';
   var currentView = 'tasks';
@@ -196,7 +263,6 @@
   var lastUserActivityMs = Date.now();
   var lastTimerTickMs = Date.now();
   var currentTutorialStep = 1;
-  var cycle100Claimed = !!loadData(STORAGE_KEYS.CYCLE100, false);
 
   var existingRunning = tasks.find(function(t) { return t && t.status === 'active'; });
   if (existingRunning) activeTaskId = existingRunning.id;
@@ -213,7 +279,6 @@
   var NOTIF_CHANNEL_DAILY_FOCUS = 'daily-focus';
   var MAX_CAPACITOR_SLOTS_PER_TASK = 24;
   var AFK_TIMEOUT_MS = 180000;
-  var AFK_TIMEOUT_SECS = 180;
 
   var MIN_MS = 60000;
   var HOUR_MS = 3600000;
@@ -222,14 +287,7 @@
   var GRACE_WINDOW_MS = 10 * MIN_MS;
 
   // --- 25-MIN FAST FOCUS POMODORO ENGINE STATE ---
-  var pomoState = Object.assign({
-    secondsLeft: 1500,
-    totalSeconds: 1500,
-    isRunning: false,
-    modeName: '25m Focus',
-    soundOn: true,
-    linkedTaskId: ''
-  }, loadData(STORAGE_KEYS.POMO_STATE, {}));
+  var pomoState = Object.assign({}, DEFAULT_POMO_STATE, loadData(STORAGE_KEYS.POMO_STATE, {}));
 
   // --- AUDIO CHIMES ENGINE (100% OFFLINE WEB AUDIO API) ---
   var audioCtxInstance = null;
@@ -400,6 +458,27 @@
     }
   }
 
+  function normalizePointsCenti(val) {
+    var num = Math.max(0, Number(val) || 0);
+    if (!Number.isFinite(num)) return 0;
+    return Math.round((num + 1e-9) * 100);
+  }
+
+  function formatPoints(val) {
+    return (normalizePointsCenti(val) / 100).toFixed(2);
+  }
+
+  function getDisplayedPoints() {
+    return formatPoints(stats.dopamineVaultPoints);
+  }
+
+  function patchPointsDisplay() {
+    var formatted = getDisplayedPoints();
+    patchElementText('stat-points-val', formatted + ' PTS');
+    patchElementText('mobile-stat-points-val', formatted + ' PTS');
+    patchElementText('vault-pts-display', formatted);
+  }
+
   function formatDateTimeLocalInput(dateStr) {
     if (!dateStr) return '';
     if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(dateStr)) {
@@ -419,6 +498,23 @@
     if (forceSave) {
       saveData(STORAGE_KEYS.POMO_STATE, pomoState);
     }
+    updatePomoUI();
+  }
+
+  function resetPomo() {
+    pomoState = Object.assign({}, DEFAULT_POMO_STATE);
+    try {
+      localStorage.removeItem(STORAGE_KEYS.POMO_STATE);
+    } catch (e) {}
+    lastPomoSoundState = null;
+    lastPomoSelectHtml = '';
+    document.querySelectorAll('.btn-pomo-preset').forEach(function(b) {
+      b.classList.remove('active');
+    });
+    var p25 = document.getElementById('preset-25m');
+    var mp25 = document.getElementById('modal-preset-25m');
+    if (p25) p25.classList.add('active');
+    if (mp25) mp25.classList.add('active');
     updatePomoUI();
   }
 
@@ -538,7 +634,7 @@
 
     patchElementText(
       'pomo-modal-mode-label',
-      'Mode: ' + pomoState.modeName + ' (' + (pomoState.totalSeconds === 1500 ? '+25 PTS' : 'Sprint Mode') + ')'
+      'Mode: ' + pomoState.modeName + ' (' + (pomoState.totalSeconds === 300 ? 'Break Mode' : '0.2 PTS/min') + ')'
     );
 
     var ringFill = document.getElementById('pomo-ring-fill');
@@ -1158,6 +1254,67 @@
     }
   }
 
+  // --- FOCUS CREDIT & CYCLE EVALUATION ---
+  function evaluateCycles() {
+    var completedCount = 0;
+    var latestTicket = null;
+
+    while ((stats.totalSecondsFocused - stats.cycleBaseSecs) >= CYCLE_TARGET_SECS) {
+      stats.cycleBaseSecs += CYCLE_TARGET_SECS;
+      stats.dopamineVaultPoints = (Number(stats.dopamineVaultPoints) || 0) + CYCLE_BONUS_PTS;
+      stats.streakCount = (Number(stats.streakCount) || 0) + 1;
+      completedCount++;
+
+      var code = 'FORGE-' + Math.floor(1000 + Math.random() * 9000);
+      latestTicket = {
+        id: 'tk-' + Date.now() + '-' + completedCount,
+        title: 'Golden Focus Ticket (+250 PTS)',
+        points: CYCLE_BONUS_PTS,
+        code: code,
+        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+      };
+      tickets.unshift(latestTicket);
+    }
+
+    if (completedCount > 0 && latestTicket) {
+      var totalBonus = completedCount * CYCLE_BONUS_PTS;
+      var notifBody = completedCount > 1
+        ? (completedCount + ' focus cycles achieved! +' + totalBonus + ' points added to your Vault!')
+        : 'Outstanding focus! Golden ticket auto-issued and +250 points added to your Vault!';
+
+      triggerImmediateNativeNotification(
+        '🏆 100% Focus Cycle Achieved!',
+        notifBody,
+        NOTIF_ID_100_CYCLE,
+        NOTIF_CHANNEL_DAILY_FOCUS
+      );
+
+      var toastMsg = completedCount > 1
+        ? (completedCount + ' Golden Tickets auto-issued (+' + totalBonus + ' PTS)')
+        : 'Golden Ticket auto-issued (+250 PTS)';
+      showToast(toastMsg, 'success', '🏆 100% Focus Cycle Reached!');
+
+      if (settings.auto100Ticket) {
+        openCelebrationModal(latestTicket);
+      }
+    }
+
+    return {
+      completedCount: completedCount,
+      latestTicket: latestTicket
+    };
+  }
+
+  function creditFocus(seconds) {
+    var secs = Math.max(0, Number(seconds) || 0);
+    if (secs <= 0) {
+      return { completedCount: 0, latestTicket: null };
+    }
+    stats.totalSecondsFocused = (Number(stats.totalSecondsFocused) || 0) + secs;
+    stats.dopamineVaultPoints = (Number(stats.dopamineVaultPoints) || 0) + (secs * POINTS_PER_FOCUS_SEC);
+    return evaluateCycles();
+  }
+
   // --- SINGLE 1-SECOND TIMER & AFK ENGINE + SINGLE 30-SECOND CHECKER ---
   if (window._focusforgeTimerInterval) clearInterval(window._focusforgeTimerInterval);
   if (window._focusforgeNotifInterval) clearInterval(window._focusforgeNotifInterval);
@@ -1195,15 +1352,13 @@
     var stateChanged = false;
     var needsFullRender = false;
     var shouldSyncState = false;
+    var taskFocusSecs = 0;
+    var pomoConsumed = 0;
+    var hadActiveTask = !!activeTaskId;
 
-    // 1. AFK Inactivity Protection (only pauses after 3 minutes of zero interaction when enabled)
+    // 1. AFK Inactivity Protection: credit ONLY up to lastUserActivityMs, never idle seconds (no clawback)
     var afkTriggered = !!(settings.afkProtection && activeTaskId && (nowMs - lastUserActivityMs >= AFK_TIMEOUT_MS));
     if (afkTriggered) {
-      var idleTickedSecs = 0;
-      if (prevTickMs > lastUserActivityMs) {
-        idleTickedSecs = Math.min(AFK_TIMEOUT_SECS, Math.floor((prevTickMs - lastUserActivityMs) / 1000));
-      }
-
       for (var k = 0; k < tasks.length; k++) {
         var afkTask = tasks[k];
         if (afkTask.id === activeTaskId && afkTask.status === 'active') {
@@ -1214,12 +1369,11 @@
             if (settings.maxSessionCap) {
               creditBeforeAfk = Math.min(creditBeforeAfk, Math.max(0, 7200 - (afkTask.activeSeconds || 0)));
             }
-            afkTask.activeSeconds = (afkTask.activeSeconds || 0) + creditBeforeAfk;
-            stats.totalSecondsFocused += creditBeforeAfk;
+            if (creditBeforeAfk > 0) {
+              afkTask.activeSeconds = (afkTask.activeSeconds || 0) + creditBeforeAfk;
+              taskFocusSecs = creditBeforeAfk;
+            }
           }
-          var actualRemoved = Math.min(afkTask.activeSeconds || 0, idleTickedSecs);
-          afkTask.activeSeconds = Math.max(0, (afkTask.activeSeconds || 0) - actualRemoved);
-          stats.totalSecondsFocused = Math.max(0, stats.totalSecondsFocused - actualRemoved);
           afkTask.status = 'paused';
           afkTask.statusBadge = 'Paused: AFK Inactive';
           break;
@@ -1244,7 +1398,7 @@
           }
           if (taskDeltaSecs > 0) {
             t.activeSeconds = (t.activeSeconds || 0) + taskDeltaSecs;
-            stats.totalSecondsFocused += taskDeltaSecs;
+            taskFocusSecs = taskDeltaSecs;
             stateChanged = true;
             if (elapsedSecs > 1) secondsSinceLastStorageSave += taskDeltaSecs;
             patchElementText('task-clock-' + t.id, formatTimer(t.activeSeconds));
@@ -1270,16 +1424,16 @@
       }
     }
 
-    // 3. Separated 25-Min Fast Focus Pomodoro Timer Tick (catches up off-screen seconds cleanly)
+    // 3. Separated 25-Min Fast Focus Pomodoro Timer Tick
     if (pomoState.isRunning) {
-      var pomoConsumed = Math.min(elapsedSecs, Math.max(0, pomoState.secondsLeft));
+      pomoConsumed = Math.min(elapsedSecs, Math.max(0, pomoState.secondsLeft));
       if (pomoConsumed > 0) {
         pomoState.secondsLeft -= pomoConsumed;
-        stats.totalSecondsFocused += pomoConsumed;
         stateChanged = true;
-        if (elapsedSecs > 1) secondsSinceLastStorageSave += pomoConsumed;
+        if (elapsedSecs > 1 && taskFocusSecs === 0) secondsSinceLastStorageSave += pomoConsumed;
 
-        if (pomoState.linkedTaskId && pomoState.linkedTaskId !== activeTaskId) {
+        // Credit linked task ONLY when no active task timer is already claiming this tick
+        if (!hadActiveTask && pomoState.linkedTaskId) {
           for (var j = 0; j < tasks.length; j++) {
             var lt = tasks[j];
             if (lt.id === pomoState.linkedTaskId && lt.status !== 'completed' && lt.status !== 'terminated') {
@@ -1310,10 +1464,9 @@
         var notifBody = 'Great focus! Your ' + pomoState.modeName + ' session has finished.';
 
         if (pomoState.totalSeconds === 1500) {
-          stats.dopamineVaultPoints += 25;
           notifTitle = '⚡ 25-Min Focus Sprint Complete!';
-          notifBody = '25-minute focus session finished! +25 Reward Points added to Vault! 🎉';
-          showToast('+25 Reward Points added to Vault! 🎉', 'success', '⚡ 25-Min Focus Sprint Complete');
+          notifBody = '25-minute focus session finished! Focus time & 0.2 PTS/min credited to your Vault! 🎉';
+          showToast('25-minute sprint complete! Focus points credited to Vault 🎉', 'success', '⚡ 25-Min Focus Sprint Complete');
         } else if (pomoState.totalSeconds === 900) {
           notifTitle = '🚀 15m Speed Sprint Complete!';
           notifBody = '15-minute speed focus finished! Well done!';
@@ -1330,7 +1483,19 @@
       }
     }
 
-    // 4. Targeted Progress Bar update & 12s throttled save
+    // 4. Single real-second credit for bar progress, points & cycle milestones
+    var focusCreditSecs = Math.max(taskFocusSecs, pomoConsumed);
+    if (focusCreditSecs > 0) {
+      var cycleRes = creditFocus(focusCreditSecs);
+      stateChanged = true;
+      patchPointsDisplay();
+      if (cycleRes.completedCount > 0) {
+        needsFullRender = true;
+        shouldSyncState = true;
+      }
+    }
+
+    // 5. Targeted Progress Bar update & 12s throttled save
     if (stateChanged) {
       updateProgressBarOnly();
 
@@ -1354,26 +1519,24 @@
     runTimerTick(true);
   }, 1000);
 
-  // Targeted updater for overload progress bar & active counters (NO task grid rebuild)
+  // Targeted updater for progress bar & active counters (strictly display-only; NO task grid rebuild, NO cycle awards)
   var lastSummaryText = '';
   var lastBarWidthPct = '';
 
   function updateProgressBarOnly() {
-    var totalFocusSecs = 0;
     var activeCount = 0;
-
     for (var i = 0; i < tasks.length; i++) {
       var t = tasks[i];
-      if (t.status !== 'terminated') {
-        totalFocusSecs += (t.activeSeconds || 0);
-        if (t.status !== 'completed') activeCount++;
+      if (t && t.status !== 'terminated' && t.status !== 'completed') {
+        activeCount++;
       }
     }
 
-    var BASE_TARGET_SECS = 6000;
-    var denominatorSecs = settings.dynamicScaling ? Math.max(BASE_TARGET_SECS, totalFocusSecs) : BASE_TARGET_SECS;
-    var rawPct = denominatorSecs > 0 ? (totalFocusSecs / denominatorSecs) * 100 : 0;
-    var pct = Math.min(100, rawPct);
+    var totalSecs = Math.max(0, Number(stats.totalSecondsFocused) || 0);
+    var cycleBase = Math.max(0, Number(stats.cycleBaseSecs) || 0);
+    var cycleSecs = Math.max(0, totalSecs - cycleBase);
+    var rawPct = (cycleSecs / CYCLE_TARGET_SECS) * 100;
+    var pct = Math.max(0, Math.min(100, rawPct));
 
     var fillEl = document.getElementById('overload-fill');
     var nextWidth = pct.toFixed(2) + '%';
@@ -1383,8 +1546,8 @@
     }
 
     var displayPct = pct >= 100 ? '100' : (pct > 0 && pct < 1 ? pct.toFixed(2) : pct.toFixed(1));
-    var completedMins = (totalFocusSecs / 60).toFixed(1);
-    var goalMins = Math.round(denominatorSecs / 60);
+    var completedMins = (cycleSecs / 60).toFixed(1);
+    var goalMins = Math.round(CYCLE_TARGET_SECS / 60);
     var nextSummary = displayPct + '% Completed (' + completedMins + 'm / ' + goalMins + 'm Goal) • ' + activeCount + ' active tasks';
     if (lastSummaryText !== nextSummary) {
       lastSummaryText = nextSummary;
@@ -1393,23 +1556,10 @@
 
     var claimBtn = document.getElementById('btn-claim-100');
     if (claimBtn) {
-      var targetDisplay = pct >= 100 ? 'inline-block' : 'none';
+      var targetDisplay = tickets.length > 0 ? 'inline-block' : 'none';
       if (claimBtn.style.display !== targetDisplay) {
         claimBtn.style.display = targetDisplay;
       }
-    }
-
-    if (pct >= 100) {
-      if (!cycle100Claimed) {
-        cycle100Claimed = true;
-        saveData(STORAGE_KEYS.CYCLE100, true);
-        if (settings.auto100Ticket) {
-          triggerAutomatic100PercentTicket(false);
-        }
-      }
-    } else if (cycle100Claimed) {
-      cycle100Claimed = false;
-      saveData(STORAGE_KEYS.CYCLE100, false);
     }
   }
 
@@ -1447,7 +1597,7 @@
   // --- 3. FULL UI RENDER (CALLED ONLY ON STRUCTURAL STATE MUTATIONS) ---
   function fullRender() {
     patchElementText('stat-streak-val', stats.streakCount + ' Flow Streak');
-    patchElementText('stat-points-val', stats.dopamineVaultPoints + ' PTS');
+    patchPointsDisplay();
 
     var goalTextEl = document.getElementById('stat-goal-text');
     var goalRemoveBtn = document.getElementById('btn-remove-goal-header');
@@ -1459,9 +1609,7 @@
       if (goalRemoveBtn) goalRemoveBtn.style.display = 'none';
     }
 
-    patchElementText('vault-pts-display', String(stats.dopamineVaultPoints));
     patchElementText('mobile-stat-streak-val', stats.streakCount + ' Flow Streak');
-    patchElementText('mobile-stat-points-val', stats.dopamineVaultPoints + ' PTS');
     patchElementText('mobile-stat-goal-text', (stats.dailyGoalText && stats.dailyGoalText.trim()) ? stats.dailyGoalText : 'Set Daily Goal');
 
     checkDailyOfflineReminder();
@@ -1605,18 +1753,12 @@
       return;
     }
 
-    var currentTotalFocusSecs = 0;
-    for (var i = 0; i < tasks.length; i++) {
-      if (tasks[i].status !== 'terminated') currentTotalFocusSecs += (tasks[i].activeSeconds || 0);
-    }
-    var currentDenomSecs = Math.max(6000, currentTotalFocusSecs);
-
     container.innerHTML = filtered.map(function(t) {
       var isCompleted = t.status === 'completed';
       var isTerminated = t.status === 'terminated';
       var isActive = t.status === 'active';
 
-      var taskPct = currentDenomSecs > 0 ? ((t.activeSeconds || 0) / currentDenomSecs) * 100 : 0;
+      var taskPct = ((t.activeSeconds || 0) / CYCLE_TARGET_SECS) * 100;
       var taskPctStr = taskPct >= 1 ? taskPct.toFixed(1) : (taskPct > 0 ? taskPct.toFixed(2) : '0');
       var safeId = escapeHtml(t.id);
 
@@ -1695,14 +1837,15 @@
     } else {
       container.innerHTML = rewards.map(function(r) {
         var safeRewardId = escapeHtml(r.id);
-        var cost = Number(r.pointsCost) || 0;
+        var cost = Math.round((Math.max(0, Number(r.pointsCost) || 0) + 1e-9) * 100) / 100;
+        var costDisplay = formatPoints(cost);
         return (
           '<div class="reward-card" id="reward-card-' + safeRewardId + '">' +
             '<div>' +
               '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">' +
                 '<span style="font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--primary); background: var(--primary-light); padding: 2px 8px; border-radius: 100px;">INCENTIVE</span>' +
                 '<div style="display: flex; align-items: center; gap: 8px;">' +
-                  '<span style="font-size: 12px; font-weight: 800; color: #d97706; font-family: var(--font-mono);">💎 ' + cost + ' PTS</span>' +
+                  '<span style="font-size: 12px; font-weight: 800; color: #d97706; font-family: var(--font-mono);">💎 ' + costDisplay + ' PTS</span>' +
                   '<button type="button" class="btn-remove-reward" data-reward-action="remove" data-reward-id="' + safeRewardId + '" title="Remove Custom Reward Option">' +
                     '<i data-lucide="trash-2" size="13"></i> Remove' +
                   '</button>' +
@@ -1733,7 +1876,7 @@
               '</div>' +
               '<h4 style="font-size: 13px; font-weight: 800; color: #78350f; margin-top: 4px;">' + escapeHtml(tk.title) + '</h4>' +
               '<div style="display: flex; align-items: center; justify-content: space-between; margin-top: 8px;">' +
-                '<span style="font-size: 12px; font-weight: 800; color: var(--emerald-dark);">+' + (Number(tk.points) || 0) + ' PTS</span>' +
+                '<span style="font-size: 12px; font-weight: 800; color: var(--emerald-dark);">+' + formatPoints(Number(tk.points) || 0) + ' PTS</span>' +
                 '<span style="font-size: 10px; font-weight: 800; color: #059669; background: #d1fae5; padding: 2px 8px; border-radius: 100px;">✓ Auto-Issued</span>' +
               '</div>' +
             '</div>'
@@ -1799,7 +1942,6 @@
     });
     if (activeTaskId === id) activeTaskId = null;
     if (pomoState.linkedTaskId === id) pomoState.linkedTaskId = '';
-    stats.dopamineVaultPoints += 20;
 
     cancelTaskDeadlineNotifications(id);
     clearTaskSentSlots(id);
@@ -1807,14 +1949,14 @@
     var taskTitle = task ? task.title : 'Task';
     triggerImmediateNativeNotification(
       'Task Completed! 🎉',
-      '"' + taskTitle + '" has been completed! +20 Points added to your Vault.',
+      '"' + taskTitle + '" has been completed!',
       NOTIF_ID_TASK_FINISH,
       NOTIF_CHANNEL_DAILY_FOCUS
     );
 
     syncState();
     playOfflineAudioChime('complete');
-    showToast(taskTitle + ' (+20 PTS added)', 'success', 'Task Completed! 🎉');
+    showToast(taskTitle + ' marked completed!', 'success', 'Task Completed! 🎉');
   }
 
   function removeTaskWithAnimation(id) {
@@ -1841,40 +1983,16 @@
   }
 
   function triggerAutomatic100PercentTicket(isManualClick) {
-    var ticketToDisplay = null;
+    var ticketToDisplay = tickets[0] || {
+      id: 'tk-' + Date.now(),
+      title: 'Golden Focus Ticket (+250 PTS)',
+      points: CYCLE_BONUS_PTS,
+      code: 'FORGE-' + Math.floor(1000 + Math.random() * 9000),
+      date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+    };
 
     if (!isManualClick) {
-      stats.streakCount++;
-      stats.dopamineVaultPoints += 50;
-
-      var code = 'FORGE-' + Math.floor(1000 + Math.random() * 9000);
-      ticketToDisplay = {
-        id: 'tk-' + Date.now(),
-        title: 'Golden Focus Ticket (+50 Points)',
-        points: 50,
-        code: code,
-        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-      };
-
-      tickets.unshift(ticketToDisplay);
-
-      triggerImmediateNativeNotification(
-        '🏆 100% Focus Cycle Achieved!',
-        'Outstanding focus! Golden ticket auto-issued and +50 points added to your Vault!',
-        NOTIF_ID_100_CYCLE,
-        NOTIF_CHANNEL_DAILY_FOCUS
-      );
-
-      syncState();
-      showToast('Golden Ticket auto-issued (+50 PTS)', 'success', '🏆 100% Focus Cycle Reached!');
-    } else {
-      ticketToDisplay = tickets[0] || {
-        id: 'tk-' + Date.now(),
-        title: 'Golden Focus Ticket (+50 Points)',
-        points: 50,
-        code: 'FORGE-' + Math.floor(1000 + Math.random() * 9000),
-        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-      };
+      ticketToDisplay = tickets[0] || ticketToDisplay;
     }
 
     openCelebrationModal(ticketToDisplay);
@@ -1884,7 +2002,7 @@
     if (!ticket) return;
     playOfflineAudioChime('fanfare');
 
-    patchElementText('celebration-ticket-title', ticket.title || 'Golden Focus Ticket (+50 PTS)');
+    patchElementText('celebration-ticket-title', ticket.title || 'Golden Focus Ticket (+250 PTS)');
     patchElementText('celebration-ticket-code', ticket.code || 'FORGE-1000');
     patchElementText('celebration-streak-num', String(stats.streakCount));
 
@@ -1941,19 +2059,27 @@
   }
 
   function redeemReward(rewardId, cost) {
-    if (stats.dopamineVaultPoints < cost) {
+    var resolvedCost = Math.round((Math.max(0, Number(cost) || 0) + 1e-9) * 100) / 100;
+    var costCenti = Math.round((resolvedCost + 1e-9) * 100);
+    var availableCenti = normalizePointsCenti(stats.dopamineVaultPoints);
+    if (availableCenti < costCenti) {
       playOfflineAudioChime('pause');
-      showToast('Need ' + cost + ' PTS (you have ' + stats.dopamineVaultPoints + ' PTS)', 'warning', 'Not Enough Points');
-      return;
+      showToast('Need ' + formatPoints(resolvedCost) + ' PTS (you have ' + getDisplayedPoints() + ' PTS)', 'warning', 'Not Enough Points');
+      return false;
     }
 
-    stats.dopamineVaultPoints -= cost;
+    var nextBalance = (Number(stats.dopamineVaultPoints) || 0) - resolvedCost;
+    if (!Number.isFinite(nextBalance) || nextBalance < 1e-9) {
+      nextBalance = 0;
+    }
+    stats.dopamineVaultPoints = nextBalance;
     rewards = rewards.map(function(r) {
       return r.id === rewardId ? Object.assign({}, r, { redemptionCount: (r.redemptionCount || 0) + 1 }) : r;
     });
     syncState();
     playOfflineAudioChime('reward');
     showToast('Enjoy your offline reward!', 'success', 'Reward Unlocked 🎉');
+    return true;
   }
 
   function removeDailyGoal() {
@@ -2330,8 +2456,8 @@
     }
 
     tasks = [];
-    rewards = DEFAULT_REWARDS.slice();
-    stats = Object.assign({}, DEFAULT_STATS);
+    rewards = DEFAULT_REWARDS.map(function(r) { return Object.assign({}, r); });
+    stats = Object.assign({}, DEFAULT_STATS, { cycleBaseSecs: 0 });
     tickets = [];
     settings = Object.assign({}, DEFAULT_SETTINGS);
     sentDeadlineSlots = {};
@@ -2346,6 +2472,8 @@
     localStorage.removeItem(STORAGE_KEYS.SENT_SLOTS);
     localStorage.removeItem(STORAGE_KEYS.NATIVE_NOTIF_IDS);
     localStorage.removeItem(STORAGE_KEYS.CYCLE100);
+
+    resetPomo();
 
     syncState();
     closeResetModal();
@@ -2562,17 +2690,24 @@
   }
 
   function handleRewardSubmit(e) {
-    e.preventDefault();
+    if (e && typeof e.preventDefault === 'function') e.preventDefault();
     var titleInput = document.getElementById('input-reward-title');
     var costInput = document.getElementById('input-reward-cost');
     var title = titleInput ? titleInput.value.trim() : '';
     if (!title) {
       showToast('Please enter a reward name.', 'warning', 'Reward Name Required');
       if (titleInput) titleInput.focus();
-      return;
+      return false;
     }
-    var rawCost = Number(costInput ? costInput.value : 50);
-    var cost = Math.max(10, Math.min(10000, Number.isFinite(rawCost) && rawCost > 0 ? Math.round(rawCost) : 50));
+    var rawVal = costInput ? String(costInput.value).trim() : '';
+    var rawCost = rawVal === '' ? NaN : Number(rawVal);
+    var normalizedCost = Number.isFinite(rawCost) ? Math.round((rawCost + 1e-9) * 100) / 100 : NaN;
+    if (!Number.isFinite(rawCost) || rawCost < MIN_REWARD_COST || !Number.isFinite(normalizedCost) || normalizedCost < MIN_REWARD_COST) {
+      showToast('Minimum reward cost is ' + formatPoints(MIN_REWARD_COST) + ' PTS.', 'warning', 'Minimum 70.00 PTS Required');
+      if (costInput) costInput.focus();
+      return false;
+    }
+    var cost = Math.min(10000, normalizedCost);
 
     var newReward = {
       id: 'r-' + Date.now(),
@@ -2585,9 +2720,10 @@
     syncState();
     closeAddRewardModal();
     if (titleInput) titleInput.value = '';
-    if (costInput) costInput.value = '50';
+    if (costInput) costInput.value = String(MIN_REWARD_COST);
     playOfflineAudioChime('reward');
-    showToast(title + ' (' + cost + ' PTS)', 'success', 'Reward Added to Vault 🎁');
+    showToast(title + ' (' + formatPoints(cost) + ' PTS)', 'success', 'Reward Added to Vault 🎁');
+    return true;
   }
 
   function switchView(viewName) {
@@ -2846,6 +2982,66 @@
   window.scheduleDailyCheckInAlarm = scheduleDailyCheckInAlarm;
   window.scheduleTaskDeadlineNotifications = scheduleTaskDeadlineNotifications;
   window.cancelTaskDeadlineNotifications = cancelTaskDeadlineNotifications;
+
+  // Testability hook exposing pure & core state functions for automated verification
+  window.__FOCUSFORGE_TEST__ = {
+    CYCLE_TARGET_SECS: CYCLE_TARGET_SECS,
+    CYCLE_BONUS_PTS: CYCLE_BONUS_PTS,
+    POINTS_PER_FOCUS_SEC: POINTS_PER_FOCUS_SEC,
+    MIN_REWARD_COST: MIN_REWARD_COST,
+    STORAGE_KEYS: STORAGE_KEYS,
+    DEFAULT_REWARDS: DEFAULT_REWARDS,
+    DEFAULT_STATS: DEFAULT_STATS,
+    DEFAULT_SETTINGS: DEFAULT_SETTINGS,
+    DEFAULT_POMO_STATE: DEFAULT_POMO_STATE,
+    creditFocus: creditFocus,
+    evaluateCycles: evaluateCycles,
+    migrateStats: migrateStats,
+    migrateRewards: migrateRewards,
+    resetPomo: resetPomo,
+    runTimerTick: runTimerTick,
+    updateProgressBarOnly: updateProgressBarOnly,
+    fullRender: fullRender,
+    completeTaskWithAnimation: completeTaskWithAnimation,
+    removeTaskWithAnimation: removeTaskWithAnimation,
+    redeemReward: redeemReward,
+    handleRewardSubmit: handleRewardSubmit,
+    confirmResetAppData: confirmResetAppData,
+    startTaskTimer: startTaskTimer,
+    pauseTaskTimer: pauseTaskTimer,
+    togglePomoTimer: togglePomoTimer,
+    setPomoPreset: setPomoPreset,
+    setPomoLinkedTask: setPomoLinkedTask,
+    getDisplayedPoints: getDisplayedPoints,
+    formatPoints: formatPoints,
+    normalizePointsCenti: normalizePointsCenti,
+    syncStateImmediate: syncStateImmediate,
+    getState: function() {
+      return {
+        tasks: tasks,
+        rewards: rewards,
+        stats: stats,
+        tickets: tickets,
+        settings: settings,
+        pomoState: pomoState,
+        activeTaskId: activeTaskId,
+        lastUserActivityMs: lastUserActivityMs,
+        lastTimerTickMs: lastTimerTickMs
+      };
+    },
+    setState: function(patch) {
+      if (!patch || typeof patch !== 'object') return;
+      if ('tasks' in patch) tasks = patch.tasks;
+      if ('rewards' in patch) rewards = patch.rewards;
+      if ('stats' in patch) stats = patch.stats;
+      if ('tickets' in patch) tickets = patch.tickets;
+      if ('settings' in patch) settings = patch.settings;
+      if ('pomoState' in patch) pomoState = patch.pomoState;
+      if ('activeTaskId' in patch) activeTaskId = patch.activeTaskId;
+      if ('lastUserActivityMs' in patch) lastUserActivityMs = patch.lastUserActivityMs;
+      if ('lastTimerTickMs' in patch) lastTimerTickMs = patch.lastTimerTickMs;
+    }
+  };
 
   // --- STARTUP INITIALIZATION ---
   function initApp() {
